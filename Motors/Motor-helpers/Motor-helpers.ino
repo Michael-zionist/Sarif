@@ -1,9 +1,8 @@
-int m1PWMPin = 37;
-int m1PhasePin = 38;
-int m2PWMPin = 39;
-int m2PhasePin = 20;
+int mRpwmPin = 37; // RIGHT Motor
+int mRphasePin = 38; 
+int mLpwmPin = 39; // LEFT Motor
+int mLphasePin = 20;
 
-// blinks onboard LED x times with a 0.6s total on-off period
 void blinkLED(int times) {
   for (int i = 0; i < times; i++) {
     digitalWrite(LED_BUILTIN, HIGH); // Turn the LED on
@@ -18,17 +17,28 @@ void setup() {
   Serial.begin(9600);
 
   // Configure pins as outputs
-  pinMode(motor1PWM, OUTPUT);
-  pinMode(motor1Phase, OUTPUT);
+  pinMode(mRpwmPin, OUTPUT);
+  pinMode(mRphasePin, OUTPUT);
+  pinMode(mLpwmPin, OUTPUT);
+  pinMode(mLphasePin, OUTPUT);
+  blinkLED(3); // Blinks 3 times to confirm setup was done
 }
+
 // the loop routine runs over and over again continuously:
 void loop() {
-  digitalWrite(motor1Phase, HIGH); //forward
-  analogWrite(motor1PWM, 100); // set speed of motor
+  digitalWrite(mRphasePin, HIGH); // motor 1 forward
+  digitalWrite(mLphasePin, HIGH); // motor 2 forward
+  analogWrite(mRpwmPin, 55); // set speed of motor 1
+  analogWrite(mLpwmPin, 50); // set speed of motor 2
   Serial.println("Forward"); // Display motor direction
   delay(2000); //2 seconds
-  digitalWrite(motor1Phase, LOW); //Backward
-  analogWrite(motor1PWM, 100); // set speed of motor
-  Serial.println("Backward"); // Display motor direction
-  delay(2000); //2 seconds
+  blinkLED(1); //Blinks once after setting to go forward
+  
+  digitalWrite(mRphasePin, LOW); // motor 1 forward
+  digitalWrite(mLphasePin, LOW); // motor 2 forward
+  analogWrite(mRpwmPin, 55); // set speed of motor 1
+  analogWrite(mLpwmPin, 50); // set speed of motor 2
+  Serial.println("Forward"); // Display motor direction
+  delay(2000); // 2 seconds
+  blinkLED(2); //Blinks 2 times after setting to go back
 }
