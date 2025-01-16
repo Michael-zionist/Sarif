@@ -1,0 +1,11 @@
+// this follows the Pinout given and suggested in the Getting Started Guide
+
+const int mRpwmPin = 37;    // RIGHT Motor PWM
+const int mRphasePin = 38;  // RIGHT Motor Phase
+const int mLpwmPin = 39;    // LEFT Motor PWM
+const int mLphasePin = 20;  // LEFT Motor Phase
+const int A1pin = 4;        // Analog pin 1 (line-follow B/W 5-sensor)
+const int A2pin = 5;        // Analog pin 2 (line-follow B/W 5-sensor)
+const int A3pin = 6;        // Analog pin 3 (line-follow B/W 5-sensor)
+const int A4pin = 7;        // Analog pin 4 (line-follow B/W 5-sensor)
+const int A5pin = 15;       // Analog pin 5 (line-follow B/W 5-sensor)
