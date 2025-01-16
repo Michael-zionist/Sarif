@@ -6,7 +6,7 @@ const char* ssid = "iot";
 const char* password = "athyria67hyperflexibleness";
 
 // Target Domain
-const char* server = "http://3.250.38.184:8000/api/arrived/3";
+const char* server = "http://3.250.38.184:8000/api/arrived/wsdu8873";
 
 
 void setup() {
@@ -37,9 +37,10 @@ void loop() {
     // Content Body
     String httpRequestData = "position=0";
 
-    // Receive & Print Response
+    // Post Content
     int httpResponseData = http.POST(httpRequestData);
-
+    
+    // Receive & Print Response
     String payload = "{}";
     payload = http.getString();
 
