@@ -1,14 +1,16 @@
-int mRpwmPin = 37; // RIGHT Motor
-int mRphasePin = 38; 
-int mLpwmPin = 39; // LEFT Motor
-int mLphasePin = 20;
+// ...pins taken from PINOUT.txt
+const int mRpwmPin = 37; // RIGHT Motor PWM
+const int mRphasePin = 38; // RIGHT Motor Phase
+const int mLpwmPin = 39; // LEFT Motor PWM
+const int mLphasePin = 20; // LEFT Motor Phase
+
 
 void blinkLED(int times) {
   for (int i = 0; i < times; i++) {
     digitalWrite(LED_BUILTIN, HIGH); // Turn the LED on
-    delay(300);                      // Wait for 0.3 seconds
+    delay(150);                      // Wait for 0.15 seconds
     digitalWrite(LED_BUILTIN, LOW);  // Turn the LED off
-    delay(300);                      // Wait for 0.3 seconds
+    delay(150);                      // Wait for 0.15 seconds
   }
 }
 
