@@ -31,6 +31,22 @@ void loop() {
     http.begin(client, server);
 
     // Content Header
-    http.addHeader("");
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    http.addHeader("Content-Length", "10");
+    
+    // Content Body
+    String httpRequestData = "position=0";
+
+    // Receive & Print Response
+    int httpResponseData = http.POST(httpRequestData);
+
+    String payload = "{}";
+    payload = http.getString();
+
+    Serial.print("HTTP Response code: ");
+    Serial.println(payload);
+
+    // End
+    http.end();
   }
 }
