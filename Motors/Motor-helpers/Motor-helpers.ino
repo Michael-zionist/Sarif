@@ -50,10 +50,10 @@ Function to drive forward/backward a given distance until stop == false, sampled
 Direction is evaluated from speed parameter:
 positive speed = forward
 negative speed = backward
-Input: int speed, int distance
+Input: int speed, int distance, int step [ms]
 Output: movement in a straight line until interrupted by argument
 */
-void drive(int speed, bool stop) {
+void drive(int speed, int step, bool stop) {
   bool direction = speed > 0; // Determine direction from speed
   digitalWrite(mRphasePin, direction); // Set direction for RIGHT motor
   digitalWrite(mLphasePin, direction); // Set direction for LEFT motor
@@ -63,7 +63,7 @@ void drive(int speed, bool stop) {
 
   int coveredDistance = 0;
   if (!stop) {
-    delay(50); // Simulate distance increments;
+    delay(step); // Simulate distance increments;
   } else {
     analogWrite(mRpwmPin, 0); // Stop RIGHT motor
     analogWrite(mLpwmPin, 0); // Stop LEFT motor
@@ -79,7 +79,7 @@ negative degrees = turning anticlockwise
 Input: int speed, int deg
 Output: movement forward on an arc limited by degrees
 */
-void turn(int speed, int deg) {
+void turnForward(int speed, int deg) {
   bool clockwise = deg > 0; // Determine direction of rotation from degrees
   if (clockwise) {
     analogWrite(mRpwmPin, 0);         // Stop RIGHT motor
@@ -89,7 +89,7 @@ void turn(int speed, int deg) {
     analogWrite(mRpwmPin, abs(speed));    // Set speed for RIGHT motor
   }
 
-  delay(round(abs(deg) * 500 / speed)); // Simulate turn duration (adjust factor as needed)
+  delay(round(abs(deg) * 2500 / speed)); // Simulate turn duration (adjust factor as needed)
 
   analogWrite(mRpwmPin, 0); // Stop RIGHT motor
   analogWrite(mLpwmPin, 0); // Stop LEFT motor
@@ -117,7 +117,7 @@ void rotate(int speed, int deg) {
   analogWrite(mRpwmPin, abs(speed)); // Set speed for RIGHT motor
   analogWrite(mLpwmPin, abs(speed) * slowingCoeff); // Set speed for LEFT motor
 
-  delay(round(abs(deg) * 250 / speed)); // Simulate turn duration (adjust factor as needed)
+  delay(round(abs(deg) * 1200 / speed)); // Simulate turn duration (adjust factor as needed)
 
   analogWrite(mRpwmPin, 0); // Stop RIGHT motor
   analogWrite(mLpwmPin, 0); // Stop LEFT motor
@@ -137,24 +137,23 @@ void setup() {
 
 // the loop routine runs over and over again continuously:
 void loop() {
-  //Serial.println("Forward"); // Display motor direction
-  blinkLED(1); // 3 sec countdown
-  delay(1000); // 5 seconds
-  blinkLED(1); // 3 sec countdown
-  delay(1000); // 5 seconds
-  blinkLED(1); // 3 sec countdown
+  blinkLED(1);
+  delay(1000); // 1st sec countdown
+  blinkLED(1); 
+  delay(1000); // 2nd sec countdown
   
-  turn(100, 45);
-  blinkLED(1);
-  turn(100, -90);
-  blinkLED(1);
-  turn(100, 180);
-  blinkLED(1);
-  delay(5000); // 5 seconds
-  rotate(100, 45);
-  blinkLED(1);
-  rotate(100, -90);
-  blinkLED(1);
-  rotate(100, 180);
-  blinkLED(1);
+  driveDistance(-100, 100); // drive backward straight at top speed for dist. of 1m
+  blinkLED(2);
+
+  for(int i = 0; i <= 50; i++) {
+    drive(80, 50, i < 40); // drive forward at speed 80 at step of 50ms until i >= 40
+    if(i % 20 == 0) blinkLED(1); // blink every second (20*50 = 1000ms)
+  }
+  blinkLED(2);
+  
+  turnForward(100, -90); // rotate on outer-wheel 90 deg counter-clockwise at top speed
+  blinkLED(4);
+
+  rotate(100, 180); // rotate on both wheel 180 deg counter-clock at top speed
+  blinkLED(5);
 }
