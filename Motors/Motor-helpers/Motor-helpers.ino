@@ -30,7 +30,7 @@ negative speed = backward
 Input: int speed, int distance (in cm)
 Output: movement in a straight line limited by distance
 */
-void driveDistance(int speed, int distance) {
+void driveDistance(int speed, int distance, const float slowingCoeff = 92) {
   bool direction = speed > 0; // Determine direction from speed
   digitalWrite(mRphasePin, direction); // Set direction for RIGHT motor
   digitalWrite(mLphasePin, direction); // Set direction for LEFT motor
@@ -53,7 +53,7 @@ negative speed = backward
 Input: int speed, int distance, int step [ms]
 Output: movement in a straight line until interrupted by argument
 */
-void drive(int speed, int step, bool stop) {
+void drive(int speed, int step, bool stop, const float slowingCoeff = 92) {
   bool direction = speed > 0; // Determine direction from speed
   digitalWrite(mRphasePin, direction); // Set direction for RIGHT motor
   digitalWrite(mLphasePin, direction); // Set direction for LEFT motor
@@ -79,7 +79,7 @@ negative degrees = turning anticlockwise
 Input: int speed, int deg
 Output: movement forward on an arc limited by degrees
 */
-void turnForward(int speed, int deg) {
+void turnForward(int speed, int deg, const float slowingCoeff = 92) {
   bool clockwise = deg > 0; // Determine direction of rotation from degrees
   if (clockwise) {
     analogWrite(mRpwmPin, 0);         // Stop RIGHT motor
@@ -104,7 +104,7 @@ negative degrees = turning anticlockwise
 Input: int speed, int deg
 Output: rotating movement in place on an arc limited by degrees
 */
-void rotate(int speed, int deg) {
+void rotate(int speed, int deg, const float slowingCoeff = 92) {
   bool clockwise = deg > 0; // Determine direction of rotation from degrees
   if (clockwise) {
     digitalWrite(mRphasePin, LOW); // RIGHT motor backward
