@@ -8,7 +8,10 @@ const char* password = "unwrinkleable66abrogative";
 // Target Domain
 const char* server = "http://3.250.38.184:8000/api/arrived/wsdu8873";
 
-void destinationFetch(){
+// Current Position
+int pos = 0;
+
+int destinationFetch(int currentPos){
   // Ensure  WiFi Connected
   if(WiFi.status()==WL_CONNECTED){
     WiFiClient client;
@@ -22,7 +25,8 @@ void destinationFetch(){
     http.addHeader("Content-Length", "10");
     
     // Content Body
-    String httpRequestData = "position=0";
+    String pos = String(currentPos);
+    String httpRequestData = "position=" + pos;
 
     // Post Content
     int httpResponseData = http.POST(httpRequestData);
@@ -35,10 +39,13 @@ void destinationFetch(){
     Serial.println(httpResponseData);
     Serial.println(payload);
 
+    // Convert to Integer
+    int currentPos = payload.toInt();
+
     // End
     http.end();
 
-    delay(10000);
+    return currentPos;
   }
 }
 
@@ -57,5 +64,6 @@ void setup() {
 }
 
 void loop() {
-  destinationFetch();
+  int nextPos;
+  nextPos = destinationFetch(pos);
 }
