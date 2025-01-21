@@ -89,7 +89,7 @@ void turn(int speed, int deg) {
     analogWrite(mRpwmPin, abs(speed));    // Set speed for RIGHT motor
   }
 
-  delay(abs(deg) * 10); // Simulate turn duration (adjust factor as needed)
+  delay(round(abs(deg) * 500 / speed)); // Simulate turn duration (adjust factor as needed)
 
   analogWrite(mRpwmPin, 0); // Stop RIGHT motor
   analogWrite(mLpwmPin, 0); // Stop LEFT motor
@@ -117,7 +117,7 @@ void rotate(int speed, int deg) {
   analogWrite(mRpwmPin, abs(speed)); // Set speed for RIGHT motor
   analogWrite(mLpwmPin, abs(speed) * slowingCoeff); // Set speed for LEFT motor
 
-  delay(abs(deg) * 10); // Simulate turn duration (adjust factor as needed)
+  delay(round(abs(deg) * 250 / speed)); // Simulate turn duration (adjust factor as needed)
 
   analogWrite(mRpwmPin, 0); // Stop RIGHT motor
   analogWrite(mLpwmPin, 0); // Stop LEFT motor
@@ -144,5 +144,17 @@ void loop() {
   delay(1000); // 5 seconds
   blinkLED(1); // 3 sec countdown
   
-  
+  turn(100, 45);
+  blinkLED(1);
+  turn(100, -90);
+  blinkLED(1);
+  turn(100, 180);
+  blinkLED(1);
+  delay(5000); // 5 seconds
+  rotate(100, 45);
+  blinkLED(1);
+  rotate(100, -90);
+  blinkLED(1);
+  rotate(100, 180);
+  blinkLED(1);
 }
