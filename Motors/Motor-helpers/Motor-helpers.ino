@@ -4,6 +4,9 @@ const int mRphasePin = 38; // RIGHT Motor Phase
 const int mLpwmPin = 39; // LEFT Motor PWM
 const int mLphasePin = 20; // LEFT Motor Phase
 
+// ...motor calibration (native to script):
+const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
+
 /*
 Fuction to flash the onboard LED a given number of times - only on board v 1.0
 
@@ -19,80 +22,91 @@ void blinkLED(int times) {
 }
 
 /*
-Function to drive forward/backward a given distance at a given speed 
+Function to drive forward/backward a given distance in cm at a given speed
 
-Uses no fs
-Input: int speed, int distance, bool direction
+Direction is evaluated from speed parameter:
+positive speed = forward 
+negative speed = backward
+Input: int speed, int distance (in cm)
 Output: movement in a straight line limited by distance
 */
-void driveDistance(int speed, int distance, bool direction) {
+void driveDistance(int speed, int distance) {
+  bool direction = speed > 0; // Determine direction from speed
   digitalWrite(mRphasePin, direction); // Set direction for RIGHT motor
   digitalWrite(mLphasePin, direction); // Set direction for LEFT motor
 
-  analogWrite(mRpwmPin, speed); // Set speed for RIGHT motor
-  analogWrite(mLpwmPin, speed); // Set speed for LEFT motor
+  analogWrite(mRpwmPin, abs(speed)); // Set speed for RIGHT motor
+  analogWrite(mLpwmPin, abs(speed) * slowingCoeff); // Set speed for LEFT motor
 
-  delay(distance * 10); // Simulate distance covered (adjust factor as needed)
+  delay(round(distance / speed * 9000)); // Simulate distance covered (adjust factor as needed)
 
   analogWrite(mRpwmPin, 0); // Stop RIGHT motor
   analogWrite(mLpwmPin, 0); // Stop LEFT motor
 }
 
 /*
-Function to drive forward/backward a given distance until stop == false
+Function to drive forward/backward a given distance until stop == false, sampled by 50ms
 
-Uses no fs
-Input: int speed, int distance, bool direction
+Direction is evaluated from speed parameter:
+positive speed = forward
+negative speed = backward
+Input: int speed, int distance
 Output: movement in a straight line until interrupted by argument
 */
-void driveUntilStop(int speed, int distance, bool direction) {
+void drive(int speed, bool stop) {
+  bool direction = speed > 0; // Determine direction from speed
   digitalWrite(mRphasePin, direction); // Set direction for RIGHT motor
   digitalWrite(mLphasePin, direction); // Set direction for LEFT motor
 
-  analogWrite(mRpwmPin, speed); // Set speed for RIGHT motor
-  analogWrite(mLpwmPin, speed); // Set speed for LEFT motor
+  analogWrite(mRpwmPin, abs(speed)); // Set speed for RIGHT motor
+  analogWrite(mLpwmPin, abs(speed) * slowingCoeff); // Set speed for LEFT motor
 
   int coveredDistance = 0;
-  while (coveredDistance < distance) {
-    delay(10); // Simulate distance increments
-    coveredDistance += 1;
+  if (!stop) {
+    delay(50); // Simulate distance increments;
+  } else {
+    analogWrite(mRpwmPin, 0); // Stop RIGHT motor
+    analogWrite(mLpwmPin, 0); // Stop LEFT motor
   }
-
-  analogWrite(mRpwmPin, 0); // Stop RIGHT motor
-  analogWrite(mLpwmPin, 0); // Stop LEFT motor
 }
 
 /*
-Function to negotiate a turn of certain angle in degrees left/right on only the outer wheel
+Function to negotiate a turn of certain angle in degrees on only the outer wheel
 
-Uses no fs
-Input: int speed, int deg, bool right
+Direction of rotation is evaluated from degrees parameter:
+positive degrees = turning clockwise
+negative degrees = turning anticlockwise
+Input: int speed, int deg
 Output: movement forward on an arc limited by degrees
 */
-void turn(int speed, int deg, bool right) {
-  if (right) {
+void turn(int speed, int deg) {
+  bool clockwise = deg > 0; // Determine direction of rotation from degrees
+  if (clockwise) {
     analogWrite(mRpwmPin, 0);         // Stop RIGHT motor
-    analogWrite(mLpwmPin, speed);    // Set speed for LEFT motor
+    analogWrite(mLpwmPin, abs(speed) * slowingCoeff);    // Set speed for LEFT motor
   } else {
     analogWrite(mLpwmPin, 0);        // Stop LEFT motor
-    analogWrite(mRpwmPin, speed);    // Set speed for RIGHT motor
+    analogWrite(mRpwmPin, abs(speed));    // Set speed for RIGHT motor
   }
 
-  delay(deg * 10); // Simulate turn duration (adjust factor as needed)
+  delay(abs(deg) * 10); // Simulate turn duration (adjust factor as needed)
 
   analogWrite(mRpwmPin, 0); // Stop RIGHT motor
   analogWrite(mLpwmPin, 0); // Stop LEFT motor
 }
 
 /*
-Function to negotiate a turn of certain angle in degrees left/right on both wheels
+Function to negotiate a turn of certain angle in degrees on both wheels
 
-Uses no fs
-Input: int speed, int deg, bool right
+Direction of rotation is evaluated from degrees parameter:
+positive degrees = turning clockwise
+negative degrees = turning anticlockwise
+Input: int speed, int deg
 Output: rotating movement in place on an arc limited by degrees
 */
-void rotate(int speed, int deg, bool right) {
-  if (right) {
+void rotate(int speed, int deg) {
+  bool clockwise = deg > 0; // Determine direction of rotation from degrees
+  if (clockwise) {
     digitalWrite(mRphasePin, LOW); // RIGHT motor backward
     digitalWrite(mLphasePin, HIGH); // LEFT motor forward
   } else {
@@ -100,10 +114,10 @@ void rotate(int speed, int deg, bool right) {
     digitalWrite(mLphasePin, LOW);  // LEFT motor backward
   }
 
-  analogWrite(mRpwmPin, speed); // Set speed for RIGHT motor
-  analogWrite(mLpwmPin, speed); // Set speed for LEFT motor
+  analogWrite(mRpwmPin, abs(speed)); // Set speed for RIGHT motor
+  analogWrite(mLpwmPin, abs(speed) * slowingCoeff); // Set speed for LEFT motor
 
-  delay(deg * 10); // Simulate turn duration (adjust factor as needed)
+  delay(abs(deg) * 10); // Simulate turn duration (adjust factor as needed)
 
   analogWrite(mRpwmPin, 0); // Stop RIGHT motor
   analogWrite(mLpwmPin, 0); // Stop LEFT motor
@@ -123,19 +137,33 @@ void setup() {
 
 // the loop routine runs over and over again continuously:
 void loop() {
-  digitalWrite(mRphasePin, HIGH); // motor 1 forward
-  digitalWrite(mLphasePin, HIGH); // motor 2 forward
-  analogWrite(mRpwmPin, 55); // set speed of motor 1
-  analogWrite(mLpwmPin, 50); // set speed of motor 2
-  Serial.println("Forward"); // Display motor direction
-  delay(2000); //2 seconds
-  blinkLED(1); //Blinks once after setting to go forward
+  //Serial.println("Forward"); // Display motor direction
+  blinkLED(1); // 3 sec countdown
+  delay(1000); // 5 seconds
+  blinkLED(1); // 3 sec countdown
+  delay(1000); // 5 seconds
+  blinkLED(1); // 3 sec countdown
   
-  digitalWrite(mRphasePin, LOW); // motor 1 forward
-  digitalWrite(mLphasePin, LOW); // motor 2 forward
-  analogWrite(mRpwmPin, 55); // set speed of motor 1
-  analogWrite(mLpwmPin, 50); // set speed of motor 2
-  Serial.println("Forward"); // Display motor direction
+  driveDistance(50, 100);
+  blinkLED(2); // Blinks once after fwd test
   delay(2000); // 2 seconds
-  blinkLED(2); //Blinks 2 times after setting to go back
+  driveDistance(75, 100);
+  blinkLED(4); // Blinks once after fwd test
+  delay(2000); // 2 seconds
+  driveDistance(100, 100);
+  blinkLED(6); // Blinks once after fwd test
+  delay(2000); // 2 seconds
+  
+  /*
+  driveDistance(-25, 20);
+  driveDistance(-50, 20);
+  driveDistance(-75, 20);
+  driveDistance(-100, 20);
+  blinkLED(2); // Blinks twice after rvs test
+
+  for(int i = 0; i <= 20; i++) {
+    drive(75, i < 15);
+  }
+  blinkLED(3); // Blinks thrice after interrupt test
+  */
 }
