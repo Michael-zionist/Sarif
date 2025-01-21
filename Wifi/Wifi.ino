@@ -3,31 +3,18 @@
 
 // Wifi Info
 const char* ssid = "iot";
-const char* password = "athyria67hyperflexibleness";
+const char* password = "unwrinkleable66abrogative";
 
 // Target Domain
 const char* server = "http://3.250.38.184:8000/api/arrived/wsdu8873";
 
-
-void setup() {
-  Serial.begin(115200);
-
-  // Connect to Wifi
-  WiFi.begin(ssid, password);
-  Serial.println("Connecting...");
-  while(WiFi.status() != WL_CONNECTED){
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-}
-
-void loop() {
-  // Send post request
+void destinationFetch(){
+  // Ensure  WiFi Connected
   if(WiFi.status()==WL_CONNECTED){
     WiFiClient client;
     HTTPClient http;
 
+    // Start creating post
     http.begin(client, server);
 
     // Content Header
@@ -45,9 +32,30 @@ void loop() {
     payload = http.getString();
 
     Serial.print("HTTP Response code: ");
+    Serial.println(httpResponseData);
     Serial.println(payload);
 
     // End
     http.end();
+
+    delay(10000);
   }
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  // Connect to Wifi
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting...");
+  while(WiFi.status() != WL_CONNECTED){
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  delay(500);
+}
+
+void loop() {
+  destinationFetch();
 }
