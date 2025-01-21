@@ -1,0 +1,67 @@
+int AnalogValue[5] = {0, 0, 0, 0, 0}; // to store the analogu readings from sensor 
+int AnalogPin[5] = {4, 5, 6, 7, 15}; // keep 8 free for tone O/P music
+int BinaryArray[5] = {0, 0, 0, 0, 0}; // to store the binary representation
+int Threshold = 2000; // threshold value 
+
+void setup()
+{
+    Serial.begin(9600);
+}
+
+int binaryToDecimal(int binaryArray[], int size)
+{
+    int decimalValue = 0; //variable to store computed decimal value
+    for (int i = 0; i < size; i++)
+    {
+        decimalValue = (decimalValue << 1) | binaryArray[i];
+    }
+    return decimalValue;
+}
+
+void loop()
+{
+    for (int i = 0; i < 5; i++) {
+        AnalogValue[i] = analogRead(AnalogPin[i]);
+        Serial.print(AnalogValue[i]); // Print the actual analog reading
+        Serial.print("\t"); // Tab for formatting
+
+        //decides to add 0 or 1 based on threshold
+        if (AnalogValue[i] <= Threshold) { 
+            BinaryArray[i] = 1;
+        } else {
+            BinaryArray[i] = 0;
+        }
+    }
+
+    Serial.println(""); //skips line
+
+    int decimalValue = binaryToDecimal(BinaryArray, 5); //runs binary array through binary to decimal converter
+
+    //prints binary array 
+    Serial.print("Binary: "); 
+    for (int i = 0; i < 5; i++) {
+        Serial.print(BinaryArray[i]);
+    } 
+    
+    Serial.println(""); //skips line
+
+    // Print the decimal equivalent
+    Serial.print("Decimal: ");
+    Serial.println(decimalValue);
+    Serial.print("\n");
+
+    delay(200); // 600ms delay rate till next reading is taken/processed
+
+    switch(decimalValue){
+      case 1:
+        turnForward(50, 45);
+      case 2:
+        turnForward(50, 20);
+      case 4:
+        drive();
+      case 8:
+        turnForward(50, 45);
+      case 16:
+        turnForward(50, -45);
+    }
+}
