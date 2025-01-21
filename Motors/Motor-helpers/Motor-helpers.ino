@@ -38,7 +38,7 @@ void driveDistance(int speed, int distance) {
   analogWrite(mRpwmPin, abs(speed)); // Set speed for RIGHT motor
   analogWrite(mLpwmPin, abs(speed) * slowingCoeff); // Set speed for LEFT motor
 
-  delay(round(distance / speed * 9000)); // Simulate distance covered (adjust factor as needed)
+  delay(abs(round((distance * 9000 / speed)))); // Simulate distance covered (adjust factor as needed)
 
   analogWrite(mRpwmPin, 0); // Stop RIGHT motor
   analogWrite(mLpwmPin, 0); // Stop LEFT motor
@@ -144,26 +144,5 @@ void loop() {
   delay(1000); // 5 seconds
   blinkLED(1); // 3 sec countdown
   
-  driveDistance(50, 100);
-  blinkLED(2); // Blinks once after fwd test
-  delay(2000); // 2 seconds
-  driveDistance(75, 100);
-  blinkLED(4); // Blinks once after fwd test
-  delay(2000); // 2 seconds
-  driveDistance(100, 100);
-  blinkLED(6); // Blinks once after fwd test
-  delay(2000); // 2 seconds
   
-  /*
-  driveDistance(-25, 20);
-  driveDistance(-50, 20);
-  driveDistance(-75, 20);
-  driveDistance(-100, 20);
-  blinkLED(2); // Blinks twice after rvs test
-
-  for(int i = 0; i <= 20; i++) {
-    drive(75, i < 15);
-  }
-  blinkLED(3); // Blinks thrice after interrupt test
-  */
 }
