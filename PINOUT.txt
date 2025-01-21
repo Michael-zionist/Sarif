@@ -9,3 +9,6 @@ const int A2pin = 5;        // Analog pin 2 (line-follow B/W 5-sensor)
 const int A3pin = 6;        // Analog pin 3 (line-follow B/W 5-sensor)
 const int A4pin = 7;        // Analog pin 4 (line-follow B/W 5-sensor)
 const int A5pin = 15;       // Analog pin 5 (line-follow B/W 5-sensor)
+
+// ...motor calibration (native to script):
+const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
