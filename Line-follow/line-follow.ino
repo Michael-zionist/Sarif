@@ -22,17 +22,17 @@ void setup() {
 // the loop routine runs over and over again continuously:
 void loop() {
   while (!stop) {
-  int spectrum = analogRead(A0); // Example sensor input (adjust as needed)
-  int turnDeg = directionController(spectrum); // Get the turn direction and magnitude
-  
-  if (turnDeg == 0) {
-    drive(80, step, stop); // Move forward if no turn needed
-  } else if (turnDeg > 0) {
-    turnForward(80, turnDeg); // Adjust to the right
-  } else {
-    turnForward(80, turnDeg); // Adjust to the left (negative degrees)
+    int spectrum = analogRead(A0); // Example sensor input (adjust as needed)
+    int turnDeg = directionController(spectrum); // Get the turn direction and magnitude
+    
+    if (turnDeg == 0) {
+      drive(80, step, stop); // Move forward if no turn needed
+    } else if (turnDeg > 0) {
+      turnForward(80, turnDeg); // Adjust to the right
+    } else {
+      turnForward(80, turnDeg); // Adjust to the left (negative degrees)
+    }
+    
+    // Optional: Add a condition to break the loop if needed
   }
-  
-  // Optional: Add a condition to break the loop if needed
-}
 }
