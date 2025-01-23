@@ -1,5 +1,3 @@
-
-
 def arrayToDecimal(arr, threshold):
     binaryValue = ''  #creates empty string to store bianry value 
     
