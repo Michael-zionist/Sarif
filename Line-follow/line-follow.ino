@@ -26,8 +26,8 @@ void blinkLED(int times) {
 }
 
 // Function to drive the robot forward/backward a given distance in cm
-void driveDistance(int speed, int distance, const float slowingCoeff = 92) {
-  bool direction = speed > 0; // Determine direction from speed
+void driveDistance(int speed, int distance, const float slowingCoeff = 0.92) {
+  bool direction = speed < 0; // Determine direction from speed
   digitalWrite(mRphasePin, direction); // Set direction for RIGHT motor
   digitalWrite(mLphasePin, direction); // Set direction for LEFT motor
 
@@ -41,8 +41,8 @@ void driveDistance(int speed, int distance, const float slowingCoeff = 92) {
 }
 
 // Function to drive the robot forward/backward until stopped, sampled every 50ms
-void drive(int speed, int step, bool stop, const float slowingCoeff = 92) {
-  bool direction = speed > 0; // Determine direction from speed
+void drive(int speed, int step, bool stop, const float slowingCoeff = 0.92) {
+  bool direction = speed < 0; // Determine direction from speed
   digitalWrite(mRphasePin, direction); // Set direction for RIGHT motor
   digitalWrite(mLphasePin, direction); // Set direction for LEFT motor
 
@@ -59,7 +59,7 @@ void drive(int speed, int step, bool stop, const float slowingCoeff = 92) {
 }
 
 // Function to turn the robot forward on the outer wheel
-void turnForward(int speed, int deg, const float slowingCoeff = 92) {
+void turnForward(int speed, int deg, const float slowingCoeff = 0.92) {
   bool clockwise = deg > 0; // Determine direction of rotation from degrees
   if (clockwise) {
     analogWrite(mRpwmPin, 0);         // Stop RIGHT motor
@@ -76,7 +76,7 @@ void turnForward(int speed, int deg, const float slowingCoeff = 92) {
 }
 
 // Function to rotate the robot in place on both wheels
-void rotate(int speed, int deg, const float slowingCoeff = 92) {
+void rotate(int speed, int deg, const float slowingCoeff = 0.92) {
   bool clockwise = deg > 0; // Determine direction of rotation from degrees
   if (clockwise) {
     digitalWrite(mRphasePin, LOW); // RIGHT motor backward
@@ -131,8 +131,8 @@ int readSensors(int whiteThreshold, int* AnalogPin) {
 // Function to convert the spectrum value to the corresponding degrees
 int directionController(int spectrum) {
   // Define the spectrum-to-degrees lookup dictionary
-  const int spectrumValues[] = {1, 2, 3, 8, 16, 24};   // Spectrum values
-  const int degreeValues[]   = {-10, -5, -20, 5, 10, 20};   // Corresponding degree values
+  const int spectrumValues[] = {1, 2, 3,  8,   16, 24};   // Spectrum values
+  const int degreeValues[]   = {8, 3, 20, -3, -8, -20};   // Corresponding degree values
 
   const int dictionarySize = sizeof(spectrumValues) / sizeof(spectrumValues[0]);
 
@@ -179,13 +179,11 @@ void loop() {
     // If no line is detected, stop and blink LED
     analogWrite(mRpwmPin, 0);
     analogWrite(mLpwmPin, 0);
+    blinkLED(2);
   } else if (degrees == 0) {
     // If the robot is aligned with the line, drive forward
-    blinkLED(2);
-    drive(80, 50, false); // Drive forward at speed 80, no stop condition
+    drive(100, 50, false); // Drive forward at speed 80, no stop condition
   } else {
-    turnForward(80, degrees); // Turn with speed 80 and the degrees value
+    turnForward(100, degrees); // Turn with speed 80 and the degrees value
   }
-
-  delay(50); // Short delay for stability
 }

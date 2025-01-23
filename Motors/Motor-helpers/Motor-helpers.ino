@@ -21,17 +21,9 @@ void blinkLED(int times) {
   }
 }
 
-/*
-Function to drive forward/backward a given distance in cm at a given speed
-
-Direction is evaluated from speed parameter:
-positive speed = forward 
-negative speed = backward
-Input: int speed, int distance (in cm)
-Output: movement in a straight line limited by distance
-*/
-void driveDistance(int speed, int distance, const float slowingCoeff = 92) {
-  bool direction = speed > 0; // Determine direction from speed
+// Function to drive the robot forward/backward a given distance in cm
+void driveDistance(int speed, int distance, const float slowingCoeff = 0.92) {
+  bool direction = speed < 0; // Determine direction from speed
   digitalWrite(mRphasePin, direction); // Set direction for RIGHT motor
   digitalWrite(mLphasePin, direction); // Set direction for LEFT motor
 
@@ -44,17 +36,9 @@ void driveDistance(int speed, int distance, const float slowingCoeff = 92) {
   analogWrite(mLpwmPin, 0); // Stop LEFT motor
 }
 
-/*
-Function to drive forward/backward a given distance until stop == false, sampled by 50ms
-
-Direction is evaluated from speed parameter:
-positive speed = forward
-negative speed = backward
-Input: int speed, int distance, int step [ms]
-Output: movement in a straight line until interrupted by argument
-*/
-void drive(int speed, int step, bool stop, const float slowingCoeff = 92) {
-  bool direction = speed > 0; // Determine direction from speed
+// Function to drive the robot forward/backward until stopped, sampled every 50ms
+void drive(int speed, int step, bool stop, const float slowingCoeff = 0.92) {
+  bool direction = speed < 0; // Determine direction from speed
   digitalWrite(mRphasePin, direction); // Set direction for RIGHT motor
   digitalWrite(mLphasePin, direction); // Set direction for LEFT motor
 
@@ -70,16 +54,8 @@ void drive(int speed, int step, bool stop, const float slowingCoeff = 92) {
   }
 }
 
-/*
-Function to negotiate a turn of certain angle in degrees on only the outer wheel
-
-Direction of rotation is evaluated from degrees parameter:
-positive degrees = turning clockwise
-negative degrees = turning anticlockwise
-Input: int speed, int deg
-Output: movement forward on an arc limited by degrees
-*/
-void turnForward(int speed, int deg, const float slowingCoeff = 92) {
+// Function to turn the robot forward on the outer wheel
+void turnForward(int speed, int deg, const float slowingCoeff = 0.92) {
   bool clockwise = deg > 0; // Determine direction of rotation from degrees
   if (clockwise) {
     analogWrite(mRpwmPin, 0);         // Stop RIGHT motor
@@ -95,16 +71,8 @@ void turnForward(int speed, int deg, const float slowingCoeff = 92) {
   analogWrite(mLpwmPin, 0); // Stop LEFT motor
 }
 
-/*
-Function to negotiate a turn of certain angle in degrees on both wheels
-
-Direction of rotation is evaluated from degrees parameter:
-positive degrees = turning clockwise
-negative degrees = turning anticlockwise
-Input: int speed, int deg
-Output: rotating movement in place on an arc limited by degrees
-*/
-void rotate(int speed, int deg, const float slowingCoeff = 92) {
+// Function to rotate the robot in place on both wheels
+void rotate(int speed, int deg, const float slowingCoeff = 0.92) {
   bool clockwise = deg > 0; // Determine direction of rotation from degrees
   if (clockwise) {
     digitalWrite(mRphasePin, LOW); // RIGHT motor backward
