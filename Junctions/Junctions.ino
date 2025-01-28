@@ -14,12 +14,12 @@ int AnalogPin[5] = {A1pin, A2pin, A3pin, A4pin, A5pin};
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
 const int topSpeed = 250;
 
-// Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, I, I, I, B]
+// Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, N, I, I, I, B]
 // N - Navigation node (Nf - fictional, Np - parking)
 // I - Index (LastNodeIndex, NextNodeIndex, TargetNodeIndex)
 // B - Orientation boolean (0 - counter-clockwise, 1 - clockwise)
 // Starting position: LastNode -> 4; NextNode -> 0; TargetNode -> 5; Orientation -> 0 (counter-clockwise)
-const int mapArray[10] = {0, 7, 2, 3, 6, 4, 5, 5, 0, 6};
+int mapArray[12] = {0, 7, 2, 3, 6, 4, 5, 1, 5, 0, 6, 0};
 
 // Function to blink the onboard LED a given number of times
 void blinkLED(int times) {
@@ -135,10 +135,11 @@ int readSensors(int whiteThreshold, int* AnalogPin) {
 }
 
 // Function to convert the spectrum value to the corresponding degrees
-int directionController(int spectrum) {
+// Returns 666 at a junction
+int directionController(int spectrum, int* mapArray, int speed) {
   // Define the spectrum-to-degrees lookup dictionary
-  const int spectrumValues[] = {1, 2, 3,  8,   16, 24};   // Spectrum values
-  const int degreeValues[]   = {8, 3, 20, -3, -8, -20};   // Corresponding degree values
+  const int spectrumValues[] = {1, 2, 3,  8,   16, 24, 31};   // Spectrum values
+  const int degreeValues[]   = {8, 3, 20, -3, -8, -20, 666};  // Corresponding deg (666 -> junction)
 
   const int dictionarySize = sizeof(spectrumValues) / sizeof(spectrumValues[0]);
 
@@ -153,12 +154,71 @@ int directionController(int spectrum) {
 }
 
 // Function to traverse a junction and report current Node position to server
-void crossJunction(int* mapArray) {
+void crossJunction(
+    int* mapArray, int speed, int turnDegrees = 90, 
+    int forwardDistance = 5, float coeff = 0.92
+    ) {
+  // Extract indices and orientation from the mapArray
+  int& LastNodeIndex = mapArray[8];
+  int& NextNodeIndex = mapArray[9];
+  int& TargetNodeIndex = mapArray[10];
+  int& Orientation = mapArray[11];
+
+  // Determine behavior at junctions
+  if (NextNodeIndex == 7 || NextNodeIndex == 6) {
+    // Nodes 7 and 6 are true junctions
+    if (TargetNodeIndex > NextNodeIndex) {
+      // Target node is ahead: Turn 90 degrees right
+      rotate(speed, turnDegrees, coeff);
+    } else if (TargetNodeIndex < NextNodeIndex) {
+      // Target node is behind: Turn 90 degrees left
+      rotate(-speed, turnDegrees, coeff);
+    }
+    // Drive forward 5 cm after turning
+    driveDistance(speed, forwardDistance, coeff);
+  } else if ((NextNodeIndex == 3 || NextNodeIndex == 4) &&
+             (TargetNodeIndex == 6 || TargetNodeIndex == 4 || TargetNodeIndex == 3)) {
+    // Nodes 3 and 4 with a target node leading through 3-6 or 4-6
+    // Reverse 180 degrees to avoid less advantageous paths
+    rotate(speed, 180, coeff);
+    driveDistance(speed, forwardDistance, coeff);
+  } else {
+    // Default: Drive straight over the node for 5 cm
+    driveDistance(speed, forwardDistance, coeff);
+  }
+
+  // Update navigation indices after crossing the node
+  LastNodeIndex = NextNodeIndex;
+
+  if (Orientation == 0) {
+    // Clockwise loop direction
+    if (LastNodeIndex == 4) {
+      NextNodeIndex = 0;
+    } else {
+      NextNodeIndex = LastNodeIndex + 1;
+    }
+  } else {
+    // Counterclockwise loop direction
+    if (LastNodeIndex == 0) {
+      NextNodeIndex = 4;
+    } else {
+      NextNodeIndex = LastNodeIndex - 1;
+    }
+  }
+
+  // Check if the robot has arrived at the target node
+  if (NextNodeIndex == TargetNodeIndex) {
+    Serial.println("Hooray");
+  }
 }
+
+
 
 // Setup function runs once when you press reset
 void setup() {
   Serial.begin(9600);
+  // Set map between 4 and 0, facing counter-clockwise, target: 2 (target index = 2)
+  int mapArray[12] = {0, 7, 2, 3, 6, 4, 5, 1, 5, 0, 2, 0}; 
 
   // Configure motor pins as outputs
   pinMode(mRpwmPin, OUTPUT);
@@ -193,6 +253,9 @@ void loop() {
   } else if (degrees == 0) {
     // If the robot is aligned with the line, drive forward
     drive(100, 50, false); // Drive forward at speed 80, no stop condition
+  } else if (degrees == 666) {
+    // if the robot reaches a junction, cross junction:
+    crossJunction(mapArray, 100);
   } else {
     turnForward(100, degrees); // Turn with speed 80 and the degrees value
   }
