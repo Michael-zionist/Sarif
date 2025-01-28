@@ -13,7 +13,7 @@ int AnalogPin[5] = {A1pin, A2pin, A3pin, A4pin, A5pin};
 
 // ...motor calibration (native to script):
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
-const int topSpeed = 250;
+const int topSpeed = 150;
 
 // Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, N, I, I, I, B]
 // N - Navigation node (Nf - fictional, Np - parking)
@@ -143,7 +143,7 @@ int readSensors(int whiteThreshold, int* AnalogPin) {
 
 // Function to convert the spectrum value to the corresponding degrees
 // Returns 666 at a junction
-int directionController(int spectrum, int* mapArray, int speed) {
+int directionController(int spectrum) {
   // Define the spectrum-to-degrees lookup dictionary
   const int spectrumValues[] = {1, 2, 3,  8,   16, 24, 31};   // Spectrum values
   const int degreeValues[]   = {8, 3, 20, -3, -8, -20, 666};  // Corresponding deg (666 -> junction)
@@ -161,15 +161,15 @@ int directionController(int spectrum, int* mapArray, int speed) {
 }
 
 // Function to traverse a junction and report current Node position to server
-void crossJunction(
-    int* mapArray, int speed, int turnDegrees = 90, 
-    int forwardDistance = 5, float coeff = 0.92
-    ) {
+void crossJunction(int* mapArray, int speed, int turnDegrees = 90, int forwardDistance = 5, float coeff = 0.92) {
   // Extract indices and orientation from the mapArray
   int& LastNodeIndex = mapArray[8];
   int& NextNodeIndex = mapArray[9];
   int& TargetNodeIndex = mapArray[10];
   int& Orientation = mapArray[11];
+
+  // Blink the LED based on the junction ID (NextNodeIndex)
+  blinkLED(mapArray[NextNodeIndex]);  // Blink the LED the number of times corresponding to the junction ID
 
   // Determine behavior at junctions
   if (NextNodeIndex == 7 || NextNodeIndex == 6) {
@@ -187,8 +187,8 @@ void crossJunction(
              (TargetNodeIndex == 6 || TargetNodeIndex == 4 || TargetNodeIndex == 3)) {
     // Nodes 3 and 4 with a target node leading through 3-6 or 4-6
     // Reverse 180 degrees to avoid less advantageous paths
-    rotate(speed, 180, coeff);
-    driveDistance(speed, forwardDistance, coeff);
+    rotate(speed, 140, coeff);
+    driveDistance(speed, 1, coeff);  // Drive only 1 cm after a 180-degree turn
   } else {
     // Default: Drive straight over the node for 5 cm
     driveDistance(speed, forwardDistance, coeff);
@@ -218,6 +218,7 @@ void crossJunction(
     Serial.println("Hooray");
   }
 }
+
 
 
 
@@ -259,11 +260,11 @@ void loop() {
     blinkLED(2);
   } else if (degrees == 0) {
     // If the robot is aligned with the line, drive forward
-    drive(100, 50, false); // Drive forward at speed 80, no stop condition
+    drive(topSpeed, 25, false); // Drive forward at speed 80, no stop condition
   } else if (degrees == 666) {
     // if the robot reaches a junction, cross junction:
-    crossJunction(mapArray, 100);
+    crossJunction(mapArray, topSpeed);
   } else {
-    turnForward(100, degrees); // Turn with speed 80 and the degrees value
+    turnForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
   }
 }
