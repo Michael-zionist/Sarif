@@ -162,71 +162,95 @@ int directionController(int spectrum) {
 }
 
 // Function to traverse a junction and report current Node position to server.
-// Returns true when the target node was reached, false otherwise
-bool crossJunction(
+int* crossJunction(
     int* mapArray, int speed, 
-    int turnDegrees = 90, int forwardDistance = 5, float coeff = 0.92
-  ) {
-  // Extract indices and orientation from the mapArray
-  int& LastNodeIndex = mapArray[8];
-  int& NextNodeIndex = mapArray[9];
-  int& TargetNodeIndex = mapArray[10];
-  int& Orientation = mapArray[11];
+    int turnDegrees = 90, int forwardDistance = 2, float coeff = 0.92
+) {
+  // Extract key indices and orientation from mapArray
+  int& lastNodeIndex = mapArray[8];
+  int& nextNodeIndex = mapArray[9];
+  int& targetNodeIndex = mapArray[10];
+  int& orientation = mapArray[11];
 
-  // Blink the LED based on the junction ID (NextNodeIndex)
-  blinkLED(mapArray[NextNodeIndex]);  // Blink the LED the number of times corresponding to the junction ID
+  // Blink LED the number of times corresponding to the current node
+  blinkLED(nextNodeIndex);
 
-  // Determine behavior at junctions
-  if (NextNodeIndex == 7 || NextNodeIndex == 6) {
-    // Nodes 7 and 6 are true junctions
-    if (TargetNodeIndex > NextNodeIndex) {
-      // Target node is ahead: Turn 90 degrees right
-      rotate(speed, turnDegrees, coeff);
-    } else if (TargetNodeIndex < NextNodeIndex) {
-      // Target node is behind: Turn 90 degrees left
-      rotate(-speed, turnDegrees, coeff);
+  // Determine behavior based on the current node
+  if (nextNodeIndex == 7) { // Junction 7 behavior
+    if (targetNodeIndex == 2 || targetNodeIndex == 0) {
+      // Drive straight at node 7
+      driveDistance(speed, forwardDistance, coeff);
+    } else if (targetNodeIndex == 1 && lastNodeIndex == 0) {
+      // Turn left at node 7 (path 0 -> 7 -> 1)
+      rotate(-speed, turnDegrees, coeff); // 90-degree left turn
+      driveDistance(speed, forwardDistance, coeff);
+      orientation = 0; // Update orientation for 7 -> 1 edge
+    } else if (targetNodeIndex == 1 && lastNodeIndex == 2) {
+      // Turn right at node 7 (path 2 -> 7 -> 1)
+      rotate(speed, turnDegrees, coeff); // 90-degree right turn
+      driveDistance(speed, forwardDistance, coeff);
+      orientation = 1; // Update orientation for 7 -> 1 edge
     }
-    // Drive forward 5 cm after turning
-    driveDistance(speed, forwardDistance, coeff);
-  } else if ((NextNodeIndex == 3 || NextNodeIndex == 4) &&
-             (TargetNodeIndex == 6 || TargetNodeIndex == 4 || TargetNodeIndex == 3)) {
-    // Nodes 3 and 4 with a target node leading through 3-6 or 4-6
-    // Reverse 180 degrees to avoid less advantageous paths
-    rotate(speed, 140, coeff);
-    driveDistance(speed, 1, coeff);  // Drive only 1 cm after a 180-degree turn
+  } else if (nextNodeIndex == 6) { // Junction 6 behavior
+    if (targetNodeIndex == 3 || targetNodeIndex == 4) {
+      // Drive straight at node 6
+      driveDistance(speed, forwardDistance, coeff);
+    } else if (targetNodeIndex == 1 && lastNodeIndex == 3) {
+      // Turn left at node 6 (path 3 -> 6 -> 1)
+      rotate(-speed, turnDegrees, coeff); // 90-degree left turn
+      driveDistance(speed, forwardDistance, coeff);
+      orientation = 0; // Update orientation for 6 -> 1 edge
+    } else if (targetNodeIndex == 1 && lastNodeIndex == 4) {
+      // Turn right at node 6 (path 4 -> 6 -> 1)
+      rotate(speed, turnDegrees, coeff); // 90-degree right turn
+      driveDistance(speed, forwardDistance, coeff);
+      orientation = 1; // Update orientation for 6 -> 1 edge
+    }
+  } else if (nextNodeIndex == 3 || nextNodeIndex == 4) {
+    // If at nodes 3 or 4 and the target involves edge 3 -> 6 or 4 -> 6
+    if ((nextNodeIndex == 3 && targetNodeIndex == 6) || 
+        (nextNodeIndex == 4 && targetNodeIndex == 6)) {
+      rotate(speed, 180, coeff); // Reverse direction (180 degrees)
+      driveDistance(speed, 1, coeff); // Drive 1 cm after turn
+      orientation = !orientation; // Toggle orientation
+    } else {
+      // Drive straight for other cases at 3 or 4
+      driveDistance(speed, forwardDistance, coeff);
+    }
   } else {
-    // Default: Drive straight over the node for 5 cm
+    // Drive straight for all other nodes
     driveDistance(speed, forwardDistance, coeff);
   }
 
-  // Update navigation indices after crossing the node
-  LastNodeIndex = NextNodeIndex;
+  // Update indices in the mapArray
+  lastNodeIndex = nextNodeIndex;
 
-  if (Orientation == 0) {
-    // Clockwise loop direction
-    if (LastNodeIndex == 4) {
-      NextNodeIndex = 0;
-    } else {
-      NextNodeIndex = LastNodeIndex + 1;
+  if (lastNodeIndex == 1) {
+    // Handle orientation changes at node 1 edges
+    if (nextNodeIndex == 7) {
+      orientation = 0; // For edge 7 -> 1
+    } else if (nextNodeIndex == 6) {
+      orientation = 1; // For edge 6 -> 1
     }
   } else {
-    // Counterclockwise loop direction
-    if (LastNodeIndex == 0) {
-      NextNodeIndex = 4;
+    // Update nextNodeIndex based on orientation
+    if (orientation == 0) {
+      nextNodeIndex = (lastNodeIndex == 4) ? 0 : (lastNodeIndex + 1) % 7;
     } else {
-      NextNodeIndex = LastNodeIndex - 1;
+      nextNodeIndex = (lastNodeIndex == 0) ? 4 : (lastNodeIndex - 1 + 7) % 7;
     }
   }
 
-  // Check if the robot has arrived at the target node
-  if (NextNodeIndex == TargetNodeIndex) {
+  // Print "Hooray" when reaching the target node
+  if (nextNodeIndex == targetNodeIndex) {
     Serial.println("Hooray");
-    return true;
   }
-  return false;
+
+  return mapArray; // Return the updated mapArray
 }
 
-int getIndex(int array[], int arraySize, int number) { // testing function
+// testing function to get the index
+int getIndex(int array[], int arraySize, int number) {
   int index = -1;  // Default to -1 if the number is not found
   for (int i = 0; i < arraySize; i++) {
     if (array[i] == number) {
@@ -249,7 +273,7 @@ void parking(){
     }
   }
 
-// Set map between 4 and 0, facing counter-clockwise, target: 2 (target index = 2)
+// Set map between 4 and 0, facing counter-clockwise, target: 0 (target index = 0)
 int route[5] = {0, 3, 2, 1, 4};
 int routeIndex = 0;
 bool checkpointReached = false;
@@ -283,14 +307,15 @@ void loop() {
     blinkLED(2);
   } else if (degrees == 0) {
     // If the robot is aligned with the line, drive forward
-    drive(topSpeed, 50, false); // Drive forward at speed 80, no stop condition
+    drive(topSpeed, 50, false); // Drive forward at top speed, no stop condition
   } else if (degrees == 666) {
     // if the robot reaches a junction, cross junction:
     checkpointReached = crossJunction(mapArray, topSpeed);
     if(checkpointReached) {
         routeIndex++;
         if (routeIndex < 5) {  // update target
-            mapArray[11] = getIndex(mapArray, 12, route[routeIndex]);
+            mapSize = 12;
+            mapArray[11] = getIndex(mapArray, mapSize, route[routeIndex]);
         }
     }
   } else {
