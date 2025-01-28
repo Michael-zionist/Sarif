@@ -3,6 +3,7 @@ const int mRpwmPin = 37;    // RIGHT Motor PWM
 const int mRphasePin = 38;  // RIGHT Motor Phase
 const int mLpwmPin = 39;    // LEFT Motor PWM
 const int mLphasePin = 20;  // LEFT Motor Phase
+const int topSpeed = 180;
 
 // Define pins for line-following sensors
 const int A1pin = 4;        // Analog pin 1 (line-follow B/W 5-sensor)
@@ -131,8 +132,8 @@ int readSensors(int whiteThreshold, int* AnalogPin) {
 // Function to convert the spectrum value to the corresponding degrees
 int directionController(int spectrum) {
   // Define the spectrum-to-degrees lookup dictionary
-  const int spectrumValues[] = {1, 2, 3,  8,   16, 24};   // Spectrum values
-  const int degreeValues[]   = {8, 3, 20, -3, -8, -20};   // Corresponding degree values
+  const int spectrumValues[] = {1, 2, 3,   8,  16, 24};   // Spectrum values
+  const int degreeValues[]   = {10, 2, 20, -2, -10, -20};   // Corresponding degree values
 
   const int dictionarySize = sizeof(spectrumValues) / sizeof(spectrumValues[0]);
 
@@ -182,8 +183,8 @@ void loop() {
     blinkLED(2);
   } else if (degrees == 0) {
     // If the robot is aligned with the line, drive forward
-    drive(100, 50, false); // Drive forward at speed 80, no stop condition
+    drive(topSpeed, 50, false); // Drive forward at speed 80, no stop condition
   } else {
-    turnForward(100, degrees); // Turn with speed 80 and the degrees value
+    turnForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
   }
 }

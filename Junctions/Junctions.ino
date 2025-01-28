@@ -12,7 +12,7 @@ int AnalogPin[5] = {A1pin, A2pin, A3pin, A4pin, A5pin};
 
 // ...motor calibration (native to script):
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
-const int topSpeed = 150;
+const int topSpeed = 180;
 
 // Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, N, I, I, I, B]
 // N - Navigation node (Nf - fictional, Np - parking)
@@ -25,9 +25,9 @@ int mapArray[12] = {0, 7, 2, 3, 6, 4, 5, 1, 5, 0, 6, 0};
 void blinkLED(int times) {
   for (int i = 0; i < times; i++) {
     digitalWrite(LED_BUILTIN, HIGH); // Turn LED on
-    delay(150);                      // Wait for 0.15 seconds
+    delay(50);                      // Wait for 0.15 seconds
     digitalWrite(LED_BUILTIN, LOW);  // Turn LED off
-    delay(150);                      // Wait for 0.15 seconds
+    delay(50);                      // Wait for 0.15 seconds
   }
 }
 
@@ -138,8 +138,8 @@ int readSensors(int whiteThreshold, int* AnalogPin) {
 // Returns 666 at a junction
 int directionController(int spectrum) {
   // Define the spectrum-to-degrees lookup dictionary
-  const int spectrumValues[] = {1, 2, 3,  8,   16, 24, 31};   // Spectrum values
-  const int degreeValues[]   = {8, 3, 20, -3, -8, -20, 666};  // Corresponding deg (666 -> junction)
+  const int spectrumValues[] = {1,  2, 3,   8,  16,  24, 31};   // Spectrum values
+  const int degreeValues[]   = {10, 2, 20, -2, -10, -20, 666};  // Corresponding deg (666 -> junction)
 
   const int dictionarySize = sizeof(spectrumValues) / sizeof(spectrumValues[0]);
 
@@ -153,8 +153,12 @@ int directionController(int spectrum) {
   return 0; // no match is found (default case - no line)
 }
 
-// Function to traverse a junction and report current Node position to server
-void crossJunction(int* mapArray, int speed, int turnDegrees = 90, int forwardDistance = 5, float coeff = 0.92) {
+// Function to traverse a junction and report current Node position to server.
+// Returns true when the target node was reached, false otherwise
+bool crossJunction(
+    int* mapArray, int speed, 
+    int turnDegrees = 90, int forwardDistance = 5, float coeff = 0.92
+  ) {
   // Extract indices and orientation from the mapArray
   int& LastNodeIndex = mapArray[8];
   int& NextNodeIndex = mapArray[9];
@@ -209,17 +213,32 @@ void crossJunction(int* mapArray, int speed, int turnDegrees = 90, int forwardDi
   // Check if the robot has arrived at the target node
   if (NextNodeIndex == TargetNodeIndex) {
     Serial.println("Hooray");
+    return true;
   }
+  return false;
+}
+
+int getIndex(int array[], int arraySize, int number) { // testing function
+  int index = -1;  // Default to -1 if the number is not found
+  for (int i = 0; i < arraySize; i++) {
+    if (array[i] == number) {
+      index = i;
+      break;
+    }
+  }
+  return index;
 }
 
 
-
+// Set map between 4 and 0, facing counter-clockwise, target: 2 (target index = 2) 
+int route[5] = {0, 3, 2, 1, 4};
+int routeIndex = 0;
+bool checkpointReached = false;
+int whiteThreshold = 2700; // Example threshold value
 
 // Setup function runs once when you press reset
 void setup() {
   Serial.begin(9600);
-  // Set map between 4 and 0, facing counter-clockwise, target: 2 (target index = 2)
-  int mapArray[12] = {0, 7, 2, 3, 6, 4, 5, 1, 5, 0, 2, 0}; 
 
   // Configure motor pins as outputs
   pinMode(mRpwmPin, OUTPUT);
@@ -227,24 +246,16 @@ void setup() {
   pinMode(mLpwmPin, OUTPUT);
   pinMode(mLphasePin, OUTPUT);
 
-  blinkLED(3); // Blink the LED 3 times to confirm setup
-
   delay(2000); // Short delay before line
   blinkLED(3);
 }
 
 void loop() {
-  int whiteThreshold = 2700; // Example threshold value
   int spectrum = readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
   int degrees = directionController(spectrum); // Get degrees based on spectrum
 
-  /*
-  Serial.print("Spectrum: ");
-  Serial.println(spectrum);
-  Serial.print("Degrees: ");
-  Serial.println(degrees);
-  */
-  
+  if (routeIndex >= 5) {spectrum = 0;}  // Stop and blink after route finished
+
   // Adjust movement based on the detected spectrum
   if (spectrum == 0) {
     // If no line is detected, stop and blink LED
@@ -253,10 +264,16 @@ void loop() {
     blinkLED(2);
   } else if (degrees == 0) {
     // If the robot is aligned with the line, drive forward
-    drive(topSpeed, 25, false); // Drive forward at speed 80, no stop condition
+    drive(topSpeed, 50, false); // Drive forward at speed 80, no stop condition
   } else if (degrees == 666) {
     // if the robot reaches a junction, cross junction:
-    crossJunction(mapArray, topSpeed);
+    checkpointReached = crossJunction(mapArray, topSpeed);
+    if(checkpointReached) {
+        routeIndex++;
+        if (routeIndex < 5) {  // update target
+            mapArray[11] = getIndex(mapArray, 12, route[routeIndex]);
+        }
+    }
   } else {
     turnForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
   }
