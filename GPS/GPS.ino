@@ -59,7 +59,7 @@ int destinationFetch(int currentPos){
 }
 
 // Function for updating Map Array (GPS)
-void GPS(int mapArray[]){
+int* GPS(int mapArray[]){
   if(mapArray[8] == mapArray[10]){  // Reached Destination Node, Pone Server
     int destNode = destinationFetch(mapArray[mapArray[8]]); // Next destination
     Serial.println("Arrived! Fetching next node...");
@@ -76,12 +76,14 @@ void GPS(int mapArray[]){
       mapArray[9] = mapArray[8] + 1;    // NextNode index is LastNode incremented
       Serial.println("NextNode index is: ");
       Serial.println(mapArray[9]);
+      return mapArray;
     }
 
     else{     // Clockwise
       mapArray[9] = mapArray[8]--;    // NextNode index is LastNode decremented
       Serial.println("NextNode index is: ");
       Serial.println(mapArray[9]);
+      return mapArray;
     }
   }
 
@@ -90,12 +92,14 @@ void GPS(int mapArray[]){
       mapArray[9] = mapArray[8] + 1;    // NextNode index is LastNode incremented
       Serial.println("NextNode index is: ");
       Serial.println(mapArray[9]);
+      return mapArray;
     }
 
     else{     // Clockwise
       mapArray[9] = mapArray[8]--;    // NextNode index is LastNode decremented
       Serial.println("NextNode index is: ");
       Serial.println(mapArray[9]);
+      return mapArray;
     }
   }
 }
