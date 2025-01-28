@@ -19,4 +19,4 @@ const int topSpeed = 250;
 // I - Index (LastNodeIndex, NextNodeIndex, TargetNodeIndex)
 // B - Orientation boolean (0 - counter-clockwise, 1 - clockwise)
 // Starting position: LastNode -> 4; NextNode -> 0; TargetNode -> 5; Orientation -> 0 (counter-clockwise)
-const int mapArray[11] = {0, 7, 2, 3, 6, 4, 5, 1, 5, 0, 6};
+const int mapArray[12] = {0, 7, 2, 3, 6, 4, 5, 1, 5, 0, 6, 0};
