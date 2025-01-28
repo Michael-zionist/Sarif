@@ -8,11 +8,13 @@ const int A2pin = 5;        // Analog pin 2 (line-follow B/W 5-sensor)
 const int A3pin = 6;        // Analog pin 3 (line-follow B/W 5-sensor)
 const int A4pin = 7;        // Analog pin 4 (line-follow B/W 5-sensor)
 const int A5pin = 15;       // Analog pin 5 (line-follow B/W 5-sensor)
+const int A16pin = 16;      // Analog pin 16 (short distance sensor)
 int AnalogPin[5] = {A1pin, A2pin, A3pin, A4pin, A5pin};
 
 // ...motor calibration (native to script):
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
 const int topSpeed = 180;
+const int parkDistance = 2000; //distance at which is stops before wall 
 
 // Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, N, I, I, I, B]
 // N - Navigation node (Nf - fictional, Np - parking)
@@ -20,6 +22,12 @@ const int topSpeed = 180;
 // B - Orientation boolean (0 - counter-clockwise, 1 - clockwise)
 // Starting position: LastNode -> 4; NextNode -> 0; TargetNode -> 5; Orientation -> 0 (counter-clockwise)
 int mapArray[12] = {0, 7, 2, 3, 6, 4, 5, 1, 5, 0, 6, 0};
+
+//Function to read short distance sensor 
+int readDistanceSensor() {
+  int distanceValue = analogRead(A16pin); // Reads the sensor value from pin 16
+  return distanceValue;                   // Returns distance value
+}
 
 // Function to blink the onboard LED a given number of times
 void blinkLED(int times) {
@@ -227,10 +235,21 @@ int getIndex(int array[], int arraySize, int number) { // testing function
     }
   }
   return index;
-}
+} 
 
+//Function to stop motors once reached wall 
+void parking(){
+  int distanceValue = readDistanceSensor(); // Read the sensor value
+  Serial.println(distanceValue);  //Print value in serial to allow debugging
 
-// Set map between 4 and 0, facing counter-clockwise, target: 2 (target index = 2) 
+  if (distanceValue > parkDistance){   
+     drive(0, 25, false);}  //stops rhino 
+    else{
+      drive(topSpeed, 25, false);   //drives striaght 
+    }
+  }
+
+// Set map between 4 and 0, facing counter-clockwise, target: 2 (target index = 2)
 int route[5] = {0, 3, 2, 1, 4};
 int routeIndex = 0;
 bool checkpointReached = false;
