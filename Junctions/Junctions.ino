@@ -14,7 +14,7 @@ int AnalogPin[5] = {A1pin, A2pin, A3pin, A4pin, A5pin};
 // ...motor calibration (native to script):
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
 const int topSpeed = 150;
-const int parkDistance = 2000;
+const int parkDistance = 2000; //distance at which is stops before wall 
 
 // Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, N, I, I, I, B]
 // N - Navigation node (Nf - fictional, Np - parking)
