@@ -64,8 +64,11 @@ void setup() {
 }
 
 void loop() {
-  int nextPos;
-  nextPos = destinationFetch(1);
-  Serial.println(nextPos);
-  delay(5000);
+  delay(10000);
+  do{
+    Serial.println(pos);
+    pos = destinationFetch(pos);
+    delay(5000);
+  }
+  while(pos != 0);
 }
