@@ -1,5 +1,4 @@
 // this follows the Pinout given and suggested in the Getting Started Guide
-
 const int mRpwmPin = 37;    // RIGHT Motor PWM
 const int mRphasePin = 38;  // RIGHT Motor Phase
 const int mLpwmPin = 39;    // LEFT Motor PWM
@@ -13,3 +12,11 @@ int AnalogPin[5] = {A1pin, A2pin, A3pin, A4pin, A5pin};
 
 // ...motor calibration (native to script):
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
+const int topSpeed = 250;
+
+// Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, I, I, I, B]
+// N - Navigation node (Nf - fictional, Np - parking)
+// I - Index (LastNodeIndex, NextNodeIndex, TargetNodeIndex)
+// B - Orientation boolean (0 - counter-clockwise, 1 - clockwise)
+// Starting position: LastNode -> 4; NextNode -> 0; TargetNode -> 5; Orientation -> 0 (counter-clockwise)
+const int mapArray[10] = {0, 7, 2, 3, 6, 4, 5, 5, 0, 6};
