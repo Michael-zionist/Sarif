@@ -15,6 +15,22 @@ const char* server = "http://3.250.38.184:8000/api/arrived/wsdu8873";
 // Map Array
 int mapArray[12] = {0, 7, 2, 3, 6, 4, 5, 1, 0, 0, 0, 0};
 
+// WiFi Setup Function
+void wiFiConnect(){
+  // WiFi setup
+  Serial.begin(115200);
+
+  // Connect to Wifi
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting...");
+  while(WiFi.status() != WL_CONNECTED){
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  delay(500);
+}
+
 // Function to fetch target node
 int destinationFetch(int currentPos){
   // Ensure  WiFi Connected
@@ -73,7 +89,7 @@ int* GPS(int mapArray[]){
     }
 
     if(mapArray[11] == 0){    // Counter Clockwise
-      mapArray[9] = mapArray[8] + 1;    // NextNode index is LastNode incremented
+      mapArray[9] = mapArray[8]++;    // NextNode index is LastNode incremented
       Serial.println("NextNode index is: ");
       Serial.println(mapArray[9]);
       return mapArray;
@@ -87,9 +103,9 @@ int* GPS(int mapArray[]){
     }
   }
 
-  else{   // LastNode == NextNode
+  else{   // CurrentNode == NextNode
     if(mapArray[11] == 0){    // Counter Clockwise
-      mapArray[9] = mapArray[8] + 1;    // NextNode index is LastNode incremented
+      mapArray[9] = mapArray[8]++;    // NextNode index is LastNode incremented
       Serial.println("NextNode index is: ");
       Serial.println(mapArray[9]);
       return mapArray;
@@ -105,29 +121,18 @@ int* GPS(int mapArray[]){
 }
 
 void setup() {
-// WiFi setup
-Serial.begin(115200);
-
-  // Connect to Wifi
-  WiFi.begin(ssid, password);
-  Serial.println("Connecting...");
-  while(WiFi.status() != WL_CONNECTED){
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  delay(500);
+  wiFiConnect();
 }
 
 // Testing garbage (IGNORE FOR NOW)
 void loop() {
   delay(10000);
   GPS(mapArray);
-  mapArray[8] = 1;
+  mapArray[8] = 1;    // Traverse & Update Position
   delay(1000);
   GPS(mapArray);
-  mapArray[8] = 2;
+  mapArray[8] = 2;    // Traverse & Update Position
   delay(1000);
   GPS(mapArray);
-  mapArray[8] = 3;
+  mapArray[8] = 3;    // Traverse & Update Position
 }
