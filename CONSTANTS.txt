@@ -20,3 +20,10 @@ const int topSpeed = 180;
 // B - Orientation boolean (0 - counter-clockwise, 1 - clockwise)
 // Starting position: LastNode -> 4; NextNode -> 0; TargetNode -> 5; Orientation -> 0 (counter-clockwise)
 int mapArray[12] = {0, 7, 2, 3, 6, 4, 5, 1, 5, 0, 6, 0};
+
+// Wifi Info
+const char* ssid = "iot";
+const char* password = "unwrinkleable66abrogative";
+
+// Target Domain
+const char* server = "http://3.250.38.184:8000/api/arrived/wsdu8873";
