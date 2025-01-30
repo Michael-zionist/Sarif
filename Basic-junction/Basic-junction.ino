@@ -166,11 +166,11 @@ void setup() {
   blinkLED(3); // Blink the LED 3 times to confirm setup
 }
 
+int turnIndex = 0;
 void loop() {
   int whiteThreshold = 2700; // Example threshold value
   int spectrum = readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
   int degrees = directionController(spectrum); // Get degrees based on spectrum
-  int turnIndex = 0;
   
   turnIndex = turnIndex % 4;  // looping to avoid overflow
   // Adjust movement based on the detected spectrum
@@ -178,20 +178,22 @@ void loop() {
     // If no line is detected, stop and blink LED
     analogWrite(mRpwmPin, 0);
     analogWrite(mLpwmPin, 0);
-    blinkLED(2);
+    //blinkLED(2);
   } else if (degrees == 0) {
     // If the robot is aligned with the line, drive forward
     drive(topSpeed, 50, false); // Drive forward at top speed, no stop condition
   } else if (degrees == 666) { // Junction!
-    if (turnDegrees == 0) {
-        rotate(topSpeed, 90);
-    } else if (turnDegrees == 1){
-        rotate(topSpeed, -90);
+    driveDistance(topSpeed, 3);
+    if (turnIndex == 0) {
+        rotate(topSpeed, 60);
+    } else if (turnIndex == 1){
+        rotate(topSpeed, 120);
     } else {
-        rotate(topSpeed, 180);
+        rotate(topSpeed, -60);
     }
     driveDistance(topSpeed, 2);
     blinkLED(turnIndex);
+    turnIndex++;
   } else {
     turnForward(topSpeed, degrees); // Turn with top speed and the degrees value
   }
