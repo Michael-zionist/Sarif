@@ -65,10 +65,10 @@ void setup() {
 
 void loop() {
   delay(10000);
+  Serial.println(pos);    // Print starting position
   do{
-    Serial.println(pos);
-    pos = destinationFetch(pos);
-    delay(5000);
+    pos = destinationFetch(pos);  // Fetch destination
+    delay(5000);      // Wait 5s
   }
   while(pos != 0);
 }
