@@ -28,39 +28,38 @@ class server{
         int destinationFetch(int currentPos){
             // Ensure  WiFi Connected
             if(WiFi.status()==WL_CONNECTED){
-                    WiFiClient client;
-                    HTTPClient http;
+                WiFiClient client;
+                HTTPClient http;
 
-                    // Start creating post
-                    http.begin(client, server);
+                // Start creating post
+                http.begin(client, server);
 
-                    // Content Header
-                    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-                    http.addHeader("Content-Length", "10");
+                // Content Header
+                http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+                http.addHeader("Content-Length", "10");
 
-                    // Content Body
-                    String pos = String(currentPos);
-                    String httpRequestData = "position=" + pos;
+                // Content Body
+                String pos = String(currentPos);
+                String httpRequestData = "position=" + pos;
 
-                    // Post Content
-                    int httpResponseData = http.POST(httpRequestData);
+                // Post Content
+                int httpResponseData = http.POST(httpRequestData);
 
-                    // Receive & Print Response
-                    String payload = "{}";
-                    payload = http.getString();
+                // Receive & Print Response
+                String payload = "{}";
+                payload = http.getString();
 
-                    Serial.print("HTTP Response code: ");
-                    Serial.println(httpResponseData);
-                    Serial.println(payload);
+                Serial.print("HTTP Response code: ");
+                Serial.println(httpResponseData);
+                Serial.println(payload);
 
-                    // Convert to Integer
-                    int currentPos = payload.toInt();
+                // Convert to Integer
+                int currentPos = payload.toInt();
 
-                    // End
-                    http.end();
+                // End
+                http.end();
 
-                    return currentPos;
-
+                return currentPos;
             }
         }
 };
