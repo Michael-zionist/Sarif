@@ -1,3 +1,6 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
 // this follows the Pinout given and suggested in the Getting Started Guide
 const int mRpwmPin = 37;    // RIGHT Motor PWM
 const int mRphasePin = 38;  // RIGHT Motor Phase
@@ -8,6 +11,7 @@ const int A2pin = 5;        // Analog pin 2 (line-follow B/W 5-sensor)
 const int A3pin = 6;        // Analog pin 3 (line-follow B/W 5-sensor)
 const int A4pin = 7;        // Analog pin 4 (line-follow B/W 5-sensor)
 const int A5pin = 15;       // Analog pin 5 (line-follow B/W 5-sensor)
+const int A16pin = 16;      // Analog pin 16 (short distance sensor)
 int AnalogPin[5] = {A1pin, A2pin, A3pin, A4pin, A5pin};
 
 // ...motor calibration (native to script):
@@ -28,3 +32,5 @@ const char* password = "unwrinkleable66abrogative";
 
 // Target Domain
 const char* server = "http://3.250.38.184:8000/api/arrived/wsdu8873";
+
+#endif  // CONSTANTS_H

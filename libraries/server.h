@@ -4,12 +4,12 @@ server.h - Contains "wiFiConnect()" and "destinationFetch()"
 
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include <constants.h>
+#include "constants.h"
 
 #ifndef SERVER_H
 #define SERVER_H
 
-class server{
+class Server{
     public:
         // WiFi Connection Function
         void wiFiConnect(){
