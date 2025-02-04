@@ -1,15 +1,15 @@
 /******************************************************************
-server.h - Contains "wiFiConnect()" and "destinationFetch()"
+online.h - Contains "wiFiConnect()" and "destinationFetch()"
 ******************************************************************/
 
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include "constants.h"
 
-#ifndef SERVER_H
-#define SERVER_H
+#ifndef ONLINE_H
+#define ONLINE_H
 
-class Server{
+class Online{
     public:
         // WiFi Connection Function
         void wiFiConnect(){
@@ -64,4 +64,4 @@ class Server{
         }
 };
 
-#endif // SERVER_H
+#endif // ONLINE_H
