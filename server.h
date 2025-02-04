@@ -9,7 +9,7 @@ server.h - Contains "wiFiConnect()" and "destinationFetch()"
 #ifndef SERVER_H
 #define SERVER_H
 
-class Server{
+class server{
     public:
         // WiFi Connection Function
         void wiFiConnect(){
