@@ -2,12 +2,15 @@
 sensing.h - Contains "parking()", "readDistanceSensor()" and "readSensors()"
 *****************************************************************************/
 
-#include <constants.h>
+#include "constants.h"
+#include "motors.h"
 
 #ifndef SENSING_H
 #define SENSING_H
 
-class sensing{
+class Sensing{
+    Motors motors;
+
     public:
         // Parking Function
         void parking(int whiteThreshold = 2700){
@@ -15,9 +18,9 @@ class sensing{
             Serial.println(distanceValue);  //Print value in serial to allow debugging
 
             if (distanceValue > parkDistance){
-                drive(0, 25, false);}  //stops rhino
+                motors.drive(0, 25, false);}  //stops rhino
             else{
-                drive(topSpeed, 25, false);   //drives striaght
+                motors.drive(topSpeed, 25, false);   //drives striaght
             }
         }
 

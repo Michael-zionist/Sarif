@@ -1,7 +1,7 @@
-#include <constants.h>
-#include <cosmetics.h>
-#include <motors.h>
-#include <sensing.h>
+#include "../../libraries/constants.h"
+#include "../../libraries/cosmetics.h"
+#include "../../libraries/motors.h"
+#include "../../libraries/sensing.h"
 int whiteThreshold = 2700; // Calibrate here
 
 // Setup function runs once when you press reset
