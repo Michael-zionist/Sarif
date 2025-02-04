@@ -3,11 +3,12 @@
 #include "../../libraries/motors.h"
 #include "../../libraries/sensing.h"
 #include "../../libraries/navigation.h"
+#include "../../libraries/online.h"
 
 /* IMPLIED CALIBRATED VALUES:
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
 const int topSpeed = 220;
-const int step = 50;
+const int step = 25;
 const int parkDistance = 2000; //distance at which is stops before wall 
 int whiteThreshold = 2700; // Calibrate here for light level
 */
@@ -16,6 +17,7 @@ int whiteThreshold = 2700; // Calibrate here for light level
 void setup() {
   Serial.begin(9600);
   Cosmetics cosmetics;
+  Online online;
 
   // Configure motor pins as outputs
   pinMode(mRpwmPin, OUTPUT);
@@ -31,6 +33,7 @@ void loop() {
   Motors motors;
   Sensing sensing;
   Navigation navigation;
+  Online online;
 
   int spectrum = sensing.readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
   int degrees = navigation.directionController(spectrum); // Get degrees based on spectrum
@@ -48,10 +51,13 @@ void loop() {
     analogWrite(mRpwmPin, 0);
     analogWrite(mLpwmPin, 0);
     cosmetics.blinkLED(2);
-  } else if (degrees == 0 || degrees == 666) {
+  } else if (degrees == 0) {
     // If the robot is aligned with the line, drive forward
     motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
-  } else {
+  } else if (degrees == 666) { // Junction!
+    cosmetics.blinkLED(2);
+    motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
+  } else{
     motors.turnForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
   }
 }
