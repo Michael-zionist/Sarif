@@ -19,12 +19,12 @@ class cosmetics{
 
         // Piezo Buzzer Jukebox Function
         void jukebox(int index){
-
+            // To be developed at INNOVATION STAGE!
         }
 
         // OLED Display Function
         void display(){
-
+            // To be developed at INNOVATION STAGE!
         }
 };
 
