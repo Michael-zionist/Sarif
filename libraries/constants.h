@@ -21,6 +21,7 @@ const int step = 40;
 const int parkDistance = 2000; //distance at which is stops before wall 
 int whiteThreshold = 1900; // Calibrate here for light level
 
+
 // Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, N, I, I, I, B]
 // N - Navigation node (Nf - fictional, Np - parking)
 // I - Index (LastNodeIndex, NextNodeIndex, TargetNodeIndex)
