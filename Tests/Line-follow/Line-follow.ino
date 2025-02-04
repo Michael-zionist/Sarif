@@ -6,8 +6,8 @@
 
 /* IMPLIED CALIBRATED VALUES:
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
-const int topSpeed = 220;
-const int step = 50;
+const int topSpeed = 180;
+const int step = 25;
 const int parkDistance = 2000; //distance at which is stops before wall 
 int whiteThreshold = 2700; // Calibrate here for light level
 */
@@ -33,7 +33,7 @@ void loop() {
   Navigation navigation;
 
   int spectrum = sensing.readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
-  int degrees = navigation.directionController(spectrum); // Get degrees based on spectrum
+  float turnCoeff = navigation.directionController(spectrum); // Get degrees based on spectrum
 
   /*
   Serial.print("Spectrum: ");
@@ -48,10 +48,13 @@ void loop() {
     analogWrite(mRpwmPin, 0);
     analogWrite(mLpwmPin, 0);
     cosmetics.blinkLED(2);
-  } else if (degrees == 0 || degrees == 666) {
+  } else if (turnCoeff == 0) {
     // If the robot is aligned with the line, drive forward
     motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
+  } else if (turnCoeff == 666) {
+    cosmetics.blinkLED(2);
+    motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
   } else {
-    motors.turnForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
+    motors.slideForward(topSpeed, turnCoeff); // Turn with speed 80 and the degrees value
   }
 }

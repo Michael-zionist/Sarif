@@ -7,7 +7,7 @@
 
 /* IMPLIED CALIBRATED VALUES:
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
-const int topSpeed = 220;
+const int topSpeed = 180;
 const int step = 25;
 const int parkDistance = 2000; //distance at which is stops before wall 
 int whiteThreshold = 2700; // Calibrate here for light level
@@ -58,6 +58,6 @@ void loop() {
     cosmetics.blinkLED(2);
     motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
   } else{
-    motors.turnForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
+    motors.slideForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
   }
 }

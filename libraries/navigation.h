@@ -32,20 +32,21 @@ class Navigation{
 
         // Function to convert the spectrum value to the corresponding degrees
         // Returns 666 at a junction : corresponding deg (666 -> junction)
-        int directionController(int spectrum) {
+        float directionController(int spectrum) {
             // Define the spectrum-to-degrees lookup dictionary
             // Spectrum values -> 
-            const int spectrumValues[] = {1, 2, 3,   8,  16, 24, 31, 30, 15};   
-            const int degreeValues[]   = {8, 2, 15, -2, -8, -15, 666, 666, 666};
+            const int spectrumValues[] = {2,   1,    3,    8,     16,   24,  31,  30,  15};   
+            const float slowCoeffs[]   = {0.15, 0.02, 0.9, -0.02, -0.15, -0.9, 666, 666, 666};
 
             const int dictionarySize = sizeof(spectrumValues) / sizeof(spectrumValues[0]);
 
             // Loop through the lookup dictionary to find the matching spectrum
             for (int i = 0; i < dictionarySize; i++) {
                 if (spectrum == spectrumValues[i]) {
-                return degreeValues[i]; // Return corresponding degree
+                    return slowCoeffs[i]; // Return corresponding degree
                 }
             }
+            //delay(25);
 
             return 0; // no match is found (default case - no line)
             }
@@ -134,8 +135,6 @@ class Navigation{
             if (nextNodeIndex == targetNodeIndex) {
                 Serial.println("Hooray");
             }
-
-            return mapArray; // Return the updated mapArray
         }
 
         // Function for updating Map Array (GPS)
