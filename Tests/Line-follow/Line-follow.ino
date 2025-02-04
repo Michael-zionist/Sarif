@@ -3,7 +3,14 @@
 #include "../../libraries/motors.h"
 #include "../../libraries/sensing.h"
 #include "../../libraries/navigation.h"
-int whiteThreshold = 2700; // Calibrate here
+
+/* IMPLIED CALIBRATED VALUES:
+const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
+const int topSpeed = 220;
+const int step = 50;
+const int parkDistance = 2000; //distance at which is stops before wall 
+int whiteThreshold = 2700; // Calibrate here for light level
+*/
 
 // Setup function runs once when you press reset
 void setup() {
@@ -44,9 +51,9 @@ void loop() {
     analogWrite(mRpwmPin, 0);
     analogWrite(mLpwmPin, 0);
     cosmetics.blinkLED(2);
-  } else if (degrees == 0) {
+  } else if (degrees == 0 || degrees == 666) {
     // If the robot is aligned with the line, drive forward
-    motors.drive(topSpeed, 50, false); // Drive forward at speed 80, no stop condition
+    motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
   } else {
     motors.turnForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
   }

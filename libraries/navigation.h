@@ -35,7 +35,7 @@ class Navigation{
         int directionController(int spectrum) {
             // Define the spectrum-to-degrees lookup dictionary
             const int spectrumValues[] = {1,  2, 3,   8,  16,  24, 31};   // Spectrum values
-            const int degreeValues[]   = {10, 2, 20, -2, -10, -20, 666};  // Corresponding deg (666 -> junction)
+            const int degreeValues[]   = {8, 2, 15, -2, -8, -15, 666};  // Corresponding deg (666 -> junction)
 
             const int dictionarySize = sizeof(spectrumValues) / sizeof(spectrumValues[0]);
 
