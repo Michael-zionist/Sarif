@@ -31,11 +31,12 @@ class Navigation{
         } 
 
         // Function to convert the spectrum value to the corresponding degrees
-        // Returns 666 at a junction
+        // Returns 666 at a junction : corresponding deg (666 -> junction)
         int directionController(int spectrum) {
             // Define the spectrum-to-degrees lookup dictionary
-            const int spectrumValues[] = {1,  2, 3,   8,  16,  24, 31};   // Spectrum values
-            const int degreeValues[]   = {8, 2, 15, -2, -8, -15, 666};  // Corresponding deg (666 -> junction)
+            // Spectrum values -> 
+            const int spectrumValues[] = {1, 2, 3,   8,  16, 24, 31, 30, 15};   
+            const int degreeValues[]   = {8, 2, 15, -2, -8, -15, 666, 666, 666};
 
             const int dictionarySize = sizeof(spectrumValues) / sizeof(spectrumValues[0]);
 
@@ -50,7 +51,7 @@ class Navigation{
             }
 
         // Function to traverse a junction and report current Node position to server.
-        int* crossJunction(
+        void crossJunction(
             int* mapArray, int speed, 
             int turnDegrees = 90, int forwardDistance = 2, float coeff = 0.92
         ) {
