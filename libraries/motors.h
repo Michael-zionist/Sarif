@@ -61,6 +61,23 @@ class Motors{
             analogWrite(mLpwmPin, 0); // Stop LEFT motor
         }
 
+        // Function to turn the robot on both wheels with a speed differential
+        void slideForward(int speed, float turnCoeff, const float slowingCoeff = 0.92)
+        {
+            bool clockwise = turnCoeff > 0; // Determine direction of rotation from degrees
+            if (clockwise) {
+                analogWrite(mRpwmPin, round(abs(speed) * turnCoeff));     // Stop RIGHT motor
+                analogWrite(mLpwmPin, round(abs(speed) * slowingCoeff));  // Set speed for LEFT motor
+            } else {
+                analogWrite(mLpwmPin, round(abs(speed) * slowingCoeff * turnCoeff)); // Stop LEFT motor
+                analogWrite(mRpwmPin, abs(speed)); // Set speed for RIGHT motor
+            }
+            delay(step);
+
+            analogWrite(mRpwmPin, 0); // Stop RIGHT motor
+            analogWrite(mLpwmPin, 0); // Stop LEFT motor
+        }
+
         // Function to rotate the robot in place on both wheels
         void rotate(int speed, int deg, const float slowingCoeff = 0.92) {
             bool clockwise = deg > 0; // Determine direction of rotation from degrees
