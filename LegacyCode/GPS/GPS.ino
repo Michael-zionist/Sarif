@@ -104,18 +104,34 @@ int* GPS(int mapArray[]){
   }
 
   else{   // CurrentNode == NextNode
-    if(mapArray[11] == 0){    // Counter Clockwise
-      mapArray[9] = mapArray[8]++;    // NextNode index is LastNode incremented
-      Serial.println("NextNode index is: ");
-      Serial.println(mapArray[9]);
-      return mapArray;
+    if(mapArray[8] == 1){   // Scary Node 7 (Junction)
+      if(mapArray[10] == 2 || mapArray[10] == 3){   // Target is Node 2 or 3
+        mapArray[9] = 2;
+      }
+
+      else if(mapArray[10] == 7 || mapArray[10] == 4){    // Target is Node 1 or 6
+        mapArray[9] = 7;
+      }
+
+      else if(mapArray[10] == 0 || mapArray[10] == 5){    // Target is Node 0 or 4
+        mapArray[9] = 0
+      }
     }
 
-    else{     // Clockwise
-      mapArray[9] = mapArray[8]--;    // NextNode index is LastNode decremented
-      Serial.println("NextNode index is: ");
-      Serial.println(mapArray[9]);
-      return mapArray;
+    else{    // Not A Junction - Normal Execution
+      if(mapArray[11] == 0){    // Counter Clockwise
+        mapArray[9] = mapArray[8]++;    // NextNode index is LastNode incremented
+        Serial.println("NextNode index is: ");
+        Serial.println(mapArray[9]);
+        return mapArray;
+      }
+
+      else{     // Clockwise
+        mapArray[9] = mapArray[8]--;    // NextNode index is LastNode decremented
+        Serial.println("NextNode index is: ");
+        Serial.println(mapArray[9]);
+        return mapArray;
+      }
     }
   }
 }
