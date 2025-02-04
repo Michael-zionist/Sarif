@@ -2,15 +2,19 @@
 navigation.h - Contains "getIndex()", "directionController()", "crossJunction()" and "GPS()"
 ******************************************************************/
 
-#include <constants.h>
-#include <cosmetics.h>
-#include <motors.h>
-#include <sensing.h>
+#include "constants.h"
+#include "cosmetics.h>"
+#include "motors.h"
+#include "sensing.h"
 
 #ifndef NAVIGATION_H
 #define NAVIGATION_H
 
-class navigation{
+class Navigation{
+    Cosmetics cosmetics;
+    Motors motors;
+    Sensing sensing;
+
     public:
         // testing function to get the index
         int getIndex(int array[], int arraySize, int number) {
@@ -55,7 +59,7 @@ class navigation{
             int& orientation = mapArray[11];
 
             // Blink LED the number of times corresponding to the current node
-            blinkLED(nextNodeIndex);
+            cosmetics.blinkLED(nextNodeIndex);
 
             // Determine behavior based on the current node
             if (nextNodeIndex == 7) { // Junction 7 behavior

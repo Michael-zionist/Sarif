@@ -2,11 +2,20 @@
 cosmetics.h - Contains "blinkLED()", "jukebox()" and "display()"
 ******************************************************************/
 
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
 #ifndef COSMETICS_H
 #define COSMETICS_H
 
-class cosmetics{
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define SDA_PIN 17  // Your custom SDA pin
+#define SCL_PIN 18  // Your custom SCL pin
+
+class Cosmetics{
     public:
+
         // LED Blink Function
         void blinkLED(int times){
             for (int i = 0; i < times; i++){
@@ -22,9 +31,9 @@ class cosmetics{
             // To be developed at INNOVATION STAGE!
         }
 
-        // OLED Display Function
+        // OLED Display Function - Hello World demo for now
         void display(){
-            // To be developed at INNOVATION STAGE!
+
         }
 };
 
