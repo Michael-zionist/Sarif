@@ -3,9 +3,10 @@ navigation.h - Contains "getIndex()", "directionController()", "crossJunction()"
 ******************************************************************/
 
 #include "constants.h"
-#include "cosmetics.h>"
+#include "cosmetics.h"
 #include "motors.h"
 #include "sensing.h"
+#include "online.h"
 
 #ifndef NAVIGATION_H
 #define NAVIGATION_H
@@ -14,6 +15,7 @@ class Navigation{
     Cosmetics cosmetics;
     Motors motors;
     Sensing sensing;
+    Online online;
 
     public:
         // testing function to get the index
@@ -65,47 +67,47 @@ class Navigation{
             if (nextNodeIndex == 7) { // Junction 7 behavior
                 if (targetNodeIndex == 2 || targetNodeIndex == 0) {
                 // Drive straight at node 7
-                driveDistance(speed, forwardDistance, coeff);
+                motors.driveDistance(speed, forwardDistance, coeff);
                 } else if (targetNodeIndex == 1 && lastNodeIndex == 0) {
                 // Turn left at node 7 (path 0 -> 7 -> 1)
-                rotate(-speed, turnDegrees, coeff); // 90-degree left turn
-                driveDistance(speed, forwardDistance, coeff);
+                motors.rotate(-speed, turnDegrees, coeff); // 90-degree left turn
+                motors.driveDistance(speed, forwardDistance, coeff);
                 orientation = 0; // Update orientation for 7 -> 1 edge
                 } else if (targetNodeIndex == 1 && lastNodeIndex == 2) {
                 // Turn right at node 7 (path 2 -> 7 -> 1)
-                rotate(speed, turnDegrees, coeff); // 90-degree right turn
-                driveDistance(speed, forwardDistance, coeff);
+                motors.rotate(speed, turnDegrees, coeff); // 90-degree right turn
+                motors.driveDistance(speed, forwardDistance, coeff);
                 orientation = 1; // Update orientation for 7 -> 1 edge
                 }
             } else if (nextNodeIndex == 6) { // Junction 6 behavior
                 if (targetNodeIndex == 3 || targetNodeIndex == 4) {
                 // Drive straight at node 6
-                driveDistance(speed, forwardDistance, coeff);
+                motors.driveDistance(speed, forwardDistance, coeff);
                 } else if (targetNodeIndex == 1 && lastNodeIndex == 3) {
                 // Turn left at node 6 (path 3 -> 6 -> 1)
-                rotate(-speed, turnDegrees, coeff); // 90-degree left turn
-                driveDistance(speed, forwardDistance, coeff);
+                motors.rotate(-speed, turnDegrees, coeff); // 90-degree left turn
+                motors.driveDistance(speed, forwardDistance, coeff);
                 orientation = 0; // Update orientation for 6 -> 1 edge
                 } else if (targetNodeIndex == 1 && lastNodeIndex == 4) {
                 // Turn right at node 6 (path 4 -> 6 -> 1)
-                rotate(speed, turnDegrees, coeff); // 90-degree right turn
-                driveDistance(speed, forwardDistance, coeff);
+                motors.rotate(speed, turnDegrees, coeff); // 90-degree right turn
+                motors.driveDistance(speed, forwardDistance, coeff);
                 orientation = 1; // Update orientation for 6 -> 1 edge
                 }
             } else if (nextNodeIndex == 3 || nextNodeIndex == 4) {
                 // If at nodes 3 or 4 and the target involves edge 3 -> 6 or 4 -> 6
                 if ((nextNodeIndex == 3 && targetNodeIndex == 6) || 
                     (nextNodeIndex == 4 && targetNodeIndex == 6)) {
-                rotate(speed, 180, coeff); // Reverse direction (180 degrees)
-                driveDistance(speed, 1, coeff); // Drive 1 cm after turn
+                motors.rotate(speed, 180, coeff); // Reverse direction (180 degrees)
+                motors.driveDistance(speed, 1, coeff); // Drive 1 cm after turn
                 orientation = !orientation; // Toggle orientation
                 } else {
                 // Drive straight for other cases at 3 or 4
-                driveDistance(speed, forwardDistance, coeff);
+                motors.driveDistance(speed, forwardDistance, coeff);
                 }
             } else {
                 // Drive straight for all other nodes
-                driveDistance(speed, forwardDistance, coeff);
+                motors.driveDistance(speed, forwardDistance, coeff);
             }
 
             // Update indices in the mapArray
@@ -138,7 +140,7 @@ class Navigation{
         // Function for updating Map Array (GPS)
         int* GPS(int mapArray[]){
             if(mapArray[8] == mapArray[10]){  // Reached Destination Node, Pone Server
-                int destNode = destinationFetch(mapArray[mapArray[8]]); // Next destination
+                int destNode = online.destinationFetch(mapArray[mapArray[8]]); // Next destination
                 Serial.println("Arrived! Fetching next node...");
 
                 for(int i=0; i<8; i++){
