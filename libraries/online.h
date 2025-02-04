@@ -1,5 +1,5 @@
 /******************************************************************
-server.h - Contains "wiFiConnect()" and "destinationFetch()"
+online.h - Contains "wiFiConnect()" and "destinationFetch()"
 ******************************************************************/
 
 #include <WiFi.h>
@@ -64,4 +64,4 @@ class Online{
         }
 };
 
-#endif // SERVER_H
+#endif // ONLINE_H
