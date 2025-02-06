@@ -264,6 +264,13 @@ class Navigation{
                     Serial.println(mapArray[9]);
                     return mapArray;
                   }
+
+                  else if(mapArray[10] == 6){    // Target is Node 5
+                    mapArray[9] = 6;
+                    Serial.println("NextNode index is: ");
+                    Serial.println(mapArray[9]);
+                    return mapArray;
+                  }
                 }
 
                 else if(mapArray[8] == 7){    // Node 1 (Junction)

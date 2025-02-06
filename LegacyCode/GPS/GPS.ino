@@ -201,6 +201,13 @@ int* GPS(int mapArray[]){
         Serial.println(mapArray[9]);
         return mapArray;
       }
+
+      else if(mapArray[10] == 6){    // Target is Node 5
+        mapArray[9] = 6;
+        Serial.println("NextNode index is: ");
+        Serial.println(mapArray[9]);
+        return mapArray;
+      }
     }
 
     else if(mapArray[8] == 7){    // Node 1 (Junction)
@@ -283,10 +290,55 @@ void loop() {
 
   GPS(mapArray);
   mapArray[8] = 4;
+  mapArray[11] = 1;
   delay(3000);
 
   GPS(mapArray);
   mapArray[8] = 3;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 2;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 1;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 0;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 5;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 4;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 3;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 2;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 1;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 7;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 4;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 6;
   delay(3000);
 
   GPS(mapArray);
