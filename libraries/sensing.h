@@ -51,10 +51,10 @@ class Sensing{
             Serial.print("Values: ");
             for (int i = 0; i < 5; i++) {
                 AnalogValue[i] = analogRead(AnalogPin[i]); // Read the analog value
-                Serial.print(AnalogValue[i]); // Print each sensor's value
-                Serial.print(" ");
+                //Serial.print(AnalogValue[i]); // Print each sensor's value
+                //Serial.print(" ");
             }
-            Serial.println("");
+            //Serial.println("");
 
             int spectrum = 0; // variable to store computed decimal value
             for (int i = 0; i < 5; i++){
