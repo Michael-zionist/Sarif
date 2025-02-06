@@ -41,13 +41,6 @@ void loop() {
 
   int spectrum = sensing.readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
   int degrees = navigation.directionController(spectrum); // Get degrees based on spectrum
-
-  /*
-  Serial.print("Spectrum: ");
-  Serial.println(spectrum);
-  Serial.print("Degrees: ");
-  Serial.println(degrees);
-  */
   
   // Adjust movement based on the detected spectrum
   if (spectrum == 0) {
@@ -65,6 +58,6 @@ void loop() {
     navigation.crossJunction(mapArray, topSpeed);
     
   } else{
-    motors.turnForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
+    motors.slideForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
   }
 }
