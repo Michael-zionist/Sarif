@@ -17,7 +17,7 @@ int AnalogPin[5] = {A1pin, A2pin, A3pin, A4pin, A5pin};
 // ...motor calibration (native to script):
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
 const int topSpeed = 190;
-const int step = 80;
+const int step = 60;
 const int parkDistance = 2000; //distance at which is stops before wall 
 int whiteThreshold = 1900; // Calibrate here for light level
 
