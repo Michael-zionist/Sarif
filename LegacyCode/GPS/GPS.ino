@@ -88,23 +88,58 @@ int* GPS(int mapArray[]){
       }
     }
 
-    if(mapArray[8] == 7){
+    if(mapArray[8] == 7){     // If at Node 1
       if(mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){   // Target Node is 3 or 4 or 5
-        mapArray[9] = 4;
+        mapArray[9] = 4;      // Next Node is 6
         Serial.println("NextNode index is: ");
         Serial.println(mapArray[9]);
         return mapArray;
       }
 
       else if(mapArray[10] == 0 || mapArray[10] == 2){    // Target Node is 0 or 2
-        mapArray[9] = 1;
+        mapArray[9] = 1;      // Next Node is 7
         Serial.println("NextNode index is: ");
         Serial.println(mapArray[9]);
         return mapArray;
       }
     }
 
-    else{
+    else if(mapArray[8] == 0 && mapArray[10] == 5){    // If at Node 0 & Target is Node 4 (Optimisation Case)
+      mapArray[9] = 5;    // Next Node is 4
+      Serial.println("NextNode index is: ");
+      Serial.println(mapArray[9]);
+      return mapArray;
+    }
+
+    else if(mapArray[8] == 5 && mapArray[10] == 0){    // If at Node 4 & Target is Node 0 (Special Case)
+      mapArray[9] = 0;    // Next Node is 0
+      Serial.println("NextNode index is: ");
+      Serial.println(mapArray[9]);
+      return mapArray;
+    }
+
+    else if(mapArray[8] == 5 && mapArray[10] == 6){    // If at Node 4 & Target is Node 5 (Special Case)
+      mapArray[9] = 4;    // Next Node is 6
+      Serial.println("NextNode index is: ");
+      Serial.println(mapArray[9]);
+      return mapArray;
+    }
+
+    else if(mapArray[8] == 5 && mapArray[10] == 7){    // If at Node 4 & Target is Node 1 (Special Case)
+      mapArray[9] = 4;    // Next Node is 6
+      Serial.println("NextNode index is: ");
+      Serial.println(mapArray[9]);
+      return mapArray;
+    }
+
+    else if(mapArray[8] == 3 && mapArray[10] == 2){     // If at Node 3 & Target is Node 2 (Optimisation Case)
+      mapArray[9] = 2;    // Next Node is 2
+      Serial.println("NextNode index is: ");
+      Serial.println(mapArray[9]);
+      return mapArray;
+    }
+
+    else{   // Starting at all other Nodes
       if(mapArray[11] == 0){    // Counter Clockwise
         mapArray[9] = mapArray[8] + 1;    // NextNode index is LastNode incremented
         Serial.println("NextNode index is: ");
@@ -166,6 +201,13 @@ int* GPS(int mapArray[]){
         Serial.println(mapArray[9]);
         return mapArray;
       }
+
+      else if(mapArray[10] == 6){    // Target is Node 5
+        mapArray[9] = 6;
+        Serial.println("NextNode index is: ");
+        Serial.println(mapArray[9]);
+        return mapArray;
+      }
     }
 
     else if(mapArray[8] == 7){    // Node 1 (Junction)
@@ -184,7 +226,35 @@ int* GPS(int mapArray[]){
       }
     }
 
-    else{    // Not A Junction - Normal Execution
+    else if(mapArray[8] == 5 && mapArray[10] == 0){    // If at Node 4 & Target is Node 0 (Special Case)
+      mapArray[9] = 0;    // Next Node is 0
+      Serial.println("NextNode index is: ");
+      Serial.println(mapArray[9]);
+      return mapArray;
+    }
+
+    else if(mapArray[8] == 0 && mapArray[10] == 5){    // If at Node 0 & Target is Node 4 (Special Case)
+      mapArray[9] = 5;    // Next Node is 4
+      Serial.println("NextNode index is: ");
+      Serial.println(mapArray[9]);
+      return mapArray;
+    }
+
+    else if(mapArray[8] == 5 && mapArray[10] == 6){    // If at Node 4 & Target is Node 5 (Special Case)
+      mapArray[9] = 4;    // Next Node is 6
+      Serial.println("NextNode index is: ");
+      Serial.println(mapArray[9]);
+      return mapArray;
+    }
+
+    else if(mapArray[8] == 3 && mapArray[10] == 2){     // If at Node 3 & Target is Node 2 (Optimisation Case)
+      mapArray[9] = 2;    // Next Node is 2
+      Serial.println("NextNode index is: ");
+      Serial.println(mapArray[9]);
+      return mapArray;
+    }
+
+    else{    // Not A Junction or Special Case - Normal Execution
       if(mapArray[11] == 0){    // Counter Clockwise
         mapArray[9] = mapArray[8] + 1;    // NextNode index is LastNode incremented
         Serial.println("NextNode index is: ");
@@ -220,10 +290,55 @@ void loop() {
 
   GPS(mapArray);
   mapArray[8] = 4;
+  mapArray[11] = 1;
   delay(3000);
 
   GPS(mapArray);
   mapArray[8] = 3;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 2;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 1;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 0;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 5;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 4;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 3;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 2;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 1;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 7;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 4;
+  delay(3000);
+
+  GPS(mapArray);
+  mapArray[8] = 6;
   delay(3000);
 
   GPS(mapArray);

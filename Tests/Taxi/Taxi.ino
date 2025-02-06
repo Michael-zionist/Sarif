@@ -27,7 +27,7 @@ void setup() {
   pinMode(mLphasePin, OUTPUT);
 
   online.wiFiConnect();
-  mapArray = navigation.GPS();
+  navigation.GPS(mapArray);
 
   cosmetics.blinkLED(3); // Blink the LED 3 times to confirm setup
 }
@@ -61,7 +61,7 @@ void loop() {
   } else if (degrees == 666) { // Junction!
     
     mapArray[8] = mapArray[9]; // node reached, so: lastNode = nextNode;
-    mapArray = navigation.GPS(mapArray);  // fetching new nextNode from GPS
+    navigation.GPS(mapArray);  // fetching new nextNode from GPS
     navigation.crossJunction(mapArray, topSpeed);
     
   } else{
