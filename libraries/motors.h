@@ -82,7 +82,6 @@ class Motors{
 
         // Function to rotate the robot in place on both wheels
         void rotate(int speed, int deg, const float slowingCoeff = 0.92) {
-            Serial.println("Rotating 90!");
             bool clockwise = deg > 0; // Determine direction of rotation from degrees
             if (clockwise) {
                 digitalWrite(mRphasePin, LOW); // RIGHT motor backward
@@ -95,11 +94,10 @@ class Motors{
             analogWrite(mRpwmPin, abs(speed)); // Set speed for RIGHT motor
             analogWrite(mLpwmPin, abs(speed) * slowingCoeff); // Set speed for LEFT motor
 
-            delay(round(abs(deg) * 1000 / speed)); // Simulate turn duration (adjust factor as needed)
+            delay(round(abs(deg) * 800 / speed)); // Simulate turn duration (adjust factor as needed)
 
             analogWrite(mRpwmPin, 0); // Stop RIGHT motor
             analogWrite(mLpwmPin, 0); // Stop LEFT motor
-            delay(50);
         }
 };
 

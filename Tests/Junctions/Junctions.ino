@@ -6,8 +6,8 @@
 
 /* IMPLIED CALIBRATED VALUES:
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
-const int topSpeed = 180;
-const int step = 25;
+const int topSpeed = 190;
+const int step = 40;
 const int parkDistance = 2000; //distance at which is stops before wall 
 int whiteThreshold = 2700; // Calibrate here for light level
 */
@@ -22,10 +22,9 @@ void setup() {
   pinMode(mRphasePin, OUTPUT);
   pinMode(mLpwmPin, OUTPUT);
   pinMode(mLphasePin, OUTPUT);
-
-  cosmetics.blinkLED(3); // Blink the LED 3 times to confirm setup
 }
 
+int node = 0;  // BEGIN THE SCRIPT BETWEEN 4 & 0 (FACING 0)
 void loop() {
   Cosmetics cosmetics;
   Motors motors;
@@ -34,13 +33,7 @@ void loop() {
 
   int spectrum = sensing.readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
   float turnCoeff = navigation.directionController(spectrum); // Get degrees based on spectrum
-
-  /*
-  Serial.print("Spectrum: ");
-  Serial.println(spectrum);
-  Serial.print("Degrees: ");
-  Serial.println(degrees);
-  */
+  
   
   // Adjust movement based on the detected spectrum
   if (spectrum == 0) {
@@ -51,9 +44,26 @@ void loop() {
     // If the robot is aligned with the line, drive forward
     motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
   } else if (turnCoeff == 666) {
-    motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
+    motors.driveDistance(topSpeed, 5); // Drive forward at speed 80, no stop condition
+    if (node == 0 || node == 4 || node == 5) {
+      node++;
+    } else if (node == 1) {
+      motors.rotate(topSpeed, -90);
+      node++;
+    } else if (node == 2) {
+      motors.rotate(topSpeed, 180);
+      node++;
+    } else if (node == 3) {
+      motors.rotate(topSpeed, -90);
+      node++;
+    } else if (node == 6) {
+      motors.rotate(topSpeed, 90);
+      node = 0;
+    }
+    motors.driveDistance(topSpeed, 5); // Drive forward at speed 80, no stop condition
     cosmetics.blinkLED(2);
+  
   } else {
     motors.slideForward(topSpeed, turnCoeff); // Turn with speed 80 and the degrees value
   }
-}
+} 
