@@ -47,7 +47,7 @@ void loop() {
   } else if (turnCoeff == 666) { // Junction!
     cosmetics.blinkLED(2);
     motors.rotate(topSpeed, -90);
-    motors.driveDistance(topSpeed, 2);
+    motors.driveDistance(topSpeed, 10);
   } else {
     motors.slideForward(topSpeed, turnCoeff); // Turn with speed 80 and the degrees value
   }

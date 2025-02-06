@@ -48,7 +48,7 @@ class Sensing{
                     BinaryArray[i] = 0;
                 }
             }
-            Serial.print("Values: ");
+            //Serial.print("Values: ");
             for (int i = 0; i < 5; i++) {
                 AnalogValue[i] = analogRead(AnalogPin[i]); // Read the analog value
                 //Serial.print(AnalogValue[i]); // Print each sensor's value

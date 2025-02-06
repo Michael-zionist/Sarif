@@ -34,9 +34,10 @@ class Navigation{
         // Returns 666 at a junction : corresponding deg (666 -> junction)
         float directionController(int spectrum) {
             // Define the spectrum-to-degrees lookup dictionary
-            // Spectrum values ->
-            const int spectrumValues[] = {2,   1,    3,    8,     16,   24,  31,  30,  15};
-            const float slowCoeffs[]   = {0.15, 0.02, 0.9, -0.02, -0.15, -0.9, 666, 666, 666};
+
+            // Spectrum values -> 
+            const int spectrumValues[] = {1,    2,    3,   6,    7,    8,     12,   16,     24,  28,  31,  30,  15};   
+            const float slowCoeffs[]   = {0.02, 0.15, 0.1, 0.9,  0.1, -0.15, -0.9, -0.02,  -0.1, 0.1, 666, 666, 666};
 
             const int dictionarySize = sizeof(spectrumValues) / sizeof(spectrumValues[0]);
 
