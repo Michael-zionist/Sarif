@@ -47,13 +47,12 @@ void loop() {
     // If no line is detected, stop and blink LED
     analogWrite(mRpwmPin, 0);
     analogWrite(mLpwmPin, 0);
-    cosmetics.blinkLED(2);
   } else if (turnCoeff == 0) {
     // If the robot is aligned with the line, drive forward
     motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
   } else if (turnCoeff == 666) {
-    cosmetics.blinkLED(2);
     motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
+    cosmetics.blinkLED(2);
   } else {
     motors.slideForward(topSpeed, turnCoeff); // Turn with speed 80 and the degrees value
   }
