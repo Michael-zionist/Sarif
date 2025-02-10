@@ -7,7 +7,7 @@ accordingly. */
 
 // WiFi Info
 const char* ssid = "iot";
-const char* password = "unwrinkleable66abrogative";
+const char* password = "athyria67hyperflexibleness";
 
 // Target Domain
 const char* server = "http://3.250.38.184:8000/api/arrived/wsdu8873";
