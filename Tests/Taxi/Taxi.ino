@@ -54,9 +54,9 @@ void loop() {
   } else if (degrees == 666) { // Junction!
     
     mapArray[8] = mapArray[9]; // node reached, so: lastNode = nextNode;
-    navigation.GPS(mapArray);  // fetching new nextNode from GPS
+    //navigation.GPS(mapArray);  // fetching new nextNode from GPS
+    mapArray[9] = ;
     navigation.crossJunction(mapArray, topSpeed);
-    
   } else {
     motors.slideForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
   }
