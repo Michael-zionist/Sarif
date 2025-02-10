@@ -18,7 +18,7 @@ int AnalogPin[5] = {A1pin, A2pin, A3pin, A4pin, A5pin};
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
 const int topSpeed = 190;
 const int step = 60;
-const int parkDistance = 2000; //distance at which is stops before wall 
+const int parkDistance = 2000; //distance at which is stops before wall
 int whiteThreshold = 1900; // Calibrate here for light level
 
 
@@ -31,7 +31,8 @@ int mapArray[12] = {0, 7, 2, 3, 6, 4, 5, 1, 5, 0, 6, 0};
 
 // Wifi Info
 const char* ssid = "iot";
-const char* password = "unwrinkleable66abrogative";
+const char* password = "athyria67hyperflexibleness";    // For ESP in Mobot
+//const char* password = "unwrinkleable66abrogative";    // For test ESP
 
 // Target Domain
 const char* server = "http://3.250.38.184:8000/api/arrived/wsdu8873";
