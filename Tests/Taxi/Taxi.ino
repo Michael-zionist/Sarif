@@ -7,8 +7,8 @@
 
 /* IMPLIED CALIBRATED VALUES:
 const float slowingCoeff = 0.92;  // Makes more efficient L motor slower to match R
-const int topSpeed = 220;
-const int step = 25;
+const int topSpeed = 190;
+const int step = 40;
 const int parkDistance = 2000; //distance at which is stops before wall 
 int whiteThreshold = 2700; // Calibrate here for light level
 */
@@ -18,7 +18,6 @@ void setup() {
   Serial.begin(115200);
   Cosmetics cosmetics;
   Online online;
-  Navigation navigation;
 
   // Configure motor pins as outputs
   pinMode(mRpwmPin, OUTPUT);
@@ -27,37 +26,46 @@ void setup() {
   pinMode(mLphasePin, OUTPUT);
 
   online.wiFiConnect();
-
   cosmetics.blinkLED(3); // Blink the LED 3 times to confirm setup
 }
 
+int node = 0;  // BEGIN THE SCRIPT BETWEEN 4 & 0 (FACING 0)
 void loop() {
   Cosmetics cosmetics;
+  Navigation navigation;
   Motors motors;
   Sensing sensing;
-  Navigation navigation;
-  Online online;
 
   int spectrum = sensing.readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
-  int turnCoeff = navigation.directionController(spectrum); // Get degrees based on spectrum
+  float turnCoeff = navigation.directionController(spectrum); // Get degrees based on spectrum
+  
   
   // Adjust movement based on the detected spectrum
   if (spectrum == 0) {
     // If no line is detected, stop and blink LED
     analogWrite(mRpwmPin, 0);
     analogWrite(mLpwmPin, 0);
-    cosmetics.blinkLED(2);
   } else if (turnCoeff == 0) {
     // If the robot is aligned with the line, drive forward
     motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
-  } else if (turnCoeff == 666) { // Junction!
+  } else if (turnCoeff == 666) {
+    motors.driveDistance(topSpeed, 5); // Drive forward at speed 80, no stop condition
     delay(200);
     cosmetics.blinkLED(1);
     mapArray[8] = mapArray[9]; // node reached, so: lastNode = nextNode;
     navigation.GPS(mapArray);  // fetching new nextNode from GPS
     navigation.crossJunction(mapArray, topSpeed);
     delay(500);
+    motors.driveDistance(topSpeed, 5); // Drive forward at speed 80, no stop condition
   } else {
     motors.slideForward(topSpeed, turnCoeff); // Turn with speed 80 and the degrees value
   }
-}
+} 
+
+
+    
+
+    
+
+    
+  
