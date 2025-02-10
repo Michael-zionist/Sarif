@@ -57,7 +57,7 @@ void loop() {
     navigation.GPS(mapArray);  // fetching new nextNode from GPS
     navigation.crossJunction(mapArray, topSpeed);
     
-  } else{
+  } else {
     motors.slideForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
   }
 }
