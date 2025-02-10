@@ -15,7 +15,7 @@ int whiteThreshold = 2700; // Calibrate here for light level
 
 // Setup function runs once when you press reset
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Cosmetics cosmetics;
   Online online;
   Navigation navigation;
@@ -27,7 +27,6 @@ void setup() {
   pinMode(mLphasePin, OUTPUT);
 
   online.wiFiConnect();
-  navigation.GPS(mapArray);
 
   cosmetics.blinkLED(3); // Blink the LED 3 times to confirm setup
 }
@@ -54,8 +53,7 @@ void loop() {
   } else if (degrees == 666) { // Junction!
     
     mapArray[8] = mapArray[9]; // node reached, so: lastNode = nextNode;
-    //navigation.GPS(mapArray);  // fetching new nextNode from GPS
-    mapArray[9] = ;
+    navigation.GPS(mapArray);  // fetching new nextNode from GPS
     navigation.crossJunction(mapArray, topSpeed);
   } else {
     motors.slideForward(topSpeed, degrees); // Turn with speed 80 and the degrees value

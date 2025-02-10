@@ -5,7 +5,6 @@ navigation.h - Contains "getIndex()", "directionController()", "crossJunction()"
 #include "cosmetics.h"
 #include "motors.h"
 #include "sensing.h"
-#include "navigation.h"
 #include "online.h"
 
 class Navigation {
@@ -88,22 +87,102 @@ class Navigation {
             }
         }
 
-        // Optimized GPS function using a lookup table
-        int* GPS(int mapArray[]) {
-            if (mapArray[8] == mapArray[10]) {
+        // Function for updating Map Array (GPS)
+        int* GPS(int mapArray[]){
+            if(mapArray[8] == mapArray[10]){  // CurrentNode == TargetNode, Pone Server
                 Serial.println("Arrived! Fetching next node...");
-                int destNode = online.destinationFetch(mapArray[mapArray[8]]);
-                for (int i = 0; i < 8; i++) {
-                    if (mapArray[i] == destNode) {
-                        mapArray[10] = i;
+                int destNode = online.destinationFetch(mapArray[mapArray[8]]); // Next Target
+            
+                for(int i = 0; i < 8; i++){
+                    if(mapArray[i] == destNode){  // Search array for destination node
+                        mapArray[10] = i;     // TargetNode assigned destNode index
+                        Serial.print("Destination Node: ");
+                        Serial.println(mapArray[mapArray[10]]);
                     }
                 }
+            
+                if(mapArray[8] == 7){     // If at Node 1
+                    if(mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){   // Target Node is 3, 4, or 5
+                        mapArray[9] = 4;      // Next Node is 6
+                    } else if(mapArray[10] == 0 || mapArray[10] == 2){    // Target Node is 0 or 2
+                        mapArray[9] = 1;      // Next Node is 7
+                    }
+                }
+                else if(mapArray[8] == 0 && mapArray[10] == 5){    // Optimisation Case
+                    mapArray[9] = 5;
+                }
+                else if(mapArray[8] == 5 && mapArray[10] == 0){    // Special Case
+                    mapArray[9] = 0;
+                }
+                else if(mapArray[8] == 5 && mapArray[10] == 6){    // Special Case
+                    mapArray[9] = 4;
+                }
+                else if(mapArray[8] == 3 && mapArray[10] == 2){    // Optimisation Case
+                    mapArray[9] = 2;
+                }
+                else{   // Normal Execution
+                    if(mapArray[11] == 0){    // Counter Clockwise
+                        mapArray[9] = mapArray[8] + 1;
+                    } else {    // Clockwise
+                        mapArray[9] = mapArray[8] - 1;
+                    }
+                }
+                Serial.print("Next Node: ");
+                Serial.println(mapArray[mapArray[9]]);
+                return mapArray;
             }
-            int gpsLookup[8][2] = {
-                {5, 1}, {2, 7}, {3, 6}, {6, 2}, {6, 5}, {0, 4}, {1, 5}, {3, 0}
-            };
-            mapArray[9] = gpsLookup[mapArray[8]][mapArray[11]];
-            Serial.print("NextNode index is: ");
-            Serial.println(mapArray[9]);
-            return mapArray;
+            
+            else {   // CurrentNode == NextNode
+                if(mapArray[8] == 1){   // Junction
+                    if(mapArray[10] == 2 || mapArray[10] == 3){
+                        mapArray[9] = 2;
+                    } else if(mapArray[10] == 7 || mapArray[10] == 4 || mapArray[10] == 6){
+                        mapArray[9] = 7;
+                    } else if(mapArray[10] == 0 || mapArray[10] == 5){
+                        mapArray[9] = 0;
+                    }
+                }
+                else if(mapArray[8] == 4){    // Junction
+                    if(mapArray[10] == 2 || mapArray[10] == 3){
+                        mapArray[9] = 3;
+                    } else if(mapArray[10] == 1 || mapArray[10] == 7){
+                        mapArray[9] = 7;
+                    } else if(mapArray[10] == 0 || mapArray[10] == 5){
+                        mapArray[9] = 5;
+                    } else if(mapArray[10] == 6){
+                        mapArray[9] = 6;
+                    }
+                }
+                else if(mapArray[8] == 7){    // Junction
+                    if(mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){
+                        mapArray[9] = 4;
+                    } else if(mapArray[10] == 0 || mapArray[10] == 2){
+                        mapArray[9] = 1;
+                    }
+                }
+                else if(mapArray[8] == 5 && mapArray[10] == 0){    // Special Case
+                    mapArray[9] = 0;
+                }
+                else if(mapArray[8] == 0 && mapArray[10] == 5){    // Special Case
+                    mapArray[9] = 5;
+                }
+                else if(mapArray[8] == 5 && mapArray[10] == 6){    // Special Case
+                    mapArray[9] = 4;
+                }
+                else if(mapArray[8] == 3 && mapArray[10] == 2){    // Optimisation Case
+                    mapArray[9] = 2;
+                }
+                else {    // Normal Execution
+                    if(mapArray[11] == 0){    // Counter Clockwise
+                        mapArray[9] = mapArray[8] + 1;
+                    } else {    // Clockwise
+                        mapArray[9] = mapArray[8] - 1;
+                    }
+                }
+                Serial.print("Next Node: ");
+                Serial.println(mapArray[mapArray[9]]);
+                return mapArray;
+            }
         }
+
+};
