@@ -39,7 +39,7 @@ void loop() {
   Online online;
 
   int spectrum = sensing.readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
-  int degrees = navigation.directionController(spectrum); // Get degrees based on spectrum
+  int turnCoeff = navigation.directionController(spectrum); // Get degrees based on spectrum
   
   // Adjust movement based on the detected spectrum
   if (spectrum == 0) {
@@ -47,15 +47,17 @@ void loop() {
     analogWrite(mRpwmPin, 0);
     analogWrite(mLpwmPin, 0);
     cosmetics.blinkLED(2);
-  } else if (degrees == 0) {
+  } else if (turnCoeff == 0) {
     // If the robot is aligned with the line, drive forward
     motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
-  } else if (degrees == 666) { // Junction!
-    
+  } else if (turnCoeff == 666) { // Junction!
+    delay(200);
+    cosmetics.blinkLED(1);
     mapArray[8] = mapArray[9]; // node reached, so: lastNode = nextNode;
     navigation.GPS(mapArray);  // fetching new nextNode from GPS
     navigation.crossJunction(mapArray, topSpeed);
+    delay(500);
   } else {
-    motors.slideForward(topSpeed, degrees); // Turn with speed 80 and the degrees value
+    motors.slideForward(topSpeed, turnCoeff); // Turn with speed 80 and the degrees value
   }
 }
