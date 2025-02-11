@@ -83,6 +83,10 @@ class Navigation {
             } else if (nextNode == 5) { // Parking
                 if (orientation == 0) {motors.rotate(speed, 90, coeff); orientation = 2;}
                 if (orientation == 1) {motors.rotate(speed, -90, coeff); orientation = 2;}
+                sensing.park(); // test 1
+                delay(5);
+                cosmetics.blinkLED(5);
+                delay(10000);
             }
             
             Serial.print("Moving from ");
