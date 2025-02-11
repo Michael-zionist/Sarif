@@ -1,5 +1,5 @@
 /*****************************************************************************
-sensing.h - Contains "park()", "readDistanceSensor()" and "readSensors()"
+sensing.h - Contains "parking()", "readDistanceSensor()" and "readSensors()"
 *****************************************************************************/
 
 #include "constants.h"
@@ -12,27 +12,23 @@ class Sensing{
     Motors motors;
 
     public:
-        // Park Function
+        // Parking Function
         void park(){
             int distanceValue = readDistanceSensor(); // Read the sensor value
-            Serial.println(distanceValue);  // Print value in serial for debugging
-
+            Serial.println(distanceValue);  // Print value in serial for debugging  
+           
             int traveledDistance = 0; // Track how far the robot has moved
-            const int obstacleThreshold = 10; // Define a threshold for obstacle detection
+            const int obstacleThreshold = 2500; // Define a threshold for obstacle detection
             const int safeDistance = 40; // Minimum distance before detecting obstacle as wall
             const int stepSize = 5; // Small step to move at a time
             const int sideMoveDistance = 10; // Distance to move sideways after detecting obstacle
 
             while (true) {
-<<<<<<< HEAD
-=======
-
->>>>>>> 699f535ec1785e385c1464146f9e193e4f483d8f
                // distanceValue = readDistanceSensor(); //DUPLICATE code i think 
                 // Serial.printIn(distanceValue);
 
-                if(distanceValue < obstacleThreshold && traveledDistance < safeDistance){
-                    Serial.printIn("Obstacle detected! Executing avoidance maneuver.");
+                if(distanceValue > obstacleThreshold && traveledDistance < safeDistance){
+                    Serial.println("Obstacle detected! Executing avoidance maneuver.");
                     motors.drive(0, 0, false);  // Stop the robot
                     motors.rotate(50, 90); // Turn right
                     motors.driveDistance(50, sideMoveDistance); // Move forward 10 cm
@@ -43,10 +39,6 @@ class Sensing{
                 else if(distanceValue > parkDistance) {
                     motors.drive(0,0,false); //stops mobot
                     break; 
-<<<<<<< HEAD
-=======
-
->>>>>>> 699f535ec1785e385c1464146f9e193e4f483d8f
                 }else{
                     motors.drive(topSpeed, 25, false);
                     traveledDistance += stepSize;
