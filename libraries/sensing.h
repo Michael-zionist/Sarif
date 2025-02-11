@@ -1,5 +1,5 @@
 /*****************************************************************************
-sensing.h - Contains "parking()", "readDistanceSensor()" and "readSensors()"
+sensing.h - Contains "park()", "readDistanceSensor()" and "readSensors()"
 *****************************************************************************/
 
 #include "constants.h"
@@ -12,15 +12,38 @@ class Sensing{
     Motors motors;
 
     public:
-        // Parking Function
-        void parking(int whiteThreshold = 2700){
+        // Park Function
+        void park(){
             int distanceValue = readDistanceSensor(); // Read the sensor value
-            Serial.println(distanceValue);  //Print value in serial to allow debugging
+            Serial.println(distanceValue);  // Print value in serial for debugging
 
-            if (distanceValue > parkDistance){
-                motors.drive(0, 25, false);}  //stops rhino
-            else{
-                motors.drive(topSpeed, 25, false);   //drives striaght
+            int traveledDistance = 0; // Track how far the robot has moved
+            const int obstacleThreshold = 10; // Define a threshold for obstacle detection
+            const int safeDistance = 20; // Minimum distance before detecting obstacle as wall
+            const int stepSize = 5; // Small step to move at a time
+            const int sideMoveDistance = 10; // Distance to move sideways after detecting obstacle
+
+            while (true) {
+                distanceValue = readDistanceSensor();
+                Serial.println(distanceValue);
+
+                if(distanceValue < obstacleThreshold && traveledDistance < safeDistance){
+                    Serial.println("Obstacle detected! Executing avoidance maneuver.");
+                    motors.drive(0, 0, false);  // Stop the robot
+                    motors.rotate(50, 90); // Turn right
+                    motors.driveDistance(50, sideMoveDistance); // Move forward 10 cm
+                    motors.rotate(-50, 90); // Turn left
+                    break; // Exit loop and continue normal parking
+                }
+
+                else if(distanceValue > parkDistance) {
+                    motors.drive(0,25,false);
+                    break;
+                }else{
+                    motors.drive(topSpeed, 25, false);
+                    traveledDistance += stepSize;
+                    delay(100);
+                }
             }
         }
 
