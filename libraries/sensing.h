@@ -1,5 +1,5 @@
 /*****************************************************************************
-sensing.h - Contains "parking()", "readDistanceSensor()" and "readSensors()"
+sensing.h - Contains "park()", "readDistanceSensor()" and "readSensors()"
 *****************************************************************************/
 
 #include "constants.h"
