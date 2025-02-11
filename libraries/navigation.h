@@ -76,13 +76,13 @@ class Navigation {
                 if (lastNode == 6) orientation = 3;
             
             } else if (lastNode == 1) {  // Car is off main loop
-                if (nextNode == 6 && orientation == 3) {motors.rotate(speed, 180, coeff); orientation = 0;}
-                if (nextNode == 7 && orientation == 2) {motors.rotate(speed, 180, coeff); orientation = 1;}
+                if (nextNode == 6 && orientation == 3) {motors.rotate(speed, 180, coeff); orientation = 2;}
+                if (nextNode == 7 && orientation == 2) {motors.rotate(speed, 180, coeff); orientation = 3;}
                 else ; // default case -> drive forward
 
             } else if (nextNode == 5) { // Parking
-                if (orientation == 0) motors.rotate(speed, 90, coeff);
-                if (orientation == 1) {motors.rotate(speed, -90, coeff); orientation = 0;}
+                if (orientation == 0) {motors.rotate(speed, 90, coeff); orientation = 2;}
+                if (orientation == 1) {motors.rotate(speed, -90, coeff); orientation = 2;}
             }
             
             Serial.print("Moving from ");
@@ -107,8 +107,9 @@ class Navigation {
                 }
 
                 if(mapArray[8] == 7){     // If at Node 1
-                    if(mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){   // Target Node is 3, 4, or 5
+                    if (mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){   // Target Node is 3, 4, or 5
                         mapArray[9] = 4;      // Next Node is 6
+                    
                     } else if(mapArray[10] == 0 || mapArray[10] == 2){    // Target Node is 0 or 2
                         mapArray[9] = 1;      // Next Node is 7
                     }
