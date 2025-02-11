@@ -13,16 +13,16 @@ class Sensing{
 
     public:
         // Parking Function
-        void park(){            
+        void park(){
             while (true)
             {
                 int distanceValue = readDistanceSensor(); // Read the sensor value
-                Serial.println(distanceValue);  // Print value in serial for debugging 
+                Serial.println(distanceValue);  // Print value in serial for debugging
 
                 if (distanceValue > parkDistance) {
                     motors.drive(0,0,false); //stops mobot
                     break;
-                   
+
                 } else{
                     motors.drive(topSpeed, 25, false);
                     delay(100);
