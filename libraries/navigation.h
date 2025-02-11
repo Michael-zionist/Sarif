@@ -60,21 +60,21 @@ class Navigation {
             // Turning & updating orientation:
             if (succeedsOnMain) {
                 if (orientation == 1) {motors.rotate(speed, 180, coeff); orientation = 0;}
-                else if (orientation > 1) {motors.rotate(speed, -90, coeff); orientation = 0;} 
+                else if (orientation > 1) {motors.rotate(speed, -90, coeff); orientation = 0;}
                 else ; // default case -> drive forward
 
             } else if (preceedssOnMain) {
                 if (orientation == 0) {motors.rotate(speed, 180, coeff); orientation = 1;}
-                else if (orientation > 1) {motors.rotate(speed, 90, coeff); orientation = 1;} 
+                else if (orientation > 1) {motors.rotate(speed, 90, coeff); orientation = 1;}
                 else ; // default case -> drive forward
 
             } else if (nextNode == 1) {  // Next node is off main loop
                 if (orientation == 0) motors.rotate(speed, -90, coeff); // counter-clockwise
                 else motors.rotate(speed, 90, coeff); // clockwise
-                
+
                 if (lastNode == 7) orientation = 2;
                 if (lastNode == 6) orientation = 3;
-            
+
             } else if (lastNode == 1) {  // Car is off main loop
                 if (nextNode == 6 && orientation == 3) {motors.rotate(speed, 180, coeff); orientation = 2;}
                 if (nextNode == 7 && orientation == 2) {motors.rotate(speed, 180, coeff); orientation = 3;}
@@ -88,7 +88,7 @@ class Navigation {
                 cosmetics.blinkLED(5);
                 delay(10000);
             }
-            
+
             Serial.print("Moving from ");
             Serial.print(lastNode);
             Serial.print(" towards ");
@@ -113,7 +113,7 @@ class Navigation {
                 if(mapArray[8] == 7){     // If at Node 1
                     if (mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){   // Target Node is 3, 4, or 5
                         mapArray[9] = 4;      // Next Node is 6
-                    
+
                     } else if(mapArray[10] == 0 || mapArray[10] == 2){    // Target Node is 0 or 2
                         mapArray[9] = 1;      // Next Node is 7
                     }
