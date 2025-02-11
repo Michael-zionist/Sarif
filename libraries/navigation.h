@@ -49,7 +49,7 @@ class Navigation {
 
             // mapArray: [0, 7, 2, 3, 6, 4, 5, 1, 0, 0, 0, 0] (... note: 0723640 are the "main loop")
             // Main loop: next node succeeds last node in mapArray:
-            bool succeedsOnMain = 
+            bool succeedsOnMain =
                 (nextNodeIndex < 6 && nextNodeIndex == (lastNodeIndex + 1)) ||
                 (lastNodeIndex == 5 && nextNodeIndex == 0); // array border case: nodes 4 -> 0
             // Main loop: next node preceeds last node in mapArray:
@@ -69,20 +69,20 @@ class Navigation {
             } else if (nextNode == 1) {  // Next node is off main loop
                 if (orientation == 0) motors.rotate(-speed, 90, coeff); // counter-clockwise
                 else motors.rotate(speed, 90, coeff); // clockwise
-                
+
                 if (lastNode == 7) orientation = 0;
                 if (lastNode == 6) orientation = 1;
-            
+
             } else if (lastNode == 1) {  // Car is off main loop
                 if (nextNode == 6 && orientation == 1) {motors.rotate(speed, 180, coeff); orientation = 0;}
                 if (nextNode == 7 && orientation == 0) {motors.rotate(speed, 180, coeff); orientation = 1;}
                 else ; // default case -> drive forward
-            
+
             } else if (nextNode == 5) { // Parking
                 if (orientation == 0) motors.rotate(speed, 90, coeff);
                 if (orientation == 1) {motors.rotate(-speed, 90, coeff); orientation = 0;}
             }
-            
+
             motors.driveDistance(speed, forwardDistance, coeff); // move off juction at the end
         }
 
@@ -155,8 +155,13 @@ class Navigation {
                 else if(mapArray[8] == 7){    // Junction 1
                     if(mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){    // Target 3 or 4 or 6
                         mapArray[9] = 4;    // Next Node is 6
-                    } else if(mapArray[10] == 0 || mapArray[10] == 2){  // Target 0 or 2
+                    }
+                    else if(mapArray[10] == 0 || mapArray[10] == 2){  // Target 0 or 2
                         mapArray[9] = 1;    // Next Node is 7
+                    }
+                    else if(mapArray[10] == 6){
+                        mapArray[9] = 4;
+                        mapArray[11] = 2;
                     }
                 }
                 else if(mapArray[8] == 5 && mapArray[10] == 0){    // Node 4 -> 0 (Special Case)
