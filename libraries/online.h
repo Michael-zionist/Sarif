@@ -20,6 +20,7 @@ class Online{
                     delay(500);
                     Serial.print(".");
             }
+            Serial.println("Connected...");
             Serial.println("");
             delay(500);
         }

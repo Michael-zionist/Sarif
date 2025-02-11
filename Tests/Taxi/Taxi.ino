@@ -41,24 +41,22 @@ void loop() {
   
   
   // Adjust movement based on the detected spectrum
-  if (spectrum == 0) {
-    // If no line is detected, stop and blink LED
+  if (spectrum == 0) {  // If no line is detected, stop and blink LED
     analogWrite(mRpwmPin, 0);
     analogWrite(mLpwmPin, 0);
-  } else if (turnCoeff == 0) {
-    // If the robot is aligned with the line, drive forward
-    motors.drive(topSpeed, step, false); // Drive forward at speed 80, no stop condition
+
+  } else if (turnCoeff == 0) {  // If the robot is aligned with the line, drive forward
+    motors.drive(topSpeed, step, false); // Drive forward at top speed, no stop condition
+
   } else if (turnCoeff == 666) {
-    motors.driveDistance(topSpeed, 5); // Drive forward at speed 80, no stop condition
-    delay(200);
+    motors.driveDistance(topSpeed, 5); // Drive forward at top speed, no stop condition
     cosmetics.blinkLED(1);
     mapArray[8] = mapArray[9]; // node reached, so: lastNode = nextNode;
     navigation.GPS(mapArray);  // fetching new nextNode from GPS
     navigation.crossJunction(mapArray, topSpeed);
-    delay(500);
-    motors.driveDistance(topSpeed, 5); // Drive forward at speed 80, no stop condition
+
   } else {
-    motors.slideForward(topSpeed, turnCoeff); // Turn with speed 80 and the degrees value
+    motors.slideForward(topSpeed, turnCoeff); // Turn with top speed and the degrees value
   }
 } 
 
