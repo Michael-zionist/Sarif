@@ -15,8 +15,8 @@ class Sensing{
         // Park Function
         void park(){
             int distanceValue = readDistanceSensor(); // Read the sensor value
-            Serial.println(distanceValue);  // Print value in serial for debugging  
-           
+            Serial.println(distanceValue);  // Print value in serial for debugging
+
             int traveledDistance = 0; // Track how far the robot has moved
             const int obstacleThreshold = 10; // Define a threshold for obstacle detection
             const int safeDistance = 20; // Minimum distance before detecting obstacle as wall
@@ -25,10 +25,10 @@ class Sensing{
 
             while (true) {
                 distanceValue = readDistanceSensor();
-                Serial.printIn(distanceValue);
+                Serial.println(distanceValue);
 
                 if(distanceValue < obstacleThreshold && traveledDistance < safeDistance){
-                    Serial.printIn("Obstacle detected! Executing avoidance maneuver.");
+                    Serial.println("Obstacle detected! Executing avoidance maneuver.");
                     motors.drive(0, 0, false);  // Stop the robot
                     motors.rotate(50, 90); // Turn right
                     motors.driveDistance(50, sideMoveDistance); // Move forward 10 cm
@@ -37,8 +37,8 @@ class Sensing{
                 }
 
                 else if(distanceValue > parkDistance) {
-                    motors.drive(0,25,false); 
-                    break; 
+                    motors.drive(0,25,false);
+                    break;
                 }else{
                     motors.drive(topSpeed, 25, false);
                     traveledDistance += stepSize;
