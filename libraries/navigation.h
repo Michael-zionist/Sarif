@@ -39,7 +39,7 @@ class Navigation {
         }
 
         // Function to traverse a junction in the correct way based on nextNode
-        void crossJunction(int* mapArray, int speed, int turnDegrees = 90, int forwardDistance = 2, float coeff = 0.92) {
+        void crossJunction(int* mapArray, int speed, int turnDegrees = 90, int forwardDistance = 5, float coeff = 0.92) {
             int& lastNodeIndex = mapArray[8];
             int& nextNodeIndex = mapArray[9];
             int& targetNodeIndex = mapArray[10];
@@ -83,6 +83,10 @@ class Navigation {
                 if (orientation == 1) {motors.rotate(-speed, 90, coeff); orientation = 0;}
             }
             
+            Serial.print("Moving from ");
+            Serial.print(lastNode);
+            Serial.print(" towards ");
+            Serial.print(nextNode);
             motors.driveDistance(speed, forwardDistance, coeff); // move off juction at the end
         }
 
