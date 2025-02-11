@@ -20,7 +20,7 @@ int whiteThreshold = 2700; // Calibrate here for light level
 
 // Setup function runs once when you press reset
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Cosmetics cosmetics;
 
   // Configure motor pins as outputs
@@ -35,7 +35,7 @@ void loop() {
 
   sensing.park();
 
-  delay(5000); 
+  delay(5); 
   
 } 
 

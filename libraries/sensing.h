@@ -13,35 +13,18 @@ class Sensing{
 
     public:
         // Parking Function
-        void park(){
-            int distanceValue = readDistanceSensor(); // Read the sensor value
-            Serial.println(distanceValue);  // Print value in serial for debugging  
-           
-            int traveledDistance = 0; // Track how far the robot has moved
-            const int obstacleThreshold = 2500; // Define a threshold for obstacle detection
-            const int safeDistance = 40; // Minimum distance before detecting obstacle as wall
-            const int stepSize = 5; // Small step to move at a time
-            const int sideMoveDistance = 10; // Distance to move sideways after detecting obstacle
+        void park(){            
+            while (true)
+            {
+                int distanceValue = readDistanceSensor(); // Read the sensor value
+                Serial.println(distanceValue);  // Print value in serial for debugging 
 
-            while (true) {
-               // distanceValue = readDistanceSensor(); //DUPLICATE code i think 
-                // Serial.printIn(distanceValue);
-
-                if(distanceValue > obstacleThreshold && traveledDistance < safeDistance){
-                    Serial.println("Obstacle detected! Executing avoidance maneuver.");
-                    motors.drive(0, 0, false);  // Stop the robot
-                    motors.rotate(50, 90); // Turn right
-                    motors.driveDistance(50, sideMoveDistance); // Move forward 10 cm
-                    motors.rotate(-50, 90); // Turn left
-                    break; // Exit loop and continue normal parking
-                }
-
-                else if(distanceValue > parkDistance) {
+                if (distanceValue > parkDistance) {
                     motors.drive(0,0,false); //stops mobot
-                    break; 
-                }else{
+                    break;
+                   
+                } else{
                     motors.drive(topSpeed, 25, false);
-                    traveledDistance += stepSize;
                     delay(100);
                 }
             }
