@@ -12,7 +12,7 @@ class Sensing{
     Motors motors;
 
     public:
-        // Parking Function
+        // Park Function
         void park(){
             int distanceValue = readDistanceSensor(); // Read the sensor value
             Serial.println(distanceValue);  // Print value in serial for debugging  
