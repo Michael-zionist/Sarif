@@ -19,15 +19,15 @@ class Sensing{
            
             int traveledDistance = 0; // Track how far the robot has moved
             const int obstacleThreshold = 10; // Define a threshold for obstacle detection
-            const int safeDistance = 20; // Minimum distance before detecting obstacle as wall
+            const int safeDistance = 40; // Minimum distance before detecting obstacle as wall
             const int stepSize = 5; // Small step to move at a time
             const int sideMoveDistance = 10; // Distance to move sideways after detecting obstacle
 
             while (true) {
-                distanceValue = readDistanceSensor();
-                Serial.printIn(distanceValue);
+               // distanceValue = readDistanceSensor(); //DUPLICATE code i think 
+                // Serial.printIn(distanceValue);
 
-                if(distanceValue < obstacleThreshold && traveledDistance < safeDistance){
+                if(distanceValue > obstacleThreshold && traveledDistance < safeDistance){
                     Serial.printIn("Obstacle detected! Executing avoidance maneuver.");
                     motors.drive(0, 0, false);  // Stop the robot
                     motors.rotate(50, 90); // Turn right
@@ -37,7 +37,7 @@ class Sensing{
                 }
 
                 else if(distanceValue > parkDistance) {
-                    motors.drive(0,25,false); 
+                    motors.drive(0,0,false); //stops mobot
                     break; 
                 }else{
                     motors.drive(topSpeed, 25, false);
