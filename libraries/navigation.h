@@ -60,33 +60,35 @@ class Navigation {
             // Turning & updating orientation:
             if (succeedsOnMain) {
                 if (orientation == 1) {motors.rotate(speed, 180, coeff); orientation = 0;}
+                else if (orientation > 1) {motors.rotate(speed, -90, coeff); orientation = 0;} 
                 else ; // default case -> drive forward
 
             } else if (preceedssOnMain) {
                 if (orientation == 0) {motors.rotate(speed, 180, coeff); orientation = 1;}
+                else if (orientation > 1) {motors.rotate(speed, 90, coeff); orientation = 1;} 
                 else ; // default case -> drive forward
 
             } else if (nextNode == 1) {  // Next node is off main loop
-                if (orientation == 0) motors.rotate(-speed, 90, coeff); // counter-clockwise
+                if (orientation == 0) motors.rotate(speed, -90, coeff); // counter-clockwise
                 else motors.rotate(speed, 90, coeff); // clockwise
-
-                if (lastNode == 7) orientation = 0;
-                if (lastNode == 6) orientation = 1;
-
+                
+                if (lastNode == 7) orientation = 2;
+                if (lastNode == 6) orientation = 3;
+            
             } else if (lastNode == 1) {  // Car is off main loop
-                if (nextNode == 6 && orientation == 1) {motors.rotate(speed, 180, coeff); orientation = 0;}
-                if (nextNode == 7 && orientation == 0) {motors.rotate(speed, 180, coeff); orientation = 1;}
+                if (nextNode == 6 && orientation == 3) {motors.rotate(speed, 180, coeff); orientation = 0;}
+                if (nextNode == 7 && orientation == 2) {motors.rotate(speed, 180, coeff); orientation = 1;}
                 else ; // default case -> drive forward
 
             } else if (nextNode == 5) { // Parking
                 if (orientation == 0) motors.rotate(speed, 90, coeff);
-                if (orientation == 1) {motors.rotate(-speed, 90, coeff); orientation = 0;}
+                if (orientation == 1) {motors.rotate(speed, -90, coeff); orientation = 0;}
             }
             
             Serial.print("Moving from ");
             Serial.print(lastNode);
             Serial.print(" towards ");
-            Serial.print(nextNode);
+            Serial.println(nextNode);
             motors.driveDistance(speed, forwardDistance, coeff); // move off juction at the end
         }
 
