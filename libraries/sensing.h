@@ -24,7 +24,10 @@ class Sensing{
             const int sideMoveDistance = 10; // Distance to move sideways after detecting obstacle
 
             while (true) {
+<<<<<<< HEAD
+=======
 
+>>>>>>> 699f535ec1785e385c1464146f9e193e4f483d8f
                // distanceValue = readDistanceSensor(); //DUPLICATE code i think 
                 // Serial.printIn(distanceValue);
 
@@ -40,7 +43,10 @@ class Sensing{
                 else if(distanceValue > parkDistance) {
                     motors.drive(0,0,false); //stops mobot
                     break; 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 699f535ec1785e385c1464146f9e193e4f483d8f
                 }else{
                     motors.drive(topSpeed, 25, false);
                     traveledDistance += stepSize;
