@@ -38,53 +38,52 @@ class Navigation {
             return 0; // Default case
         }
 
-        // Function to determine turning behavior at a junction
-        void turnRobot(int currentNode, int targetNode, int lastNode, int turnSpeed, int junctionOffset = 2) {
-            if (targetNode == lastNode) {
-                motors.driveDistance(turnSpeed, junctionOffset);
-            } else if (targetNode < lastNode) {
-                motors.rotate(-turnSpeed, 90);
-                motors.driveDistance(turnSpeed, junctionOffset);
-            } else {
-                motors.rotate(turnSpeed, 90);
-                motors.driveDistance(turnSpeed, junctionOffset);
-            }
-        }
-
-        // Function to traverse a junction and update position
+        // Function to traverse a junction in the correct way based on nextNode
         void crossJunction(int* mapArray, int speed, int turnDegrees = 90, int forwardDistance = 2, float coeff = 0.92) {
             int& lastNodeIndex = mapArray[8];
             int& nextNodeIndex = mapArray[9];
             int& targetNodeIndex = mapArray[10];
             int& orientation = mapArray[11];
+            int& nextNode = mapArray[nextNodeIndex];
+            int& lastNode = mapArray[lastNodeIndex];
 
-            cosmetics.blinkLED(nextNodeIndex);
+            // mapArray: [0, 7, 2, 3, 6, 4, 5, 1, 0, 0, 0, 0] (... note: 0723640 are the "main loop")
+            // Main loop: next node succeeds last node in mapArray:
+            bool succeedsOnMain = 
+                (nextNodeIndex < 6 && nextNodeIndex == (lastNodeIndex + 1)) ||
+                (lastNodeIndex == 5 && nextNodeIndex == 0); // array border case: nodes 4 -> 0
+            // Main loop: next node preceeds last node in mapArray:
+            bool preceedssOnMain =
+                (nextNodeIndex < 6 && nextNodeIndex == (lastNodeIndex - 1)) ||
+                (lastNodeIndex == 0 && nextNodeIndex == 5); // array border case: nodes 0 -> 4
 
-            switch (nextNodeIndex) {
-                case 7:
-                case 6:
-                    turnRobot(nextNodeIndex, targetNodeIndex, lastNodeIndex, speed);
-                    orientation = (targetNodeIndex == 1 && lastNodeIndex == 0) ? 0 : 1;
-                    break;
-                case 3: case 4:
-                    if (targetNodeIndex == 6) {
-                        motors.rotate(speed, 180);
-                        motors.driveDistance(speed, 1);
-                        orientation = !orientation;
-                    } else {
-                        motors.driveDistance(speed, forwardDistance);
-                    }
-                    break;
-                default:
-                    motors.driveDistance(speed, forwardDistance);
+            // Turning & updating orientation:
+            if (succeedsOnMain) {
+                if (orientation == 1) {motors.rotate(speed, 180, coeff); orientation = 0}
+                else ; // default case -> drive forward
+
+            } else if (preceedssOnMain) {
+                if (orientation == 0) {motors.rotate(speed, 180, coeff); orientation = 1};
+                else ; // default case -> drive forward
+
+            } else if (nextNode == 1) {  // Next node is off main loop
+                if (orientation == 0) motors.rotate(-speed, 90, coeff); // counter-clockwise
+                else motors.rotate(speed, 90, coeff); // clockwise
+                
+                if (lastNode == 7) orientation = 0;
+                if (lastNode == 6) orientation = 1;
+            
+            } else if (lastNode == 1) {  // Car is off main loop
+                if (nextNode == 6 && orientation == 1) {motors.rotate(speed, 180, coeff); orientation = 0};
+                if (nextNode == 7 && orientation == 0) {motors.rotate(speed, 180, coeff); orientation = 1};
+                else ; // default case -> drive forward
+            
+            } else if (nextNode == 5) { // Parking
+                if (orientation == 0) motors.rotate(speed, 90, coeff);
+                if (orientation == 1) {motors.rotate(-speed, 90, coeff); orientation = 0};
             }
-
-            lastNodeIndex = nextNodeIndex;
-            nextNodeIndex = (orientation == 0) ? (lastNodeIndex + 1) % 7 : (lastNodeIndex - 1 + 7) % 7;
-
-            if (nextNodeIndex == targetNodeIndex) {
-                Serial.println("Hooray");
-            }
+            
+            motors.driveDistance(speed, forwardDistance, coeff); // move off juction at the end
         }
 
         // Function for updating Map Array (GPS)
