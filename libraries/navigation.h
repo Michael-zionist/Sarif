@@ -153,15 +153,11 @@ class Navigation {
                     }
                 }
                 else if(mapArray[8] == 7){    // Junction 1
-                    if(mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){    // Target 3 or 4 or 6
+                    if(mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){    // Target 3 or 4 or 5
                         mapArray[9] = 4;    // Next Node is 6
                     }
                     else if(mapArray[10] == 0 || mapArray[10] == 2){  // Target 0 or 2
                         mapArray[9] = 1;    // Next Node is 7
-                    }
-                    else if(mapArray[10] == 6){
-                        mapArray[9] = 4;
-                        mapArray[11] = 2;
                     }
                 }
                 else if(mapArray[8] == 5 && mapArray[10] == 0){    // Node 4 -> 0 (Special Case)
