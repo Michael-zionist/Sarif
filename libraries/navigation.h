@@ -26,10 +26,10 @@ class Navigation {
 
         // Function to map spectrum values to direction coefficients
         float directionController(int spectrum) {
-            const int spectrumValues[] = {1, 2, 3, 6, 7, 8, 12, 16, 24, 28, 31, 30, 15};   
+            const int spectrumValues[] = {1, 2, 3, 6, 7, 8, 12, 16, 24, 28, 31, 30, 15};
             const float slowCoeffs[]   = {0.02, 0.15, 0.1, 0.9, 0.1, -0.15, -0.9, -0.02, -0.1, 0.1, 666, 666, 666};
             const int dictionarySize = sizeof(spectrumValues) / sizeof(spectrumValues[0]);
-            
+
             for (int i = 0; i < dictionarySize; i++) {
                 if (spectrum == spectrumValues[i]) {
                     return slowCoeffs[i];
@@ -87,20 +87,20 @@ class Navigation {
             }
         }
 
-        // Function for updating Map Array (GPS)
+        // Function for updating Map Array (GPS - Pathfinding)
         int* GPS(int mapArray[]){
             if(mapArray[8] == mapArray[10]){  // CurrentNode == TargetNode, Pone Server
                 Serial.println("Arrived! Fetching next node...");
                 int destNode = online.destinationFetch(mapArray[mapArray[8]]); // Next Target
-            
+
                 for(int i = 0; i < 8; i++){
                     if(mapArray[i] == destNode){  // Search array for destination node
-                        mapArray[10] = i;     // TargetNode assigned destNode index
+                        mapArray[10] = i;         // TargetNode assigned destNode index
                         Serial.print("Destination Node: ");
                         Serial.println(mapArray[mapArray[10]]);
                     }
                 }
-            
+
                 if(mapArray[8] == 7){     // If at Node 1
                     if(mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){   // Target Node is 3, 4, or 5
                         mapArray[9] = 4;      // Next Node is 6
@@ -108,22 +108,22 @@ class Navigation {
                         mapArray[9] = 1;      // Next Node is 7
                     }
                 }
-                else if(mapArray[8] == 0 && mapArray[10] == 5){    // Optimisation Case
-                    mapArray[9] = 5;
+                else if(mapArray[8] == 0 && mapArray[10] == 5){    // Node 0 -> 4 (Optimisation)
+                    mapArray[9] = 5;    // Next Node is 4
                 }
-                else if(mapArray[8] == 5 && mapArray[10] == 0){    // Special Case
-                    mapArray[9] = 0;
+                else if(mapArray[8] == 5 && mapArray[10] == 0){    // Node 4 -> 0 (Special Case)
+                    mapArray[9] = 0;    // Next Node is 0
                 }
-                else if(mapArray[8] == 5 && mapArray[10] == 6){    // Special Case
-                    mapArray[9] = 4;
+                else if(mapArray[8] == 5 && mapArray[10] == 6){    // Node 4 -> 6 (Special Case)
+                    mapArray[9] = 4;    // Next Node is 6
                 }
-                else if(mapArray[8] == 3 && mapArray[10] == 2){    // Optimisation Case
-                    mapArray[9] = 2;
+                else if(mapArray[8] == 3 && mapArray[10] == 2){    // Node 3 -> 2 (Optimisation)
+                    mapArray[9] = 2;    // Next Node is 2
                 }
-                else{   // Normal Execution
+                else{   // Increment/Decrement mapArray for NextNode (Standard)
                     if(mapArray[11] == 0){    // Counter Clockwise
                         mapArray[9] = mapArray[8] + 1;
-                    } else {    // Clockwise
+                    } else {                  // Clockwise
                         mapArray[9] = mapArray[8] - 1;
                     }
                 }
@@ -131,51 +131,51 @@ class Navigation {
                 Serial.println(mapArray[mapArray[9]]);
                 return mapArray;
             }
-            
+
             else {   // CurrentNode == NextNode
-                if(mapArray[8] == 1){   // Junction
-                    if(mapArray[10] == 2 || mapArray[10] == 3){
-                        mapArray[9] = 2;
-                    } else if(mapArray[10] == 7 || mapArray[10] == 4 || mapArray[10] == 6){
-                        mapArray[9] = 7;
-                    } else if(mapArray[10] == 0 || mapArray[10] == 5){
-                        mapArray[9] = 0;
+                if(mapArray[8] == 1){   // Junction 7 (Virtual)
+                    if(mapArray[10] == 2 || mapArray[10] == 3){ // Target 2 or 3
+                        mapArray[9] = 2;    // Next Node is 2
+                    } else if(mapArray[10] == 7 || mapArray[10] == 4 || mapArray[10] == 6){ // Target 1 or 6 or 5
+                        mapArray[9] = 7;    // Next Node is 1
+                    } else if(mapArray[10] == 0 || mapArray[10] == 5){  // Target 0 or 4
+                        mapArray[9] = 0;    // Next Node is 0
                     }
                 }
-                else if(mapArray[8] == 4){    // Junction
-                    if(mapArray[10] == 2 || mapArray[10] == 3){
-                        mapArray[9] = 3;
-                    } else if(mapArray[10] == 1 || mapArray[10] == 7){
-                        mapArray[9] = 7;
-                    } else if(mapArray[10] == 0 || mapArray[10] == 5){
-                        mapArray[9] = 5;
-                    } else if(mapArray[10] == 6){
-                        mapArray[9] = 6;
+                else if(mapArray[8] == 4){    // Junction 6 (Virtual)
+                    if(mapArray[10] == 2 || mapArray[10] == 3){ // Target 2 or 3
+                        mapArray[9] = 3;    // Next Node is 3
+                    } else if(mapArray[10] == 1 || mapArray[10] == 7){  // Target 7 or 1
+                        mapArray[9] = 7;    // Next Node is 1
+                    } else if(mapArray[10] == 0 || mapArray[10] == 5){  // Target 0 or 4
+                        mapArray[9] = 5;    // Next Node is 4
+                    } else if(mapArray[10] == 6){   // Target 5
+                        mapArray[9] = 6;    // Next Node is 5
                     }
                 }
-                else if(mapArray[8] == 7){    // Junction
-                    if(mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){
-                        mapArray[9] = 4;
-                    } else if(mapArray[10] == 0 || mapArray[10] == 2){
-                        mapArray[9] = 1;
+                else if(mapArray[8] == 7){    // Junction 1
+                    if(mapArray[10] == 3 || mapArray[10] == 5 || mapArray[10] == 6){    // Target 3 or 4 or 6
+                        mapArray[9] = 4;    // Next Node is 6
+                    } else if(mapArray[10] == 0 || mapArray[10] == 2){  // Target 0 or 2
+                        mapArray[9] = 1;    // Next Node is 7
                     }
                 }
-                else if(mapArray[8] == 5 && mapArray[10] == 0){    // Special Case
-                    mapArray[9] = 0;
+                else if(mapArray[8] == 5 && mapArray[10] == 0){    // Node 4 -> 0 (Special Case)
+                    mapArray[9] = 0;    // Next Node is 0
                 }
-                else if(mapArray[8] == 0 && mapArray[10] == 5){    // Special Case
-                    mapArray[9] = 5;
+                else if(mapArray[8] == 0 && mapArray[10] == 5){    // Node 0 -> 4 (Special Case)
+                    mapArray[9] = 5;    // Next Node is 4
                 }
-                else if(mapArray[8] == 5 && mapArray[10] == 6){    // Special Case
-                    mapArray[9] = 4;
+                else if(mapArray[8] == 5 && mapArray[10] == 6){    // Node 4 -> 5 (Special Case)
+                    mapArray[9] = 4;    // Next Node is 6
                 }
-                else if(mapArray[8] == 3 && mapArray[10] == 2){    // Optimisation Case
-                    mapArray[9] = 2;
+                else if(mapArray[8] == 3 && mapArray[10] == 2){    // Node 3 -> 2 (Optimisation)
+                    mapArray[9] = 2;    // Next Node is 2
                 }
                 else {    // Normal Execution
                     if(mapArray[11] == 0){    // Counter Clockwise
                         mapArray[9] = mapArray[8] + 1;
-                    } else {    // Clockwise
+                    } else {                  // Clockwise
                         mapArray[9] = mapArray[8] - 1;
                     }
                 }
