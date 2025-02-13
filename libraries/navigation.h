@@ -130,6 +130,9 @@ class Navigation {
                 else if(mapArray[8] == 3 && mapArray[10] == 2){    // Node 3 -> 2 (Optimisation)
                     mapArray[9] = 2;    // Next Node is 2
                 }
+                else if(mapArray[8] == 5 && mapArray[10] == 3){    // Node 4 -> 3 (Special Case)
+                    mapArray[9] = 4;    // Next Node is 6
+                }
                 else{   // Increment/Decrement mapArray for NextNode (Standard)
                     if(mapArray[11] == 0){    // Counter Clockwise
                         mapArray[9] = mapArray[8] + 1;
