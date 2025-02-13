@@ -29,19 +29,6 @@ int whiteThreshold = 1900; // Calibrate here for light level
 // Starting position: LastNode -> 4; NextNode -> 0; TargetNode -> 5; Orientation -> 0 (counter-clockwise)
 int mapArray[12] = {0, 7, 2, 3, 6, 4, 5, 1, 0, 0, 0, 0};
 
-// Lookup table for next nodes based on (currentNode, targetNode)
-const int lookupTable[8][8] = {
-    // Target Nodes: 0  1  2  3  4  5  6  7
-      { 0, 1, 1, 2, 5, 5, 6, 7 }, // Node 0
-      { 0, 1, 2, 2, 5, 5, 6, 7 }, // Node 1
-      { 0, 1, 2, 3, 5, 5, 6, 7 }, // Node 2
-      { 0, 1, 2, 3, 5, 5, 6, 7 }, // Node 3
-      { 0, 1, 2, 3, 5, 6, 6, 7 }, // Node 4 (Junction)
-      { 0, 1, 2, 3, 4, 5, 6, 7 }, // Node 5
-      { 0, 1, 2, 3, 4, 5, 6, 7 }, // Node 6
-      { 0, 1, 2, 3, 4, 5, 6, 7 }  // Node 7 (Junction)
-  };
-
 // Wifi Info
 const char* ssid = "iot";
 const char* password = "athyria67hyperflexibleness";    // For ESP in Mobot
