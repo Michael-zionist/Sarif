@@ -22,12 +22,13 @@ const int parkDistance = 2000; //distance at which is stops before wall
 int whiteThreshold = 1900; // Calibrate here for light level
 
 
-// Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, N, I, I, I, B]
+// Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, N, I, I, I, B, O]
 // N - Navigation node (Nf - fictional, Np - parking)
 // I - Index (LastNodeIndex, NextNodeIndex, TargetNodeIndex)
 // B - Orientation boolean (0 - counter-clockwise, 1 - clockwise)
-// Starting position: LastNode -> 4; NextNode -> 0; TargetNode -> 5; Orientation -> 0 (counter-clockwise)
-int mapArray[12] = {0, 7, 2, 3, 6, 4, 5, 1, 0, 0, 0, 0};
+// O - Obstacle memory (100 - Obstacle False, <8 - Target Node index -> Obstacle True)
+// Starting position: LastNode -> 0; NextNode -> 0; TargetNode -> 0; Orientation -> 0 (counter-clockwise)
+int mapArray[13] = {0, 7, 2, 3, 6, 4, 5, 1, 0, 0, 0, 0, 100};
 
 // Wifi Info
 const char* ssid = "iot";
