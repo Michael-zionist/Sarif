@@ -40,6 +40,7 @@ class Navigation {
 
         // Function to traverse a junction in the correct way based on nextNode
         void crossJunction(int* mapArray, int speed, int turnDegrees = 90, int forwardDistance = 5, float coeff = 0.92) {
+            int step = 50; // 50 ms step for parking
             int& lastNodeIndex = mapArray[8];
             int& nextNodeIndex = mapArray[9];
             int& targetNodeIndex = mapArray[10];
@@ -83,6 +84,18 @@ class Navigation {
             } else if (nextNode == 5) { // Parking
                 if (orientation == 0) {motors.rotate(speed, 90, coeff); orientation = 2;}
                 if (orientation == 1) {motors.rotate(speed, -90, coeff); orientation = 2;}
+                
+                // 50-step alignment loop (simplified line-follow loop)
+                for (int i = 0; i < 50; i++) {
+                    int spectrum = sensing.readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
+                    float turnCoeff = this->directionController(spectrum); // Get degrees based on spectrum
+                    if (turnCoeff == 0) {  // If the robot is aligned with the line, drive forward
+                        motors.drive(topSpeed/2, step, false); // Drive forward at top speed, no stop condition
+                    } else {
+                        motors.slideForward(topSpeed/2, turnCoeff); // Turn with top speed and the degrees value
+                    }
+                }
+
                 // Begin parking
                 sensing.park();
                 delay(5);
