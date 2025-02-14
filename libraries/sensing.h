@@ -30,6 +30,11 @@ class Sensing{
             }
         }
 
+        // Obstacle Detection Function
+        void obstacleDetection(){
+            // Do something here...
+        }
+
         // Distance Sensor Reading Function
         int readDistanceSensor(){
             int distanceValue = analogRead(A16pin); // Reads the sensor value from pin 16
