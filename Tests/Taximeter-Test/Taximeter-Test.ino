@@ -89,14 +89,18 @@ void taxiNavFunc( void * pvParameters ){
 void taximeterFunc( void * pvParameters ){
   Cosmetics cosmetics;
   int journeyTime = 0;  // Define Journey Time Variable
+  float journeyFare = 4.4;  // Standard Rate - Initial Charge of €4.40
   cosmetics.displayLogo();  // Display Sarif Logo
 
-  for(;;){
-    delay(1000);
-    journeyTime++;
-    Serial.println(journeyTime);  // Test
-    
-    cosmetics.displayStats(23, 20.99);  // Display things on screen
+  for(;;){    // Infinite Loop
+    delay(1000);  // 1 second
+    journeyTime++;  // Update journey time (seconds)
+
+    if(journeyTime % 5 == 0){ // If 5 seconds passed
+      journeyFare += 0.47;    // Add €0.47 to fare (Standard Rate)
+    }
+
+    cosmetics.displayStats(journeyTime, journeyFare);  // Display time & fare on screen
   }
 }
 
