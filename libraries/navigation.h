@@ -273,7 +273,7 @@ class Navigation {
             int& targetNode = mapArray[targetNodeIndex];
             int& blockedNode = mapArray[blockedNodeIndex];
 
-            // Arrived? currentNode == targetNode: teleport()->GPS() to pone server
+            // Arrived? currentNode == targetNode: pone server, return from teleport() to GPS() navigation
             if (lastNode == nextNode && nextNode == blockedNode) {
                 blockedNode = 100;
                 this->GPS(mapArray);
@@ -282,25 +282,39 @@ class Navigation {
 
             // Not arrived? Determine next node; targetNode is Node of Access: can be 6 or 7
             int northBridge[4] = {7, 2, 3, 6};  // default orientation: 0
-            int centerBridge[3] = {7, 1, 6};    // default orientation: 2
             int southBridge[4] = {7, 0, 4, 6};  // default orientation: 1
-            int* bridges[3] = {northBridge, centerBridge, southBridge};
+            int centerBridge[3] = {7, 1, 6};    // default orientation: 2
+            int* bridges[3] = {northBridge, southBridge, centerBridge};
             int bridgeFlags[3] = {mapArray[13], mapArray[14], mapArray[15]}; // north, center, south
-            int usedBridge = 0;
+            
+            // Procedure: determine current bridge and find a free bridge to cross (preferring middle)
+            int freeBridgeIndex;
+            int currentBrideIndex;
             int nextNodeNumber;
-
-            if (targetNode == 6) {
-                if (lastNode == 7) {
-                    if (!bridgeFlags[0]) nextNodeNumber = 2;
-                    else if (!bridgeFlags[1]) nextNodeNumber = 1;
-                    else nextNodeNumber = 0;
-                }
-
-            } else if (targetNode == 7) {
-
+            int nodeBridgeID;
+            for (int i = 2; i >= 0; i--) {
+                nodeBridgeID = getIndex(mapArray, 16, lastNode);
+                if (nodeBridgeID != -1) {currentBrideIndex = i; break;}
+            }
+            for (int i = 0; i < 3; i++) {
+                if (mapArray[13+i] == 0) freeBridgeIndex = i;
+                if (freeBridgeIndex == currentBrideIndex) break; // path forward is free
             }
 
-            
+            // find next node:
+            if (targetNode == 6) { // target is West (6)
+                if (freeBridgeIndex == currentBrideIndex) // path forward is free
+                    nextNodeNumber = bridges[currentBrideIndex][i+1];
+                else
+                    nextNodeNumber = bridges[currentBrideIndex][i-1];
+
+            } else if (targetNode == 7) { // target is East (7)
+                if (freeBridgeIndex == currentBrideIndex) // path forward is free
+                    nextNodeNumber = bridges[currentBrideIndex][i-1];
+                else
+                    nextNodeNumber = bridges[currentBrideIndex][i+1];
+            }
+
             nextNodeIndex = getIndex(mapArray, 16, nextNodeNumber);
             cosmetics.displayNextNode();
             return mapArray;
