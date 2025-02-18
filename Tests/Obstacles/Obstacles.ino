@@ -44,6 +44,7 @@ void loop() {
   if (sensing.obstacleAhead()) {  Obstacle detected, entering rerouting mode!
     motors.rotate(topSpeed, 180);
     navigation.rerouteTarget(mapArray);
+    cosmetics.blinkLED(5);
 
   } else if (spectrum == 0) {  // If no line is detected, stop and blink LED
     analogWrite(mRpwmPin, 0);
