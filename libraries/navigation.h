@@ -84,7 +84,7 @@ class Navigation {
             } else if (nextNode == 5) { // Parking
                 if (orientation == 0) {motors.rotate(speed, 90, coeff); orientation = 2;}
                 if (orientation == 1) {motors.rotate(speed, -90, coeff); orientation = 2;}
-                
+
                 // 50-step alignment loop (simplified line-follow loop)
                 for (int i = 0; i < 50; i++) {
                     int spectrum = sensing.readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
@@ -163,7 +163,7 @@ class Navigation {
                 Serial.print("Next Node: ");
                 Serial.println(mapArray[mapArray[9]]);
                 return mapArray;
-            
+
             } else {   // CurrentNode == NextNode
                 if(mapArray[8] == 1){   // Junction 7 (Virtual)
                     if(mapArray[10] == 2 || mapArray[10] == 3){ // Target 2 or 3
@@ -231,17 +231,17 @@ class Navigation {
             int& blockedNode = mapArray[blockedNodeIndex];
 
             blockedNodeIndex = targetNodeIndex;
-            
+
             // update target node to (virtual) Node of Access: 6/7
-            if (lastNode == 6 || (nextNode < 3 && lastNode != 7) || nextNode == 7) 
-                targetNodeIndex = 1; // head to 7 
-            else 
-                targetNodeIndex = 4; // head to 6 
+            if (lastNode == 6 || (nextNode < 3 && lastNode != 7) || nextNode == 7)
+                targetNodeIndex = 1; // head to 7
+            else
+                targetNodeIndex = 4; // head to 6
 
             // update blocked-bridge flags:
             if (1 < lastNode < 4 || 1 < nextNode < 4) mapArray[13] = 1; // northern blocked
             else if (lastNode == 1 || nextNode == 1) mapArray[14] = 1; // central blocked
-            else mapArray[15] = 1; // central blocked
+            else mapArray[15] = 1; // southern blocked
 
             // update orientation:
             if (orientation < 2) {
@@ -249,10 +249,10 @@ class Navigation {
             } else {
                 orientation = 5 - orientation; // flipping 2/3 (central bridge)
             }
-            
+
             // update indices: nextNode, lastNode
             int walledNodeIndex = nextNodeIndex;
-            
+
             nextNodeIndex = lastNodeIndex;
             lastNodeIndex = walledNodeIndex;
 
@@ -286,7 +286,7 @@ class Navigation {
             int centerBridge[3] = {7, 1, 6};    // default orientation: 2
             int* bridges[3] = {northBridge, southBridge, centerBridge};
             int bridgeFlags[3] = {mapArray[13], mapArray[14], mapArray[15]}; // north, center, south
-            
+
             // Procedure: determine current bridge and find a free bridge to cross (preferring middle)
             int freeBridgeIndex;
             int currentBrideIndex;
