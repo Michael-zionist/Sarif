@@ -32,10 +32,18 @@ void setup() {
 
 
 void loop() {
+  // 50-step alignment loop (simplified line-follow loop)
+  for (int i = 0; i < 50; i++) {
+    int spectrum = sensing.readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
+    float turnCoeff = navigation.directionController(spectrum); // Get degrees based on spectrum
+    if (turnCoeff == 0) {  // If the robot is aligned with the line, drive forward
+      motors.drive(topSpeed/2, step, false); // Drive forward at top speed, no stop condition
+    } else {
+      motors.slideForward(topSpeed/2, turnCoeff); // Turn with top speed and the degrees value
+    }
+  }
 
   sensing.park();
-
-  delay(5); 
-  
+  delay(60000); 
 } 
 
