@@ -102,22 +102,27 @@ void taximeterFunc( void * pvParameters ){
   cosmetics.displayLogo();  // Display Sarif Logo
 
   for(;;){    // Infinite Loop
-    delay(1000);  // 1 second
+    delay(1000);    // 1 second
     journeyTime++;  // Update journey time (seconds)
 
     if(journeyTime % 5 == 0){ // If 5 seconds passed
       journeyFare += 0.47;    // Add €0.47 to fare (Standard Rate)
     }
 
-    if(mapArray[8] == mapArray[9]){
+    if(mapArray[8] == mapArray[9] && mapArray[8] != 6){
       delay(100);
-      cosmetics.displayNextNode();
+      cosmetics.displayNextNode();  // Display Next Node
       delay(1900);
-      journeyTime += 2;
+      for(int i=0; i<2; i++){ // Update journey time twice (2 seconds)
+        journeyTime ++;
+        if(journeyTime % 5 == 0){ // If 5 seconds passed
+          journeyFare += 0.47;    // Add €0.47 to fare (Standard Rate)
+        }
+      }
     }
 
-    if(mapArray[8] == 6){
-      cosmetics.displayJourneyEnd(journeyFare);
+    else{
+      cosmetics.displayJourneyEnd(journeyFare); // Display End Flag & Fare
       delay(60000);
     }
 
