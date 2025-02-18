@@ -43,9 +43,7 @@ void loop() {
   // Adjust movement based on the detected spectrum
   if (sensing.obstacleAhead()) {  Obstacle detected, entering rerouting mode!
     motors.rotate(topSpeed, 180);
-    mapArray[12] = mapArray[9]; // blockedNode index is former nextNode index
-    mapArray[9] = mapArray[8];  // nextNode index is former lastNode index
-    mapArray[8] = mapArray[12]; // lastNode index is virtual - the blockedNode index
+    navigation.rerouteTarget(mapArray);
 
   } else if (spectrum == 0) {  // If no line is detected, stop and blink LED
     analogWrite(mRpwmPin, 0);

@@ -226,8 +226,51 @@ class Navigation {
             }
         }
 
-        // Function for updating Map Array when junction is blocked
+        // Function for make all MapArray index changes at the moment obstacle is found
+        int* rerouteTarget(int mapArray[]){
+            int& lastNodeIndex = mapArray[8];
+            int& nextNodeIndex = mapArray[9];
+            int& targetNodeIndex = mapArray[10];
+            int& blockedNodeIndex = mapArray[12];
+            int& orientation = mapArray[11];
+            int& nextNode = mapArray[nextNodeIndex];
+            int& lastNode = mapArray[lastNodeIndex];
+            int& targetNode = mapArray[targetNodeIndex];
+            int& blockedNode = mapArray[blockedNodeIndex];
+
+            // update blocked-bridge flags:
+            if (1 < lastNode < 4 || 1 < nextNode < 4) mapArray[13] = 1; // northern blocked
+            else if (lastNode == 1 || nextNode == 1) mapArray[14] = 1; // central blocked
+            else mapArray[15] = 1; // central blocked
+
+            // update orientation:
+            if (orientation < 2) {
+                orientation = 1 - orientation; // flipping 0/1 (main loop)
+            } else {
+                orientation = 5 - orientation; // flipping 2/3 (central bridge)
+            }
+            
+            // update indices: blockedNode, nextNode, lastNode
+            blockedNodeIndex = nextNodeIndex;
+            nextNodeIndex = lastNodeIndex;
+            lastNodeIndex = blockedNodeIndex;
+
+            // update target node to (virtual) Node of Access: 6/7
+            if (blockedNode < 3 && lastNode != 7) targetNodeIndex = 1; // head to 7 
+            else targetNodeIndex = 4; // head to 6 
+
+            // Result: navigation will resume using GPS() with server reporting once blockedNode is reached
+            // targetNode is now the virtual node of access
+            return mapArray;
+        }
+
+        // Function for updating Map Array when junction is blocked, resolves targetNode
         int* teleport(int mapArray[]){
-            // todo;
+            int& lastNodeIndex = mapArray[8];
+            int& nextNodeIndex = mapArray[9];
+            int& targetNodeIndex = mapArray[10];
+            int& orientation = mapArray[11];
+            int& nextNode = mapArray[nextNodeIndex];
+            int& lastNode = mapArray[lastNodeIndex];
         }
 };
