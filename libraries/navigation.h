@@ -305,13 +305,13 @@ class Navigation {
             if (targetNode == 6) { // target is West (6)
                 if (freeBridgeIndex == currentBrideIndex) // path forward is free
                     nextNodeNumber = bridges[currentBrideIndex][i+1];
-                else
+                else // path forward blocked, revert to last junction
                     nextNodeNumber = bridges[currentBrideIndex][i-1];
 
             } else if (targetNode == 7) { // target is East (7)
                 if (freeBridgeIndex == currentBrideIndex) // path forward is free
                     nextNodeNumber = bridges[currentBrideIndex][i-1];
-                else
+                else // path forward blocked, revert to last junction
                     nextNodeNumber = bridges[currentBrideIndex][i+1];
             }
 
