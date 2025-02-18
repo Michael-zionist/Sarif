@@ -13,19 +13,32 @@ class Sensing{
 
     public:
         // Parking Function
-        void park(){
+         void park(){  
+            int time = 0;
+        
             while (true)
             {
                 int distanceValue = readDistanceSensor(); // Read the sensor value
-                Serial.println(distanceValue);  // Print value in serial for debugging
-
-                if (distanceValue > parkDistance) {
-                    motors.drive(0,0,false); //stops mobot
+                
+                Serial.print("Time Counter: "); //for debugging
+                Serial.println(time);
+        
+                // if object detected before time = 40 
+                if (distanceValue <= parkDistance && time < 40) { 
+                    Serial.println("Obstacle!!! Turning right");
+                    motors.drive(0, 50, false); // Turn right in place
+                    delay(500);  // Turning duration (adjust as needed)
+                } 
+                    //after time = 40 park if obstacle
+                else if (distanceValue > parkDistance) { 
+                    Serial.println("Parking condition met. Stopping motors.");
+                    motors.drive(0, 0, false); // Stops the mobot
                     break;
-
-                } else{
+                } 
+                else {
                     motors.drive(topSpeed, 25, false);
                     delay(100);
+                    time += 1; 
                 }
             }
         }
