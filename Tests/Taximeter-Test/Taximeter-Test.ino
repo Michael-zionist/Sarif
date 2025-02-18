@@ -79,7 +79,9 @@ void taxiNavFunc( void * pvParameters ){
     } else if (turnCoeff == 666) {
       motors.driveDistance(topSpeed, 5); // Drive forward at top speed, no stop condition
       cosmetics.blinkLED(1);
+
       mapArray[8] = mapArray[9]; // node reached, so: lastNode = nextNode;
+
 
       // Fetch the new nextNode from navigation, depending on obstacles:
       if (mapArray[12] == 100) navigation.GPS(mapArray);  // no obstacle
