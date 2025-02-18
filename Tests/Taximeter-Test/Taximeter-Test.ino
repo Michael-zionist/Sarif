@@ -44,7 +44,6 @@ void setup() {
   xTaskCreatePinnedToCore(taximeterFunc, "taximeter", 10000, NULL, 1, &taximeter, 0);   // Pin taximeter task to core 0 (Secondary Process)
   delay(20);
 
-  online.wiFiConnect();  // Connect to WiFi
   cosmetics.blinkLED(3); // Blink the LED 3 times to confirm setup
 }
 
@@ -69,7 +68,6 @@ void taxiNavFunc( void * pvParameters ){
     if (sensing.obstacleAhead()) { // Obstacle detected, entering rerouting mode!
       motors.rotate(topSpeed, 180);
       navigation.rerouteTarget(mapArray);
-      cosmetics.blinkLED(5);
 
     } else if (spectrum == 0) {  // If no line is detected, stop and blink LED
       analogWrite(mRpwmPin, 0);
@@ -109,19 +107,17 @@ void taximeterFunc( void * pvParameters ){
       journeyFare += 0.47;    // Add €0.47 to fare (Standard Rate)
     }
 
-    if(mapArray[8] == mapArray[9] && mapArray[8] != 6){
-      delay(100);
+    if((mapArray[8] == mapArray[9]) && mapArray[8] != 6){
+      delay(50);
       cosmetics.displayNextNode();  // Display Next Node
-      delay(1900);
-      for(int i=0; i<2; i++){ // Update journey time twice (2 seconds)
-        journeyTime ++;
-        if(journeyTime % 5 == 0){ // If 5 seconds passed
-          journeyFare += 0.47;    // Add €0.47 to fare (Standard Rate)
-        }
+      delay(1000);
+      journeyTime ++;
+      if(journeyTime % 5 == 0){ // If 5 seconds passed
+        journeyFare += 0.47;    // Add €0.47 to fare (Standard Rate)
       }
     }
 
-    else{
+    else if(mapArray[8] == 6){
       cosmetics.displayJourneyEnd(journeyFare); // Display End Flag & Fare
       delay(60000);
     }
