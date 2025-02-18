@@ -17,12 +17,12 @@ class Online{
             WiFi.begin(ssid, password);
             Serial.println("Connecting...");
             while(WiFi.status() != WL_CONNECTED){   // Wait for Connection
-                    delay(500);
+                    delay(100);
                     Serial.print(".");
             }
             Serial.println("Connected...");
             Serial.println("");
-            delay(500);
+            delay(200);
         }
 
         // Server Communication Function
