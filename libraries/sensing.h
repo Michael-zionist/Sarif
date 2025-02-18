@@ -26,7 +26,7 @@ class Sensing{
                 // if object detected before time = 40 
                 if (distanceValue > parkDistance && time < 40) { 
                     Serial.println("Obstacle!!! Turning right");
-                    motors.drive(0, 50, false); // Turn right in place
+                    motors.rotate(topSpeed, 90); // Turn right in place
                     delay(500);  // Turning duration (adjust as needed)
                 } 
                     //after time = 40 park if obstacle
