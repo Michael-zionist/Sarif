@@ -36,6 +36,7 @@ class Sensing{
             Serial.println(distanceValue);  // Print value in serial for debugging
 
             return (distanceValue > obsDistance);
+        }
 
         // Distance Sensor Reading Function
         int readDistanceSensor(){

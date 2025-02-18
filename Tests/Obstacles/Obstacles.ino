@@ -41,7 +41,7 @@ void loop() {
   
 
   // Adjust movement based on the detected spectrum
-  if (sensing.obstacleAhead()) {  Obstacle detected, entering rerouting mode!
+  if (sensing.obstacleAhead()) { // Obstacle detected, entering rerouting mode!
     motors.rotate(topSpeed, 180);
     navigation.rerouteTarget(mapArray);
     cosmetics.blinkLED(5);
