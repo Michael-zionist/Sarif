@@ -32,7 +32,7 @@ int whiteThreshold = 1900; // Calibrate here for light level
 // Cb - Central bridge status (0 - open, 1 - blocked)
 // Sb - South bridge status (0 - open, 1 - blocked)
 // Starting position: LastNode -> 0; NextNode -> 0; TargetNode -> 0; Orientation -> 0 (counter-clockwise)
-int mapArray[13] = {0, 7, 2, 3, 6, 4, 5, 1, 0, 0, 0, 0, 100, 0, 0, 0};
+int mapArray[16] = {0, 7, 2, 3, 6, 4, 5, 1, 0, 0, 0, 0, 100, 0, 0, 0};
 
 // Wifi Info
 const char* ssid = "iot";

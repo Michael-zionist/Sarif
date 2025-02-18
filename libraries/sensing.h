@@ -30,12 +30,12 @@ class Sensing{
             }
         }
 
-        // Obstacle Detection Function (returns true when obstacle within range is spotted)
-        bool obstacleAhead(){
+        // Obstacle Detection Function (0 - free, 1 - blocked)
+        bool obstacleAhead(int obsDistance = 2000){
             int distanceValue = readDistanceSensor(); // Read the sensor value
             Serial.println(distanceValue);  // Print value in serial for debugging
 
-            return (distanceValue > parkDistance);
+            return (distanceValue > obsDistance);
 
         // Distance Sensor Reading Function
         int readDistanceSensor(){
