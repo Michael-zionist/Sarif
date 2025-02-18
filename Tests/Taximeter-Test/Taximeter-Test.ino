@@ -63,9 +63,14 @@ void taxiNavFunc( void * pvParameters ){
     int spectrum = sensing.readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
     float turnCoeff = navigation.directionController(spectrum); // Get degrees based on spectrum
     
-    
+
     // Adjust movement based on the detected spectrum
-    if (spectrum == 0) {  // If no line is detected, stop and blink LED
+    if (sensing.obstacleAhead()) { // Obstacle detected, entering rerouting mode!
+      motors.rotate(topSpeed, 180);
+      navigation.rerouteTarget(mapArray);
+      cosmetics.blinkLED(5);
+
+    } else if (spectrum == 0) {  // If no line is detected, stop and blink LED
       analogWrite(mRpwmPin, 0);
       analogWrite(mLpwmPin, 0);
 
@@ -76,7 +81,10 @@ void taxiNavFunc( void * pvParameters ){
       motors.driveDistance(topSpeed, 5); // Drive forward at top speed, no stop condition
       cosmetics.blinkLED(1);
       mapArray[8] = mapArray[9]; // node reached, so: lastNode = nextNode;
-      navigation.GPS(mapArray);  // fetching new nextNode from GPS
+
+      // Fetch the new nextNode from navigation, depending on obstacles:
+      if (mapArray[12] == 100) navigation.GPS(mapArray);  // no obstacle
+      else navigation.teleport(mapArray); // rerouting     
       navigation.crossJunction(mapArray, topSpeed);
 
     } else {
