@@ -114,8 +114,10 @@ class Navigation {
 
         // Function for updating Map Array (GPS - Pathfinding)
         int* GPS(int mapArray[]){
-            if(mapArray[12] < 8){   // Obstacle encountered - reroute!
-                return mapArray;
+            if(mapArray[12] < 8){   // Obstacle encountered - reroute! This condition shouldn't arise!!
+                Serial.println("Called GPS() while rerouting; should be calling teleport()");
+                while (true); // Halt program
+                //return mapArray;
             }
             else{   // No obstacle - normal GPS function
                 if(mapArray[8] == mapArray[10]){  // CurrentNode == TargetNode, Pone Server
@@ -222,5 +224,10 @@ class Navigation {
                     return mapArray;
                 }
             }
+        }
+
+        // Function for updating Map Array when junction is blocked
+        int* teleport(int mapArray[]){
+            // todo;
         }
 };
