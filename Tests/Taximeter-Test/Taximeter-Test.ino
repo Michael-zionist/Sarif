@@ -54,6 +54,7 @@ void setup() {
 
 // taxiNav Function Code (Core 1 - Primary Process)
 void taxiNavFunc( void * pvParameters ){
+  delay(3000);
   for(;;){
     Cosmetics cosmetics;
     Navigation navigation;
@@ -106,6 +107,18 @@ void taximeterFunc( void * pvParameters ){
 
     if(journeyTime % 5 == 0){ // If 5 seconds passed
       journeyFare += 0.47;    // Add €0.47 to fare (Standard Rate)
+    }
+
+    if(mapArray[8] == mapArray[9]){
+      delay(100);
+      cosmetics.displayNextNode();
+      delay(1900);
+      journeyTime += 2;
+    }
+
+    if(mapArray[8] == 6){
+      cosmetics.displayJourneyEnd(journeyFare);
+      delay(60000);
     }
 
     cosmetics.displayStats(journeyTime, journeyFare);  // Display time & fare on screen
