@@ -230,6 +230,14 @@ class Navigation {
             int& targetNode = mapArray[targetNodeIndex];
             int& blockedNode = mapArray[blockedNodeIndex];
 
+            blockedNodeIndex = targetNodeIndex;
+            
+            // update target node to (virtual) Node of Access: 6/7
+            if (lastNode == 6 || (nextNode < 3 && lastNode != 7) || nextNode == 7) 
+                targetNodeIndex = 1; // head to 7 
+            else 
+                targetNodeIndex = 4; // head to 6 
+
             // update blocked-bridge flags:
             if (1 < lastNode < 4 || 1 < nextNode < 4) mapArray[13] = 1; // northern blocked
             else if (lastNode == 1 || nextNode == 1) mapArray[14] = 1; // central blocked
@@ -242,27 +250,59 @@ class Navigation {
                 orientation = 5 - orientation; // flipping 2/3 (central bridge)
             }
             
-            // update indices: blockedNode, nextNode, lastNode
-            blockedNodeIndex = nextNodeIndex;
+            // update indices: nextNode, lastNode
+            int walledNodeIndex = nextNodeIndex;
+            
             nextNodeIndex = lastNodeIndex;
-            lastNodeIndex = blockedNodeIndex;
-
-            // update target node to (virtual) Node of Access: 6/7
-            if (blockedNode < 3 && lastNode != 7) targetNodeIndex = 1; // head to 7 
-            else targetNodeIndex = 4; // head to 6 
+            lastNodeIndex = walledNodeIndex;
 
             // Result: navigation will resume using GPS() with server reporting once blockedNode is reached
             // targetNode is now the virtual node of access
             return mapArray;
         }
 
-        // Function for updating Map Array when junction is blocked, resolves targetNode
+        // Updating Map Array when path is blocked: resolves nextNode, targetNode, blockedNode
         int* teleport(int mapArray[]){
             int& lastNodeIndex = mapArray[8];
             int& nextNodeIndex = mapArray[9];
             int& targetNodeIndex = mapArray[10];
+            int& blockedNodeIndex = mapArray[12];
             int& orientation = mapArray[11];
             int& nextNode = mapArray[nextNodeIndex];
             int& lastNode = mapArray[lastNodeIndex];
+            int& targetNode = mapArray[targetNodeIndex];
+            int& blockedNode = mapArray[blockedNodeIndex];
+
+            // Arrived? currentNode == targetNode: teleport()->GPS() to pone server
+            if (lastNode == nextNode && nextNode == blockedNode) {
+                blockedNode = 100;
+                this->GPS(mapArray);
+                return mapArray;
+            }
+
+            // Not arrived? Determine next node; targetNode is Node of Access: can be 6 or 7
+            int northBridge[4] = {7, 2, 3, 6};  // default orientation: 0
+            int centerBridge[3] = {7, 1, 6};    // default orientation: 2
+            int southBridge[4] = {7, 0, 4, 6};  // default orientation: 1
+            int* bridges[3] = {northBridge, centerBridge, southBridge};
+            int bridgeFlags[3] = {mapArray[13], mapArray[14], mapArray[15]}; // north, center, south
+            int usedBridge = 0;
+            int nextNodeNumber;
+
+            if (targetNode == 6) {
+                if (lastNode == 7) {
+                    if (!bridgeFlags[0]) nextNodeNumber = 2;
+                    else if (!bridgeFlags[1]) nextNodeNumber = 1;
+                    else nextNodeNumber = 0;
+                }
+
+            } else if (targetNode == 7) {
+
+            }
+
+            
+            nextNodeIndex = getIndex(mapArray, 16, nextNodeNumber);
+            cosmetics.displayNextNode();
+            return mapArray;
         }
 };
