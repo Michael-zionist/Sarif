@@ -229,9 +229,8 @@ class Cosmetics{
             display.setTextSize(7);            // Set text size
             display.setTextColor(WHITE);       // Set text color
             display.setCursor(50, 16);         // Define Position
-            display.print(mapArray[mapArray[9]]);    // Display Next Node
+            display.print(mapArray[mapArray[10]]);    // Display Next Node
             display.display();
-            delay(3000);
         }
 
         void displayJourneyEnd(float journeyFare){
@@ -247,21 +246,23 @@ class Cosmetics{
             display.clearDisplay();  // Clear buffer
             display.drawBitmap(0, 0, image_data_Flag, 128, 64, 1);  // Draw Flag Bitmap
             display.display();  // Display
-            delay(3000);
+            delay(5000);
 
             // Display Fare
             display.clearDisplay();            // Clear buffer
-            display.setTextSize(4);            // Set text size
+            display.setTextSize(2);            // Set text size
             display.setTextColor(WHITE);       // Set text color
             display.setCursor(5, 16);          // Define Position
             display.print(journeyFare);
-            display.print(" Credits");
+            display.setCursor(5, 25);          // Redefine position
+            display.println("");               // Newline
+            display.print("Credits");
             display.display();
-            delay(3000);
+            delay(5000);
 
             // Ending Motto
             display.clearDisplay();            // Clear buffer
-            display.setTextSize(4);            // Set text size
+            display.setTextSize(1);            // Set text size
             display.setTextColor(WHITE);       // Set text color
             display.setCursor(5, 16);          // Define Position
             display.print("You Can't");
@@ -269,7 +270,7 @@ class Cosmetics{
             display.println("");               // Newline
             display.print("Kill Progress");
             display.display();
-            delay(3000);
+            delay(5000);
         }
 };
 
