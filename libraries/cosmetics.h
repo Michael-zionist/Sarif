@@ -115,6 +115,7 @@ class Cosmetics{
             display.clearDisplay();  // Clear buffer
             display.drawBitmap(0, 0, image_data_Sarif, 128, 64, 1);  // Draw Sarif Logo Bitmap
             display.display();  // Display
+            delay(3000);
         }
 
         // OLED Generic taximeter stats display
@@ -128,15 +129,17 @@ class Cosmetics{
             }
 
             display.clearDisplay();            // Clear buffer
-            display.setTextSize(1);            // Set text size
+            display.setTextSize(2);          // Set text size
             display.setTextColor(WHITE);       // Set text color
             display.setCursor(5, 5);           // Define position
-            display.println("Journey Time: "); // Display Journey Time
+            display.println("");
+            display.print("Wait: "); // Display Journey Time
             display.print(journeyTime);
             display.print("s");
 
             display.setCursor(5, 25);          // Redefine position
-            display.println("Fare: €");        // Display Fare
+            display.println("");
+            display.print("Fare: ");        // Display Fare
             display.print(journeyFare);
 
             display.display();      // Display on screen
