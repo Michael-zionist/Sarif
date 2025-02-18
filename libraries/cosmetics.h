@@ -230,6 +230,8 @@ class Cosmetics{
             display.setTextColor(WHITE);       // Set text color
             display.setCursor(50, 16);         // Define Position
             display.print(mapArray[mapArray[9]]);    // Display Next Node
+            display.display();
+            delay(3000);
         }
 
         void displayJourneyEnd(float journeyFare){
@@ -254,6 +256,7 @@ class Cosmetics{
             display.setCursor(5, 16);          // Define Position
             display.print(journeyFare);
             display.print(" Credits");
+            display.display();
             delay(3000);
 
             // Ending Motto
@@ -265,6 +268,7 @@ class Cosmetics{
             display.setCursor(5, 25);          // Redefine position
             display.println("");               // Newline
             display.print("Kill Progress");
+            display.display();
             delay(3000);
         }
 };
