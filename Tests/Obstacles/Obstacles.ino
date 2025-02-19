@@ -25,6 +25,7 @@ void setup() {
   pinMode(mLpwmPin, OUTPUT);
   pinMode(mLphasePin, OUTPUT);
 
+  online.wiFiConnect();  // Connect to "iot" network
   cosmetics.blinkLED(3); // Blink the LED 3 times to confirm setup
 }
 
