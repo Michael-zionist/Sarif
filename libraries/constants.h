@@ -27,7 +27,7 @@ int whiteThreshold = 1900; // Calibrate here for light level
 // I - Index (LastNodeIndex, NextNodeIndex, TargetNodeIndex)
 // B - Orientation boolean (0 - counter-clockwise, 1 - clockwise)
 // O - Obstacle memory (100 - Obstacle False, <8 - Target Node index -> Obstacle True)
-// B1 - Blocked node index (for obstacles) 
+// B1 - Blocked node index (for obstacles)
 // Nb - North bridge status (0 - open, 1 - blocked)
 // Cb - Central bridge status (0 - open, 1 - blocked)
 // Sb - South bridge status (0 - open, 1 - blocked)
@@ -35,13 +35,13 @@ int whiteThreshold = 1900; // Calibrate here for light level
 int mapArray[16] = {0, 7, 2, 3, 6, 4, 5, 1, 0, 0, 0, 0, 100, 0, 0, 0};
 
 // Wifi Info
-const char* ssid = "Sarif Industries";
-const char* password = "amongsus";
+//const char* ssid = "Sarif Industries";
+//const char* password = "amongsus";
 //const char* ssid = "Nathan's Hotspot";
 //const char* password = "hello1234";
 
-//const char* ssid = "iot";
-//const char* password = "athyria67hyperflexibleness";   // For ESP in Mobot
+const char* ssid = "iot";
+const char* password = "athyria67hyperflexibleness";   // For ESP in Mobot
 //const char* password = "unwrinkleable66abrogative";    // For test ESP
 
 // Target Domain
