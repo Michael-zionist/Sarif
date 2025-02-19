@@ -229,7 +229,7 @@ class Cosmetics{
             display.setTextSize(7);            // Set text size
             display.setTextColor(WHITE);       // Set text color
             display.setCursor(50, 16);         // Define Position
-            display.print(mapArray[mapArray[10]]);    // Display Next Node
+            display.print(mapArray[mapArray[9]]);    // Display Next Node
             display.display();
             delay(200);
         }
