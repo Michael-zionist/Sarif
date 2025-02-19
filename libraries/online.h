@@ -17,8 +17,8 @@ class Online{
             WiFi.begin(ssid, password);
             //Serial.println("Connecting...");
             while(WiFi.status() != WL_CONNECTED){   // Wait for Connection
-                    delay(500);
-                    //Serial.print(".");
+            delay(500);
+            //Serial.print(".");
             }
             //Serial.println("Connected...");
             //Serial.println("");
