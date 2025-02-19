@@ -27,17 +27,6 @@ class Online{
 
         // Server Communication Function
         int destinationFetch(int currentPos){
-            // Connect to Wifi
-            WiFi.begin(ssid, password);
-            //Serial.println("Connecting...");
-            while(WiFi.status() != WL_CONNECTED){   // Wait for Connection
-                    delay(300);
-                    //Serial.print(".");
-            }
-            //Serial.println("Connected...");
-            //Serial.println("");
-            delay(200);
-
             // Ensure  WiFi Connected
             if(WiFi.status()==WL_CONNECTED){
                 WiFiClient client;

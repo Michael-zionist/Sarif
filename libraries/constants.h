@@ -27,7 +27,7 @@ int whiteThreshold = 1900; // Calibrate here for light level
 // I - Index (LastNodeIndex, NextNodeIndex, TargetNodeIndex)
 // B - Orientation boolean (0 - counter-clockwise, 1 - clockwise)
 // O - Obstacle memory (100 - Obstacle False, <8 - Target Node index -> Obstacle True)
-// B1 - Blocked node index (for obstacles) 
+// B1 - Blocked node index (for obstacles)
 // Nb - North bridge status (0 - open, 1 - blocked)
 // Cb - Central bridge status (0 - open, 1 - blocked)
 // Sb - South bridge status (0 - open, 1 - blocked)
