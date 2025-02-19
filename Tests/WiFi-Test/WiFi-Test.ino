@@ -13,8 +13,8 @@ void loop() {
   Navigation navigation;
 
   delay(10000);
-  Serial.print("Starting position: ");
-  Serial.println(pos);    // Print starting position
+  //Serial.print("Starting position: ");
+  //Serial.println(pos);    // Print starting position
   navigation.GPS(mapArray);
   mapArray[8] = 1;
   delay(3000);

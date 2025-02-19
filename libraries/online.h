@@ -15,13 +15,13 @@ class Online{
         void wiFiConnect(){
             // Connect to Wifi
             WiFi.begin(ssid, password);
-            Serial.println("Connecting...");
+            //Serial.println("Connecting...");
             while(WiFi.status() != WL_CONNECTED){   // Wait for Connection
                     delay(500);
-                    Serial.print(".");
+                    //Serial.print(".");
             }
-            Serial.println("Connected...");
-            Serial.println("");
+            //Serial.println("Connected...");
+            //Serial.println("");
             delay(500);
         }
 
@@ -29,13 +29,13 @@ class Online{
         int destinationFetch(int currentPos){
             // Connect to Wifi
             WiFi.begin(ssid, password);
-            Serial.println("Connecting...");
+            //Serial.println("Connecting...");
             while(WiFi.status() != WL_CONNECTED){   // Wait for Connection
                     delay(500);
-                    Serial.print(".");
+                    //Serial.print(".");
             }
-            Serial.println("Connected...");
-            Serial.println("");
+            //Serial.println("Connected...");
+            //Serial.println("");
             delay(500);
 
             // Ensure  WiFi Connected
@@ -61,9 +61,9 @@ class Online{
                 String payload = "{}";
                 payload = http.getString();
 
-                Serial.print("HTTP Response code: ");
-                Serial.println(httpResponseData);
-                Serial.println(payload);
+                //Serial.print("HTTP Response code: ");
+                //Serial.println(httpResponseData);
+                //Serial.println(payload);
 
                 // Convert to Integer
                 int currentPos = payload.toInt();

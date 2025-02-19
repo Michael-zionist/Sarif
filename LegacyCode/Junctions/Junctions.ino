@@ -65,9 +65,9 @@ int destinationFetch(int currentPos){
     String payload = "{}";
     payload = http.getString();
 
-    Serial.print("HTTP Response code: ");
-    Serial.println(httpResponseData);
-    Serial.println(payload);
+    //Serial.print("HTTP Response code: ");
+    //Serial.println(httpResponseData);
+    //Serial.println(payload);
 
     // Convert to Integer
     int currentPos = payload.toInt();
@@ -79,7 +79,7 @@ int destinationFetch(int currentPos){
   }
 
   else{
-    Serial.print("Error - WiFi Disconnected...");   // If no connection, print error
+    //Serial.print("Error - WiFi Disconnected...");   // If no connection, print error
   }
 }
 
@@ -87,27 +87,27 @@ int destinationFetch(int currentPos){
 int* GPS(int mapArray[]){
   if(mapArray[8] == mapArray[10]){  // Reached Destination Node, Pone Server
     int destNode = destinationFetch(mapArray[mapArray[8]]); // Next destination
-    Serial.println("Arrived! Fetching next node...");
+    //Serial.println("Arrived! Fetching next node...");
 
     for(int i=0; i<8; i++){
       if(mapArray[i] == destNode){  // Search array for destination node
         mapArray[10] = i;     // TargetNode assigned destNode index
-        Serial.println("Destination at index: ");
-        Serial.println(i);
+        //Serial.println("Destination at index: ");
+        //Serial.println(i);
       }
     }
 
     if(mapArray[11] == 0){    // Counter Clockwise
       mapArray[9] = mapArray[8] + 1;    // NextNode index is LastNode incremented
-      Serial.println("NextNode index is: ");
-      Serial.println(mapArray[9]);
+      //Serial.println("NextNode index is: ");
+      //Serial.println(mapArray[9]);
       return mapArray;
     }
 
     else{     // Clockwise
       mapArray[9] = mapArray[8]--;    // NextNode index is LastNode decremented
-      Serial.println("NextNode index is: ");
-      Serial.println(mapArray[9]);
+      //Serial.println("NextNode index is: ");
+      //Serial.println(mapArray[9]);
       return mapArray;
     }
   }
@@ -115,15 +115,15 @@ int* GPS(int mapArray[]){
   else{   // LastNode == NextNode
     if(mapArray[11] == 0){    // Counter Clockwise
       mapArray[9] = mapArray[8] + 1;    // NextNode index is LastNode incremented
-      Serial.println("NextNode index is: ");
-      Serial.println(mapArray[9]);
+      //Serial.println("NextNode index is: ");
+      //Serial.println(mapArray[9]);
       return mapArray;
     }
 
     else{     // Clockwise
       mapArray[9] = mapArray[8]--;    // NextNode index is LastNode decremented
-      Serial.println("NextNode index is: ");
-      Serial.println(mapArray[9]);
+      //Serial.println("NextNode index is: ");
+      //Serial.println(mapArray[9]);
       return mapArray;
     }
   }
@@ -233,12 +233,12 @@ int readSensors(int whiteThreshold, int* AnalogPin) {
   }
 
   // Print the sensor values
-  Serial.print("Values: ");
+  //Serial.print("Values: ");
   for (int i = 0; i < 5; i++) {
-    Serial.print(AnalogValue[i]); // Print sensor values
-    Serial.print(" ");
+    //Serial.print(AnalogValue[i]); // Print sensor values
+    //Serial.print(" ");
   }
-  Serial.println("");
+  //Serial.println("");
 
   // Convert binary array to spectrum value (decimal)
   int spectrum = 0;
@@ -349,7 +349,7 @@ int* crossJunction(
 
   // Print "Hooray" when reaching the target node
   if (nextNodeIndex == targetNodeIndex) {
-    Serial.println("Hooray");
+    //Serial.println("Hooray");
   }
 
   return mapArray; // Return the updated mapArray
@@ -370,7 +370,7 @@ int getIndex(int array[], int arraySize, int number) {
 //Function to stop motors once reached wall 
 void parking(int whiteThreshold = 2700){
   int distanceValue = readDistanceSensor(); // Read the sensor value
-  Serial.println(distanceValue);  //Print value in serial to allow debugging
+  //Serial.println(distanceValue);  //Print value in Serial to allow debugging
 
   if (distanceValue > parkDistance){   
      drive(0, 25, false);}  //stops rhino 
@@ -391,12 +391,12 @@ void setup() {
 
   // Connect to Wifi
   WiFi.begin(ssid, password);
-  Serial.println("Connecting...");
+  //Serial.println("Connecting...");
   while(WiFi.status() != WL_CONNECTED){
     delay(500);
-    Serial.print(".");
+    //Serial.print(".");
   }
-  Serial.println("");
+  //Serial.println("");
   delay(500);
 
   Serial.begin(9600);

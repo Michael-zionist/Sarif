@@ -22,8 +22,8 @@ void loop()
 {
     for (int i = 0; i < 5; i++) {
         AnalogValue[i] = analogRead(AnalogPin[i]);
-        Serial.print(AnalogValue[i]); // Print the actual analog reading
-        Serial.print("\t"); // Tab for formatting
+        //Serial.print(AnalogValue[i]); // Print the actual analog reading
+        //Serial.print("\t"); // Tab for formatting
 
         //decides to add 0 or 1 based on threshold
         if (AnalogValue[i] >= Threshold) { 
@@ -33,22 +33,22 @@ void loop()
         }
     }
 
-    Serial.println(""); //skips line
+    //Serial.println(""); //skips line
 
     int decimalValue = binaryToDecimal(BinaryArray, 5); //runs binary array through binary to decimal converter
 
     //prints binary array 
-    Serial.print("Binary: "); 
+    //Serial.print("Binary: "); 
     for (int i = 0; i < 5; i++) {
-        Serial.print(BinaryArray[i]);
+        //Serial.print(BinaryArray[i]);
     }
     
-    Serial.println(""); //skips line
+    //Serial.println(""); //skips line
 
     // Print the decimal equivalent
-    Serial.print("Decimal: ");
-    Serial.println(decimalValue);
-    Serial.print("\n");
+    //Serial.print("Decimal: ");
+    //Serial.println(decimalValue);
+    //Serial.print("\n");
 
     delay(600); // 600ms delay rate till next reading is taken/processed
 }

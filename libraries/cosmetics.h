@@ -176,7 +176,7 @@ class Cosmetics{
             Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);   // Declare display object
 
             if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {  // Check for connection
-                Serial.println(F("SSD1306 allocation failed"));
+                //Serial.println(F("SSD1306 allocation failed"));
                 for(;;);
             }
 
@@ -193,7 +193,7 @@ class Cosmetics{
             Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);   // Declare display object
 
             if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {  // Check for connection
-                Serial.println(F("SSD1306 allocation failed"));
+                //Serial.println(F("SSD1306 allocation failed"));
                 for(;;);
             }
 
@@ -220,7 +220,7 @@ class Cosmetics{
             Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);   // Declare display object
 
             if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {  // Check for connection
-                Serial.println(F("SSD1306 allocation failed"));
+                //Serial.println(F("SSD1306 allocation failed"));
                 for(;;);
             }
 
@@ -239,7 +239,7 @@ class Cosmetics{
             Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);   // Declare display object
 
             if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {  // Check for connection
-                Serial.println(F("SSD1306 allocation failed"));
+                //Serial.println(F("SSD1306 allocation failed"));
                 for(;;);
             }
 

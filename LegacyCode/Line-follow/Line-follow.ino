@@ -114,12 +114,12 @@ int readSensors(int whiteThreshold, int* AnalogPin) {
   }
 
   // Print the sensor values
-  Serial.print("Values: ");
+  //Serial.print("Values: ");
   for (int i = 0; i < 5; i++) {
-    Serial.print(AnalogValue[i]); // Print sensor values
-    Serial.print(" ");
+    //Serial.print(AnalogValue[i]); // Print sensor values
+    //Serial.print(" ");
   }
-  Serial.println("");
+  //Serial.println("");
 
   // Convert binary array to spectrum value (decimal)
   int spectrum = 0;
@@ -169,10 +169,10 @@ void loop() {
   int degrees = directionController(spectrum); // Get degrees based on spectrum
 
   /*
-  Serial.print("Spectrum: ");
-  Serial.println(spectrum);
-  Serial.print("Degrees: ");
-  Serial.println(degrees);
+  //Serial.print("Spectrum: ");
+  //Serial.println(spectrum);
+  //Serial.print("Degrees: ");
+  //Serial.println(degrees);
   */
   
   // Adjust movement based on the detected spectrum

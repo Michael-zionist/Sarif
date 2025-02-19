@@ -20,12 +20,12 @@ class Sensing{
             {
                 int distanceValue = readDistanceSensor(); // Read the sensor value
                 
-                Serial.print("Time Counter: "); //for debugging
-                Serial.println(time);
+                //Serial.print("Time Counter: "); //for debugging
+                //Serial.println(time);
         
                 // if object detected before time = 40 
                 if (distanceValue > parkDistance && time < 15) { 
-                    Serial.println("Obstacle!!! Turning right");
+                    //Serial.println("Obstacle!!! Turning right");
                     motors.rotate(topSpeed, 90); // Turn right in place
                     motors.driveDistance(topSpeed, 20);
                     motors.rotate(topSpeed, -90);
@@ -33,7 +33,7 @@ class Sensing{
                 } 
                     //after time = 40 park if obstacle
                 else if (distanceValue > parkDistance) { 
-                    Serial.println("Parking condition met. Stopping motors.");
+                    //Serial.println("Parking condition met. Stopping motors.");
                     motors.drive(0, 0, false); // Stops the mobot
                     break;
                 } 
@@ -48,7 +48,7 @@ class Sensing{
         // Obstacle Detection Function (0 - free, 1 - blocked)
         bool obstacleAhead(int obsDistance = 2000){
             int distanceValue = readDistanceSensor(); // Read the sensor value
-            Serial.println(distanceValue);  // Print value in serial for debugging
+            //Serial.println(distanceValue);  // Print value in Serial for debugging
 
             return (distanceValue > obsDistance);
         }
@@ -77,13 +77,13 @@ class Sensing{
                     BinaryArray[i] = 0;
                 }
             }
-            //Serial.print("Values: ");
+            ////Serial.print("Values: ");
             for (int i = 0; i < 5; i++) {
                 AnalogValue[i] = analogRead(AnalogPin[i]); // Read the analog value
-                //Serial.print(AnalogValue[i]); // Print each sensor's value
-                //Serial.print(" ");
+                ////Serial.print(AnalogValue[i]); // Print each sensor's value
+                ////Serial.print(" ");
             }
-            //Serial.println("");
+            ////Serial.println("");
 
             int spectrum = 0; // variable to store computed decimal value
             for (int i = 0; i < 5; i++){

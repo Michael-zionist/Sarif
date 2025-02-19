@@ -13,29 +13,29 @@ void loop() {
 
     for (int i = 0; i < 5; i++) {
         AnalogValue[i] = analogRead(AnalogPin[i]); // Read analog value from sensor
-        Serial.print("Sensor "); 
-        Serial.print(i); 
-        Serial.print(": ");
-        Serial.print(AnalogValue[i]);             // Print analog reading
-        Serial.print("\t");
+        //Serial.print("Sensor "); 
+        //Serial.print(i); 
+        //Serial.print(": ");
+        //Serial.print(AnalogValue[i]);             // Print analog reading
+        //Serial.print("\t");
 
         // Check if the value is above or below the threshold
         if (AnalogValue[i] >= threshold) {
             binaryValue = (binaryValue << 1) | 1; // Append '1' to binaryValue
-            Serial.print("Binary: 1\t");
+            //Serial.print("Binary: 1\t");
         } else {
             binaryValue = (binaryValue << 1);     // Append '0' to binaryValue
-            Serial.print("Binary: 0\t");
+            //Serial.print("Binary: 0\t");
         }
 
         if (i == 4) {
-            Serial.println(); // Newline after the last sensor reading
+            //Serial.println(); // Newline after the last sensor reading
             delay(600);       // Display new set of readings every 600ms
         }
     }
 
     // Print the final decimal equivalent of the binary value
-    Serial.print("Decimal Equivalent: ");
-    Serial.println(binaryValue);
+    //Serial.print("Decimal Equivalent: ");
+    //Serial.println(binaryValue);
     delay(600); // Additional delay for clarity in Serial Monitor
 }

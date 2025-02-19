@@ -119,12 +119,12 @@ int readSensors(int whiteThreshold, int* AnalogPin) {
   }
 
   // Print the sensor values
-  Serial.print("Values: ");
+  //Serial.print("Values: ");
   for (int i = 0; i < 5; i++) {
-    Serial.print(AnalogValue[i]); // Print sensor values
-    Serial.print(" ");
+    //Serial.print(AnalogValue[i]); // Print sensor values
+    //Serial.print(" ");
   }
-  Serial.println("");
+  //Serial.println("");
 
   // Convert binary array to spectrum value (decimal)
   int spectrum = 0;
