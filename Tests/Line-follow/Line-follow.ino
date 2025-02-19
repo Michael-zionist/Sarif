@@ -36,10 +36,10 @@ void loop() {
   float turnCoeff = navigation.directionController(spectrum); // Get degrees based on spectrum
 
   /*
-  Serial.print("Spectrum: ");
-  Serial.println(spectrum);
-  Serial.print("Degrees: ");
-  Serial.println(degrees);
+  //Serial.print("Spectrum: ");
+  //Serial.println(spectrum);
+  //Serial.print("Degrees: ");
+  //Serial.println(degrees);
   */
   
   // Adjust movement based on the detected spectrum

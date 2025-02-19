@@ -52,7 +52,7 @@ void loop() {
     motors.drive(topSpeed, step, false); // Drive forward at top speed, no stop condition
 
   } else if (turnCoeff == 666) {
-    motors.driveDistance(topSpeed, 5); // Drive forward at top speed, no stop condition
+    motors.driveDistance(topSpeed, 5); // Drive 5 cm onto junction
     cosmetics.blinkLED(1);
     mapArray[8] = mapArray[9]; // node reached, so: lastNode = nextNode;
 

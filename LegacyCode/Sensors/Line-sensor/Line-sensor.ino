@@ -39,13 +39,13 @@ int readSensors(int whiteThreshold, int* AnalogPin) {
             BinaryArray[i] = 0;
         }
     }
-    Serial.print("Values: ");
+    //Serial.print("Values: ");
     for (int i = 0; i < 5; i++) {
       AnalogValue[i] = analogRead(AnalogPin[i]); // Read the analog value 
-      Serial.print(AnalogValue[i]); // Print each sensor's value
-      Serial.print(" ");
+      //Serial.print(AnalogValue[i]); // Print each sensor's value
+      //Serial.print(" ");
     }
-    Serial.println("");
+    //Serial.println("");
 
     int spectrum = 0; // variable to store computed decimal value
     for (int i = 0; i < 5; i++)
@@ -88,12 +88,12 @@ void loop()
 {
     int whiteThreshold = 2700; // Example threshold value
     int spectrum = readSensors(whiteThreshold, AnalogPin); // Get spectrum from sensors
-    Serial.print("Spectrum: ");
-    Serial.println(spectrum);
+    //Serial.print("Spectrum: ");
+    //Serial.println(spectrum);
 
     int degrees = directionController(spectrum); // Get degrees based on spectrum
-    Serial.print("Degrees: ");
-    Serial.println(degrees);
+    //Serial.print("Degrees: ");
+    //Serial.println(degrees);
 
     delay(500); // Delay for 500ms to prevent spamming the Serial Monitor
 }

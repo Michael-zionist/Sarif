@@ -64,8 +64,8 @@ class Motors{
         // Function to turn the robot on both wheels with a speed differential
         void slideForward(int speed, float turnCoeff, const float slowingCoeff = 0.92)
         {
-            //Serial.print("Sliding ");
-            //Serial.println(turnCoeff);
+            ////Serial.print("Sliding ");
+            ////Serial.println(turnCoeff);
             bool clockwise = turnCoeff > 0; // Determine direction of rotation from degrees
             if (clockwise) {
                 analogWrite(mRpwmPin, abs(speed * turnCoeff));     // Stop RIGHT motor

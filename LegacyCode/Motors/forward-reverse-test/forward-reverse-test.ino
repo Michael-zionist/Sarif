@@ -30,7 +30,7 @@ void loop() {
   digitalWrite(mLPhasePin, HIGH); // motor 2 forward
   analogWrite(mRPWMPin, 55); // set speed of motor 1
   analogWrite(mLPWMPin, 50); // set speed of motor 2
-  Serial.println("Forward"); // Display motor direction
+  //Serial.println("Forward"); // Display motor direction
   delay(2000); //2 seconds
   blinkLED(1); //Blinks once after setting to go forward
   
@@ -38,7 +38,7 @@ void loop() {
   digitalWrite(mLPhasePin, LOW); // motor 2 forward
   analogWrite(mRPWMPin, 55); // set speed of motor 1
   analogWrite(mLPWMPin, 50); // set speed of motor 2
-  Serial.println("Forward"); // Display motor direction
+  //Serial.println("Forward"); // Display motor direction
   delay(2000); // 2 seconds
   blinkLED(2); //Blinks 2 times after setting to go back
 }

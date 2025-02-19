@@ -35,9 +35,9 @@ int destinationFetch(int currentPos){
     String payload = "{}";
     payload = http.getString();
 
-    Serial.print("HTTP Response code: ");
-    Serial.println(httpResponseData);
-    Serial.println(payload);
+    //Serial.print("HTTP Response code: ");
+    //Serial.println(httpResponseData);
+    //Serial.println(payload);
 
     // Convert to Integer
     int currentPos = payload.toInt();
@@ -54,18 +54,18 @@ void setup() {
 
   // Connect to Wifi
   WiFi.begin(ssid, password);
-  Serial.println("Connecting...");
+  //Serial.println("Connecting...");
   while(WiFi.status() != WL_CONNECTED){
     delay(500);
-    Serial.print(".");
+    //Serial.print(".");
   }
-  Serial.println("");
+  //Serial.println("");
   delay(500);
 }
 
 void loop() {
   delay(10000);
-  Serial.println(pos);    // Print starting position
+  //Serial.println(pos);    // Print starting position
   do{
     pos = destinationFetch(pos);  // Fetch destination
     delay(5000);      // Wait 5s

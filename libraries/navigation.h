@@ -62,7 +62,7 @@ class Navigation {
             if (succeedsOnMain) {
                 if (orientation == 1) {motors.rotate(speed, 180, coeff); orientation = 0;}
                 else if (orientation > 1) {motors.rotate(speed, -90, coeff); orientation = 0;}
-                else ; // default case -> drive forward
+                else Serial.println("Should just drive on"); // default case -> drive forward
 
             } else if (preceedssOnMain) {
                 if (orientation == 0) {motors.rotate(speed, 180, coeff); orientation = 1;}
@@ -105,24 +105,24 @@ class Navigation {
                 delay(10000);
             }
 
-            Serial.print("Moving from ");
-            Serial.print(lastNode);
-            Serial.print(" towards ");
-            Serial.println(nextNode);
+            //Serial.print("Moving from ");
+            //Serial.print(lastNode);
+            //Serial.print(" towards ");
+            //Serial.println(nextNode);
             motors.driveDistance(speed, forwardDistance, coeff); // move off juction at the end
         }
 
         // Function for updating Map Array (GPS - Pathfinding)
         int* GPS(int mapArray[]){
             if(mapArray[8] == mapArray[10]){  // CurrentNode == TargetNode, Pone Server
-                Serial.println("Arrived! Fetching next node...");
+                //Serial.println("Arrived! Fetching next node...");
                 int destNode = online.destinationFetch(mapArray[mapArray[8]]); // Next Target
 
                 for(int i = 0; i < 8; i++){
                     if(mapArray[i] == destNode){  // Search array for destination node
                         mapArray[10] = i;         // TargetNode assigned destNode index
-                        Serial.print("Destination Node: ");
-                        Serial.println(mapArray[mapArray[10]]);
+                        //Serial.print("Destination Node: ");
+                        //Serial.println(mapArray[mapArray[10]]);
                     }
                 }
 
@@ -162,6 +162,8 @@ class Navigation {
                 }
                 Serial.print("Next Node: ");
                 Serial.println(mapArray[mapArray[9]]);
+                cosmetics.displayNextNode();
+                delay(200);
                 return mapArray;
 
             } else {   // CurrentNode == NextNode
@@ -214,12 +216,14 @@ class Navigation {
                 }
                 Serial.print("Next Node: ");
                 Serial.println(mapArray[mapArray[9]]);
+                cosmetics.displayNextNode();
+                delay(200);
                 return mapArray;
             }
         }
 
         // Function for make all MapArray index changes at the moment obstacle is found
-        int* rerouteTarget(int mapArray[]){
+        int* rerouteTarget(int mapArray[], int speed=topSpeed, int forwardDistance = 5, float coeff = 0.92){
             int& lastNodeIndex = mapArray[8];
             int& nextNodeIndex = mapArray[9];
             int& targetNodeIndex = mapArray[10];
@@ -230,8 +234,9 @@ class Navigation {
             int& targetNode = mapArray[targetNodeIndex];
             int& blockedNode = mapArray[blockedNodeIndex];
 
-            blockedNodeIndex = targetNodeIndex;
-
+            //blockedNodeIndex = targetNodeIndex; // Should work tho!
+            mapArray[12] = targetNodeIndex;
+            
             // update target node to (virtual) Node of Access: 6/7
             if (lastNode == 6 || (nextNode < 3 && lastNode != 7) || nextNode == 7)
                 targetNodeIndex = 1; // head to 7
@@ -255,9 +260,15 @@ class Navigation {
 
             nextNodeIndex = lastNodeIndex;
             lastNodeIndex = walledNodeIndex;
+            Serial.print("Next Node: ");
+            Serial.println(mapArray[mapArray[9]]);
+            cosmetics.displayNextNode();
+            delay(200);
 
             // Result: navigation will resume using GPS() with server reporting once blockedNode is reached
             // targetNode is now the virtual node of access
+            motors.driveDistance(speed, forwardDistance, coeff); // move off juction at the end
+            delay(200);
             return mapArray;
         }
 
@@ -293,7 +304,7 @@ class Navigation {
             int nextNodeNumber;
             int nodeBridgeID;
             for (int i = 2; i >= 0; i--) {
-                nodeBridgeID = getIndex(mapArray, 16, lastNode);
+                nodeBridgeID = getIndex(bridges[i], 16, lastNode);
                 if (nodeBridgeID != -1) {currentBrideIndex = i; break;}
             }
             for (int i = 0; i < 3; i++) {
@@ -316,7 +327,10 @@ class Navigation {
             }
 
             nextNodeIndex = getIndex(mapArray, 16, nextNodeNumber);
+            Serial.print("Next Node: ");
+            Serial.println(mapArray[mapArray[9]]);
             cosmetics.displayNextNode();
+            delay(200);
             return mapArray;
         }
 };
