@@ -44,6 +44,7 @@ void setup() {
   xTaskCreatePinnedToCore(taximeterFunc, "taximeter", 10000, NULL, 1, &taximeter, 0);   // Pin taximeter task to core 0 (Secondary Process)
   delay(20);
 
+  online.wiFiConnect();  // Connect to "iot" network
   cosmetics.blinkLED(3); // Blink the LED 3 times to confirm setup
 }
 
