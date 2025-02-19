@@ -288,7 +288,7 @@ class Navigation {
             if (lastNode == nextNode && nextNode == blockedNode) {
                 cosmetics.blinkLED(3);
                 Serial.println("GPS Resumed");
-                blockedNode = 100; // restore normal GPS wifi navigation
+                blockedNodeIndex = 100; // restore normal GPS wifi navigation
                 this->GPS(mapArray); // get next node from GPS
                 return mapArray;
             
