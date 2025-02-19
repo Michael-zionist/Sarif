@@ -234,7 +234,6 @@ class Navigation {
             int& targetNode = mapArray[targetNodeIndex];
             int& blockedNode = mapArray[blockedNodeIndex];
 
-            //blockedNodeIndex = targetNodeIndex; // Should work tho!
             mapArray[12] = targetNodeIndex;
             
             // update target node to (virtual) Node of Access: 6/7
@@ -315,15 +314,15 @@ class Navigation {
             // find next node:
             if (targetNode == 6) { // target is West (6)
                 if (freeBridgeIndex == currentBrideIndex) // path forward is free
-                    nextNodeNumber = bridges[currentBrideIndex][nodeBridgeID+1];
-                else // path forward blocked, revert to last junction
                     nextNodeNumber = bridges[currentBrideIndex][nodeBridgeID-1];
+                else // path forward blocked, revert to last junction
+                    nextNodeNumber = bridges[currentBrideIndex][nodeBridgeID+1];
 
             } else if (targetNode == 7) { // target is East (7)
                 if (freeBridgeIndex == currentBrideIndex) // path forward is free
-                    nextNodeNumber = bridges[currentBrideIndex][nodeBridgeID-1];
-                else // path forward blocked, revert to last junction
                     nextNodeNumber = bridges[currentBrideIndex][nodeBridgeID+1];
+                else // path forward blocked, revert to last junction
+                    nextNodeNumber = bridges[currentBrideIndex][nodeBridgeID-1];
             }
 
             nextNodeIndex = getIndex(mapArray, 16, nextNodeNumber);
