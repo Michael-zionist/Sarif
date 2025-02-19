@@ -16,9 +16,9 @@ class Navigation {
     public:
         // Function to get the index of a value in an array
         int getIndex(int array[], int arraySize, int number) {
-            for (int i = 0; i < arraySize; i++) {
-                if (array[i] == number) {
-                    return i;
+            for (int j = 0; j < arraySize; j++) {
+                if (array[j] == number) {
+                    return j;
                 }
             }
             return -1; // Return -1 if not found
@@ -54,7 +54,7 @@ class Navigation {
                 (nextNodeIndex < 6 && nextNodeIndex == (lastNodeIndex + 1)) ||
                 (lastNodeIndex == 5 && nextNodeIndex == 0); // array border case: nodes 4 -> 0
             // Main loop: next node preceeds last node in mapArray:
-            bool preceedssOnMain =
+            bool preceedsOnMain =
                 (nextNodeIndex < 6 && nextNodeIndex == (lastNodeIndex - 1)) ||
                 (lastNodeIndex == 0 && nextNodeIndex == 5); // array border case: nodes 0 -> 4
 
@@ -64,7 +64,7 @@ class Navigation {
                 else if (orientation > 1) {motors.rotate(speed, -90, coeff); orientation = 0;}
                 else Serial.println("Should just drive on"); // default case -> drive forward
 
-            } else if (preceedssOnMain) {
+            } else if (preceedsOnMain) {
                 if (orientation == 0) {motors.rotate(speed, 180, coeff); orientation = 1;}
                 else if (orientation > 1) {motors.rotate(speed, 90, coeff); orientation = 1;}
                 else ; // default case -> drive forward
@@ -243,7 +243,8 @@ class Navigation {
                 targetNodeIndex = 4; // head to 6
 
             // update blocked-bridge flags:
-            if (1 < lastNode < 4 || 1 < nextNode < 4) mapArray[13] = 1; // northern blocked
+            if ((lastNode > 1 && lastNode < 4) || (nextNode > 1 && nextNode < 4)) 
+                mapArray[13] = 1; // northern blocked
             else if (lastNode == 1 || nextNode == 1) mapArray[15] = 1; // central blocked
             else mapArray[14] = 1; // southern blocked
 
@@ -283,12 +284,14 @@ class Navigation {
             int& targetNode = mapArray[targetNodeIndex];
             int& blockedNode = mapArray[blockedNodeIndex];
 
-            // Arrived? currentNode == targetNode: pone server, return from teleport() to GPS() navigation
+            // Arrived? (Ie. currentNode == blockedNode?): pone server, return from teleport() to GPS() navigation
             if (lastNode == nextNode && nextNode == blockedNode) {
+                cosmetics.blinkLED(3);
                 Serial.println("GPS Resumed");
-                blockedNode = 100;
-                this->GPS(mapArray);
+                blockedNode = 100; // restore normal GPS wifi navigation
+                this->GPS(mapArray); // get next node from GPS
                 return mapArray;
+            
             }
 
             // Not arrived? Determine next node; targetNode is Node of Access: can be 6 or 7
@@ -299,35 +302,56 @@ class Navigation {
             int bridgeFlags[3] = {mapArray[13], mapArray[14], mapArray[15]}; // north, south, center
 
             // Procedure: determine current bridge and find a free bridge to cross (preferring middle)
-            int freeBridgeIndex = -1; // dummy val
-            int currentBridgeIndex = 10; // dummy val
+            int freeBridgeIndex;
+            int currentBridgeIndex;
             int nextNodeNumber;
             int nodeBridgeID;
-            for (int i = 2; i >= 0; i--) { // searches for current bridge, center as default
-                nodeBridgeID = getIndex(bridges[i], 16, lastNode);
+            for (int i = 2; i >= 0; i--) { // searches for current bridge, center as default for knots
+                if (i < 2) nodeBridgeID = getIndex(bridges[i], 4, lastNode);
+                else nodeBridgeID = getIndex(bridges[i], 3, lastNode);
+                
                 if (nodeBridgeID != -1) {currentBridgeIndex = i; break;}
             }
             for (int i = 0; i < 3; i++) {
                 if (mapArray[13+i] == 0) freeBridgeIndex = i;
                 if (freeBridgeIndex == currentBridgeIndex) break; // path forward is free
             }
-            Serial.print("Travelling through ");
-            Serial.print(*bridges[currentBridgeIndex]);
-            Serial.print(", is at node: ");
-            Serial.print(bridges[currentBridgeIndex][nodeBridgeID]);
+            Serial.print("freeBridgeIndex ");
+            Serial.println(freeBridgeIndex);
+            Serial.print("currentBridgeIndex ");
+            Serial.println(currentBridgeIndex);
+            Serial.print("nodeBridgeID ");
+            Serial.println(nodeBridgeID);
 
             // find next node:
             if (targetNode == 6) { // target is West (6)
-                if (freeBridgeIndex == currentBridgeIndex) // path forward is free
+                if (freeBridgeIndex == currentBridgeIndex && lastNode == 6) {  // target reached, head to blocked node
+                    if (blockedNode == 0) nextNodeNumber = 4;
+                    else if (blockedNode == 2) nextNodeNumber = 3;
+                    else nextNodeNumber = blockedNode;
+
+                } else if (freeBridgeIndex == currentBridgeIndex) { // path forward toward target is free
+                    if (lastNode == 7) nextNodeNumber = bridges[freeBridgeIndex][1];
+                    else nextNodeNumber = bridges[currentBridgeIndex][nodeBridgeID+1];
+                    
+                } else { // path forward toward target blocked, revert to last junction
                     nextNodeNumber = bridges[currentBridgeIndex][nodeBridgeID-1];
-                else // path forward blocked, revert to last junction
-                    nextNodeNumber = bridges[currentBridgeIndex][nodeBridgeID+1];
+                }
 
             } else if (targetNode == 7) { // target is East (7)
-                if (freeBridgeIndex == currentBridgeIndex) // path forward is free
+                if (freeBridgeIndex == currentBridgeIndex && lastNode == 7) {  // target reached, head to blocked node
+                    if (blockedNode == 4) nextNodeNumber = 0;
+                    else if (blockedNode == 3) nextNodeNumber = 2;
+                    else nextNodeNumber = blockedNode;
+
+                } else if (freeBridgeIndex == currentBridgeIndex) { // path forward toward target is free
+                    if (lastNode == 6 && freeBridgeIndex == 2) nextNodeNumber = bridges[freeBridgeIndex][1];
+                    else if (lastNode == 6) nextNodeNumber = bridges[freeBridgeIndex][2];
+                    else nextNodeNumber = bridges[currentBridgeIndex][nodeBridgeID-1];
+
+                } else { // path forward toward target blocked, revert to last junction
                     nextNodeNumber = bridges[currentBridgeIndex][nodeBridgeID+1];
-                else // path forward blocked, revert to last junction
-                    nextNodeNumber = bridges[currentBridgeIndex][nodeBridgeID-1];
+                }
             }
 
             nextNodeIndex = getIndex(mapArray, 16, nextNodeNumber);
