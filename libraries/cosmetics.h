@@ -231,6 +231,7 @@ class Cosmetics{
             display.setCursor(50, 16);         // Define Position
             display.print(mapArray[mapArray[10]]);    // Display Next Node
             display.display();
+            delay(200);
         }
 
         void displayJourneyEnd(float journeyFare){

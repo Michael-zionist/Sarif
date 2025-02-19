@@ -29,7 +29,7 @@ class Sensing{
                     motors.rotate(topSpeed, 90); // Turn right in place
                     motors.driveDistance(topSpeed, 20);
                     motors.rotate(topSpeed, -90);
-                    delay(500);  // Turning duration (adjust as needed)
+                    delay(200);  // Turning duration (adjust as needed)
                 } 
                     //after time = 40 park if obstacle
                 else if (distanceValue > parkDistance) { 
