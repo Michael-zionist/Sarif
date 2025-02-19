@@ -22,7 +22,7 @@ const int parkDistance = 2000; //distance at which is stops before wall
 int whiteThreshold = 1900; // Calibrate here for light level
 
 
-// Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, N, I, I, I, B, O, Bl, Nb, Cb, Sb]
+// Navigation array has set structure: [N, Nf, N, N, Nf, N, Np, N, I, I, I, B, O, Bl, Nb, Sb, Cb]
 // N - Navigation node (Nf - fictional, Np - parking)
 // I - Index (LastNodeIndex, NextNodeIndex, TargetNodeIndex)
 // B - Orientation boolean (0 - counter-clockwise, 1 - clockwise)
@@ -35,13 +35,13 @@ int whiteThreshold = 1900; // Calibrate here for light level
 int mapArray[16] = {0, 7, 2, 3, 6, 4, 5, 1, 0, 0, 0, 0, 100, 0, 0, 0};
 
 // Wifi Info
-const char* ssid = "Sarif Industries";
-const char* password = "amongsus";
+//const char* ssid = "Sarif Industries";
+//const char* password = "amongsus";
 //const char* ssid = "Nathan's Hotspot";
 //const char* password = "hello1234";
 
-//const char* ssid = "iot";
-//const char* password = "athyria67hyperflexibleness";   // For ESP in Mobot
+const char* ssid = "iot";
+const char* password = "athyria67hyperflexibleness";   // For ESP in Mobot
 //const char* password = "unwrinkleable66abrogative";    // For test ESP
 
 // Target Domain
