@@ -326,7 +326,7 @@ class Navigation {
 
             // find next node:
             if (targetNode == 6) { // target is West (6)
-                if (freeBridgeIndex == currentBridgeIndex && lastNode == 6) {  // target reached, head to blocked node
+                if ((freeBridgeIndex == currentBridgeIndex) && lastNode == 6) {  // target reached, head to blocked node
                     targetNodeIndex = blockedNodeIndex;
                     if (blockedNode == 0) nextNodeNumber = 4;
                     else if (blockedNode == 2) nextNodeNumber = 3;
@@ -338,10 +338,11 @@ class Navigation {
                     
                 } else { // path forward toward target blocked, revert to last junction
                     nextNodeNumber = bridges[currentBridgeIndex][nodeBridgeID-1];
+                    // ...failing these, I suspect on Orientation
                 }
 
             } else if (targetNode == 7) { // target is East (7)
-                if (freeBridgeIndex == currentBridgeIndex && lastNode == 7) {  // target reached, head to blocked node
+                if ((freeBridgeIndex == currentBridgeIndex) && lastNode == 7) {  // target reached, head to blocked node
                     targetNodeIndex = blockedNodeIndex;
                     if (blockedNode == 4) nextNodeNumber = 0;
                     else if (blockedNode == 3) nextNodeNumber = 2;
