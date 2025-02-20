@@ -235,7 +235,7 @@ class Navigation {
             int& blockedNode = mapArray[blockedNodeIndex];
 
             mapArray[12] = targetNodeIndex;
-            
+
             // update target node to (virtual) Node of Access: 6/7
             if (lastNode == 6 || (nextNode < 3 && lastNode != 7) || nextNode == 7)
                 targetNodeIndex = 1; // head to 7
@@ -243,7 +243,7 @@ class Navigation {
                 targetNodeIndex = 4; // head to 6
 
             // update blocked-bridge flags:
-            if ((lastNode > 1 && lastNode < 4) || (nextNode > 1 && nextNode < 4)) 
+            if ((lastNode > 1 && lastNode < 4) || (nextNode > 1 && nextNode < 4))
                 mapArray[13] = 1; // northern blocked
             else if (lastNode == 1 || nextNode == 1) mapArray[15] = 1; // central blocked
             else mapArray[14] = 1; // southern blocked
@@ -267,8 +267,6 @@ class Navigation {
 
             // Result: navigation will resume using GPS() with server reporting once blockedNode is reached
             // targetNode is now the virtual node of access
-            motors.driveDistance(speed, forwardDistance, coeff); // move off juction at the end
-            delay(200);
             return mapArray;
         }
 
@@ -292,7 +290,7 @@ class Navigation {
                 blockedNodeIndex = 100; // restore normal GPS wifi navigation
                 this->GPS(mapArray); // get next node from GPS
                 return mapArray;
-            
+
             }
 
             // Not arrived? Determine next node; targetNode is Node of Access: can be 6 or 7
@@ -310,7 +308,7 @@ class Navigation {
             for (int i = 2; i >= 0; i--) { // searches for current bridge, center as default for knots
                 if (i < 2) nodeBridgeID = getIndex(bridges[i], 4, lastNode);
                 else nodeBridgeID = getIndex(bridges[i], 3, lastNode);
-                
+
                 if (nodeBridgeID != -1) {currentBridgeIndex = i; break;}
             }
             for (int i = 0; i < 3; i++) {
@@ -335,7 +333,7 @@ class Navigation {
                 } else if (freeBridgeIndex == currentBridgeIndex) { // path forward toward target is free
                     if (lastNode == 7) nextNodeNumber = bridges[freeBridgeIndex][1];
                     else nextNodeNumber = bridges[currentBridgeIndex][nodeBridgeID+1];
-                    
+
                 } else { // path forward toward target blocked, revert to last junction
                     nextNodeNumber = bridges[currentBridgeIndex][nodeBridgeID-1];
                 }
