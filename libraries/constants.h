@@ -1,3 +1,7 @@
+/**********************************************************************************
+constants.h - Contains all Pinouts, Calibration Constants, mapArray and WiFi Info
+**********************************************************************************/
+
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
@@ -35,11 +39,6 @@ int whiteThreshold = 1900; // Calibrate here for light level
 int mapArray[16] = {0, 7, 2, 3, 6, 4, 5, 1, 0, 0, 0, 0, 100, 0, 0, 0};
 
 // Wifi Info
-//const char* ssid = "Sarif Industries";
-//const char* password = "amongsus";
-//const char* ssid = "Nathan's Hotspot";
-//const char* password = "hello1234";
-
 const char* ssid = "iot";
 const char* password = "athyria67hyperflexibleness";   // For ESP in Mobot
 //const char* password = "unwrinkleable66abrogative";    // For test ESP
