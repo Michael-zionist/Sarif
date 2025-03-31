@@ -1,6 +1,6 @@
-/*****************************************************************************
-sensing.h - Contains "parking()", "readDistanceSensor()" and "readSensors()"
-*****************************************************************************/
+/*********************************************************************************************
+sensing.h - Contains "park()", "obstacleAhead()", "readDistanceSensor()" and "readSensors()"
+*********************************************************************************************/
 
 #include "constants.h"
 #include "motors.h"
@@ -13,34 +13,34 @@ class Sensing{
 
     public:
         // Parking Function
-         void park(){  
+         void park(){
             int time = 0;
-        
+
             while (true)
             {
                 int distanceValue = readDistanceSensor(); // Read the sensor value
-                
+
                 //Serial.print("Time Counter: "); //for debugging
                 //Serial.println(time);
-        
-                // if object detected before time = 40 
-                if (distanceValue > parkDistance && time < 15) { 
+
+                // if object detected before time = 40
+                if (distanceValue > parkDistance && time < 15) {
                     //Serial.println("Obstacle!!! Turning right");
                     motors.rotate(topSpeed, 90); // Turn right in place
                     motors.driveDistance(topSpeed, 20);
                     motors.rotate(topSpeed, -90);
                     delay(200);  // Turning duration (adjust as needed)
-                } 
+                }
                     //after time = 40 park if obstacle
-                else if (distanceValue > parkDistance) { 
+                else if (distanceValue > parkDistance) {
                     //Serial.println("Parking condition met. Stopping motors.");
                     motors.drive(0, 0, false); // Stops the mobot
                     break;
-                } 
+                }
                 else {
                     motors.drive(topSpeed, 25, false);
                     delay(100);
-                    time += 1; 
+                    time += 1;
                 }
             }
         }
